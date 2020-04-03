@@ -7,6 +7,7 @@ use Yard\DigiD\Foundation\Plugin;
 
 use Yard\DigiD\GravityForms\DigiD\Inputs\HiddenInput;
 use Yard\DigiD\GravityForms\DigiD\Inputs\LinkInput;
+
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
@@ -102,7 +103,7 @@ class DigiDField extends GF_Field
     {
         $bsn_id = $this->id . '.1';
         $bsn    = rgget($bsn_id, $value);
-        if ($this->isRequired or rgblank($bsn)) {
+        if (rgblank($bsn)) {
             $this->failed_validation  = true;
             $this->validation_message = empty($this->errorMessage) ? esc_html__('This field is required.', config('core.text_domain')) : $this->errorMessage;
         }

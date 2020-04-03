@@ -83,18 +83,14 @@ class DigiDController
         // $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/SUCCESS.xml'));
         $attributes   = new Attributes($responseData);
 
-        $sessionData = [
-            'digid_session_id'  => (new SessionID())->getSessionIdFromDocument($responseData),
-            'digid_status_code' => $attributes->status()->get()->getStatusCode(),
-            'digid_bsn'         => '',
-        ];
-
-        if ($attributes->status()->get()->isSuccess()) {
-            $sessionData['digid_bsn'] = $attributes->bsn()->getID();
-        }
-
         $session = resolve('session');
-        $session->set($sessionData);
+        $session->set('digid_session_id', (new SessionID())->getSessionIdFromDocument($responseData));
+        $session->set('digid_status_code', $attributes->status()->get()->getStatusCode());
+        if ($attributes->status()->get()->isSuccess()) {
+            $session->set('digid_bsn', $attributes->bsn()->getID());
+        } else {
+            $session->set('digid_bsn', '');
+        }
 
         if (empty($session->get('digid_resume_link'))) {
             header('Location: '. site_url('/'));
