@@ -7,6 +7,8 @@ use StdClass;
 use Yard\DigiD\DigiD\DigiD;
 use Yard\DigiD\Foundation\Plugin;
 
+use function Yard\DigiD\Foundation\Helpers\resolve;
+
 class LinkInput extends AbstractInput
 {
 
@@ -147,23 +149,35 @@ class LinkInput extends AbstractInput
     public function render(): string
     {
         if ($this->is_admin || ! rgar($this->getInput(), 'isHidden')) {
-            if ($this->is_sub_label_above) {
-                return "{$this->getSpanField()}
-						{$this->getLabelField()}
-                        {$this->getInputField()}
-                    </span>";
-            } else {
-                return "{$this->getSpanField()}
-                        {$this->getInputField()}
-						{$this->getLabelField()}
-                    </span>";
+            $session = resolve('session');
+            $session->set('digid_resume_link', $this->getResumeLink());
+
+            $bsn = $session->get('digid_bsn');
+            if (!empty($bsn)) {
+                return 'Gelukt. Klik op volgende knop.';
             }
+
+            return "{$this->getSpanField()}
+						{$this->getLabelField()}
+                        {$this->getInputField()}
+                    </span>";
         } else {
             return '';
         }
     }
 
+    /**
+     * Get the resume link.
+     *
+     * @return string
+     */
+    protected function getResumeLink(): string
+    {
+        $resume                  = \GFAPI::submit_form($this->field->formId, ['gform_save' => true, 'confirmation_message' => []]);
+        $resumeToken             = $resume['resume_token'] ?? null;
 
+        return sprintf('%s?gf_token=%s', get_permalink(), $resumeToken);
+    }
 
     /**
      * Get the placeholder
@@ -202,7 +216,7 @@ class LinkInput extends AbstractInput
      */
     protected function getLabelField(): string
     {
-        return "<label for='{$this->field->id}_{$this->fieldID}' id='{$this->field->id}_{$this->fieldID}_label' {$this->sub_label_class_attribute}>{$this->getLabel()}</label>";
+        return "";
     }
 
     /**
@@ -212,15 +226,6 @@ class LinkInput extends AbstractInput
      */
     protected function getInputField(): string
     {
-        return '<img src="'. Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'). '"><a href="'. $this->digid->getAuthNRequestURL() .'&redirect=https://test.nl">DigiD</a>';
-        return "<input
-                    type='button'
-                    data-name='{$this->fieldName}'
-                    name='input_{$this->field->id}.{$this->fieldID}'
-                    id='input_{$this->field->id}_{$this->form['id']}_{$this->fieldID}'
-                    value='{$this->getValue()}'
-                    {$this->field->get_tabindex()} {$this->disabled_text} {$this->readonly} {$this->getPlaceholder()} {$this->required_attribute} {$this->invalid_attribute}
-                    aria-label='{$this->fieldName}'
-                />";
+        return '<a href="'. $this->digid->getAuthNRequestURL() .'"><img src="'. Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'). '"></a>';
     }
 }

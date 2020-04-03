@@ -14,7 +14,7 @@ abstract class AbstractInput
     /** @var stdClass */
     protected $field;
 
-    /** @var string Set default value of input. */
+    /** @var array Set default value of input. */
     protected $value;
 
     /** @var bool */
@@ -25,6 +25,9 @@ abstract class AbstractInput
 
     /** @var string */
     protected $sub_label_class_attribute = '';
+
+    /** @var string */
+    protected $field_sub_label_placement = '';
 
     /** @var string */
     protected $invalid_attribute = '';
@@ -68,7 +71,7 @@ abstract class AbstractInput
     public function getValue(): ?string
     {
         if (is_array($this->value)) {
-            return esc_attr(rgget($this->field->id .'.'. $this->fieldID, $this->value));
+            return esc_attr(rgget($this->field->id .'.'. $this->field->id, $this->value));
         } else {
             return $this->value;
         }
@@ -94,6 +97,6 @@ abstract class AbstractInput
      */
     public function getInput()
     {
-        return GFFormsModel::get_input($this->field, $this->field->id . '.'. $this->fieldID);
+        return GFFormsModel::get_input($this->field, $this->field->id . '.'. $this->field->id);
     }
 }

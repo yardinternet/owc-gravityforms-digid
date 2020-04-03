@@ -72,7 +72,8 @@ class DigiDController
     public static function acsResolve(): void
     {
         if (! isset($_GET['SAMLart'])) {
-            return;
+            header('Location: '. site_url('/'));
+            exit;
         }
 
         $responseData = resolve('samlbase_binding_artifact')
@@ -83,20 +84,24 @@ class DigiDController
         $attributes   = new Attributes($responseData);
 
         $sessionData = [
-            'hsw_session_id'  => (new SessionID())->getSessionIdFromDocument($responseData),
-            'hsw_status_code' => $attributes->status()->get()->getStatusCode(),
-            'hsw_bsn'         => '',
+            'digid_session_id'  => (new SessionID())->getSessionIdFromDocument($responseData),
+            'digid_status_code' => $attributes->status()->get()->getStatusCode(),
+            'digid_bsn'         => '',
         ];
 
         if ($attributes->status()->get()->isSuccess()) {
-            $sessionData = array_merge($sessionData, [
-                'hsw_bsn' => $attributes->bsn()->getID()
-            ]);
+            $sessionData['digid_bsn'] = $attributes->bsn()->getID();
         }
 
-        $digid = resolve('session')->set($sessionData);
+        $session = resolve('session');
+        $session->set($sessionData);
 
-        header('Location: '. get_site_url('/test/'));
+        if (empty($session->get('digid_resume_link'))) {
+            header('Location: '. site_url('/'));
+            exit;
+        }
+
+        header('Location: '. $session->get('digid_resume_link'));
         exit;
     }
 }

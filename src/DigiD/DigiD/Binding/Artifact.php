@@ -17,8 +17,11 @@ class Artifact extends BindingArtifact
 {
     /**
      * Do a request with the current binding
+     *
+     * @param string $artifact
+     * @return string
      */
-    public function resolveArtifact($artifact = '')
+    public function resolveArtifact(string $artifact = ''): string
     {
         $this->setTargetUrlFromMetadata($this->metadataBindingLocation);
         $this->setProtocolBinding(self::BINDING_POST);

@@ -84,7 +84,8 @@ class Plugin
     {
         $builder         = new ContainerBuilder();
         $builder->addDefinitions([
-            'session' => new \duncan3dc\Sessions\SessionInstance($this->getName()),
+            // 'session' => new \duncan3dc\Sessions\SessionInstance($this->getName()),
+            'session' => Session::getInstance(),
             'route'   => new \Yard\DigiD\Foundation\Routing\Router(get_blog_details()->path ?? '')
         ]);
         $this->container = $builder->build();

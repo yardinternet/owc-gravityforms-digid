@@ -20,6 +20,7 @@ use function Yard\DigiD\Foundation\Helpers\config;
 
 class AuthnRequest extends ProtocolAuthnRequest
 {
+    /** @var RequestedAuthnContext */
     protected $requestedAuthnContext;
 
     /**
@@ -49,7 +50,6 @@ class AuthnRequest extends ProtocolAuthnRequest
             ->setIssueInstant(new DateTime("now", new DateTimeZone("UTC")))
             ->setIssuer(new Issuer(config('digid.issuer')))
             ->setDestination(config('digid.url.destination'))
-            ->setForceAuthn(false)
             ->setAssertionConsumerServiceIndex('0')
             ->setRequestedAuthnContext(
                 (new RequestedAuthnContext())

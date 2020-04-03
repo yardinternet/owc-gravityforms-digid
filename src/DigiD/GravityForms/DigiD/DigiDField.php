@@ -3,12 +3,12 @@
 namespace Yard\DigiD\GravityForms\DigiD;
 
 use GF_Field;
-use function Yard\DigiD\Foundation\Helpers\config;
-
-use function Yard\DigiD\Foundation\Helpers\resolve;
 use Yard\DigiD\Foundation\Plugin;
+
+use Yard\DigiD\GravityForms\DigiD\Inputs\HiddenInput;
 use Yard\DigiD\GravityForms\DigiD\Inputs\LinkInput;
-use Yard\DigiD\GravityForms\DigiD\Inputs\TextInput;
+use function Yard\DigiD\Foundation\Helpers\config;
+use function Yard\DigiD\Foundation\Helpers\resolve;
 
 if (! class_exists('\GFForms')) {
     die();
@@ -24,9 +24,12 @@ class DigiDField extends GF_Field
     /** @var ?string */
     protected $bsn;
 
+    /**
+     * @param array $data
+     */
     public function __construct($data = [])
     {
-        $this->bsn = resolve('session')->get('hsw_bsn');
+        $this->bsn = resolve('session')->get('digid_bsn');
         parent::__construct($data);
     }
 
@@ -65,11 +68,9 @@ class DigiDField extends GF_Field
     public function get_form_editor_field_settings()
     {
         return [
-            'sub_label_placement_setting',
             'input_placeholders_setting',
             'rules_setting',
             'conditional_logic_field_setting',
-            'label_setting',
             'rules_setting',
             'description_setting',
             'css_class_setting',
@@ -99,14 +100,19 @@ class DigiDField extends GF_Field
      */
     public function validate($value, $form)
     {
+        $bsn_id = $this->id . '.1';
+        $bsn    = rgget($bsn_id, $value);
+        if ($this->isRequired or rgblank($bsn)) {
+            $this->failed_validation  = true;
+            $this->validation_message = empty($this->errorMessage) ? esc_html__('This field is required.', config('core.text_domain')) : $this->errorMessage;
+        }
     }
 
     /**
      * Return all the fields available.
      *
      * @param array $value
-     *
-     * @return []
+     * @return array
      */
     protected function getFields(array $value): array
     {
@@ -115,7 +121,7 @@ class DigiDField extends GF_Field
                 ->setFieldID(2)
                 ->setFieldName('digid')
                 ->setFieldText(__('DigiD', config('core.text_domain'))),
-            (new TextInput($this, $value))
+            (new HiddenInput($this, $value))
                 ->setFieldID(1)
                 ->setFieldName('bsn')
                 ->setValue($this->bsn)

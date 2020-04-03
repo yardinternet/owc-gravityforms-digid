@@ -22,7 +22,11 @@ class Attributes
      */
     public function bsn(): BSN
     {
-        return new BSN($this->response->xpath('//samlp:ArtifactResponse//samlp:Response//saml:Assertion//saml:Subject//saml:NameID'));
+        try {
+            return new BSN($this->response->xpath('//samlp:ArtifactResponse//samlp:Response//saml:Assertion//saml:Subject//saml:NameID'));
+        } catch (\Exception $e) {
+            return 'Fout ontstaan';
+        }
     }
 
     /**

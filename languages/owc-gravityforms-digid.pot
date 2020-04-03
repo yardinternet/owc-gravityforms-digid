@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OWC GravityForms DigiD\n"
-"POT-Creation-Date: 2020-03-27 11:07+0100\n"
+"POT-Creation-Date: 2020-04-03 14:45+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,51 +18,11 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-2: vendor\n"
 "X-Poedit-SearchPathExcluded-3: languages\n"
 
-#: src/DigiD/GravityForms/DigiD/DigiDAddressField.php:28
-msgid "DigiD Address"
+#: src/DigiD/GravityForms/DigiD/DigiDField.php:43
+#: src/DigiD/GravityForms/DigiD/DigiDField.php:123
+msgid "DigiD"
 msgstr ""
 
-#: src/DigiD/GravityForms/DigiD/DigiDAddressField.php:96
-#: src/DigiD/GravityForms/DigiD/DigiDAddressField.php:105
-msgid "This field is required. Please enter a complete address."
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiD/DigiDAddressField.php:122
-msgid "Postcode"
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiD/DigiDAddressField.php:127
-msgid "Homenumber"
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiD/DigiDAddressField.php:132
-msgid "Homenumber addition"
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiD/DigiDAddressField.php:135
-msgid "Search"
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiD/DigiDAddressField.php:141
-msgid "Address"
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiD/DigiDAddressField.php:147
-msgid "City"
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiD/DigiDAddressField.php:153
-msgid "State"
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiD/DigiDLookup.php:69
-msgid "No results found"
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiD/DigiDLookup.php:78
-msgid "1 result found"
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiD/DigiDLookup.php:92
-msgid "Found too many results. Try to make the address more specific. For example with a house number addition"
+#: src/DigiD/GravityForms/DigiD/DigiDField.php:107
+msgid "This field is required."
 msgstr ""
