@@ -21,7 +21,6 @@ class RepositoryTest extends TestCase
     public function gets_value_correctly(): void
     {
         $repository = new Config(__DIR__ . '/config');
-        $repository->boot();
 
         $config = [
             'test'      => [
@@ -60,7 +59,6 @@ class RepositoryTest extends TestCase
     public function check_setting_of_protected_nodes(): void
     {
         $repository = new Config(__DIR__ . '/config');
-        $repository->boot();
 
         $expectedConfig = [
             'test'      => [
@@ -92,7 +90,6 @@ class RepositoryTest extends TestCase
         ];
 
         $repository = new Config(__DIR__ . '/config');
-        $repository->boot();
 
         $repository->set('directory', 'test');
         $this->assertEquals($expectedConfig, $repository->all());
@@ -136,7 +133,6 @@ class RepositoryTest extends TestCase
         ];
 
         $repository = new Config(__DIR__ . '/config');
-        $repository->boot();
 
         $repository->set('directory.testfile', 'test');
         $this->assertEquals($expectedConfig, $repository->all());
@@ -192,7 +188,6 @@ class RepositoryTest extends TestCase
         ];
 
         $repository = new Config(__DIR__ . '/config');
-        $repository->boot();
 
         $repository->set('directory.multi', 'test');
         $this->assertEquals($expectedConfig, $repository->all());
@@ -212,7 +207,6 @@ class RepositoryTest extends TestCase
         ];
 
         $repository = new Config(__DIR__ . '/config');
-        $repository->boot();
 
         $repository->set('directory.multi.deep', 'test');
         $this->assertEquals($expectedConfig, $repository->all());
@@ -259,7 +253,6 @@ class RepositoryTest extends TestCase
         ];
 
         $repository = new Config(__DIR__ . '/config');
-        $repository->boot();
 
         $repository->set('doesnotexist.directory.multi.deep');
         $this->assertEquals($expectedConfig, $repository->all());
@@ -282,7 +275,6 @@ class RepositoryTest extends TestCase
         ];
 
         $repository = new Config(__DIR__ . '/config');
-        $repository->boot();
 
         $repository->set([null => null]);
         $this->assertEquals($expectedConfig, $repository->all());

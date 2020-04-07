@@ -37,6 +37,7 @@
 
 # track this file .gitignore (i.e. do NOT ignore it)
 !.gitignore
+!.github/
 
 # Eslint
 !.eslintrc
@@ -88,8 +89,6 @@ Thumbs.db
 
 # ignore node/grunt dependency directories
 node_modules/
-
-code-coverage
 
 # no map files
 *.map

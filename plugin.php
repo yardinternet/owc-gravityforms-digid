@@ -37,4 +37,4 @@ $autoloader = new \Yard\DigiD\Autoloader();
 /**
  * Begin execution of the plugin.
  */
-$plugin = (new \Yard\DigiD\Foundation\Plugin(__DIR__))->boot();
+$plugin = \Yard\DigiD\Foundation\Plugin::getInstance(__DIR__)->boot();

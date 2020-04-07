@@ -8,7 +8,9 @@
     "lightsaml/lightsaml": "^1.4",
     "wizkunde/samlbase": "^1.3",
     "php-di/php-di": "^6.0",
-    "ocramius/proxy-manager": "^2.2"
+    "ocramius/proxy-manager": "^2.2",
+    "aura/session": "^2.1",
+    "rspeekenbrink/monolog-microsoft-teams": "^1.1"
   },
   "require-dev": {
     "mockery/mockery": "1.0.*",
@@ -30,7 +32,7 @@
   },
   "scripts": {
     "unit": "clear && ./vendor/bin/phpunit --testsuite 'Unit Test Suite' --colors=always",
-    "unit-coverage": "clear && ./vendor/bin/phpunit --testsuite 'Unit Test Suite' --colors=always --coverage-html ./tests/coverage",
+    "unit-coverage": "clear && ./vendor/bin/phpunit --testsuite 'Unit Test Suite' --prepend tests/xdebug-filter.php --colors=always --coverage-html ./tests/coverage",
     "integration": "clear && ./vendor/bin/phpunit --testsuite 'Integration Test Suite' --colors=always",
     "test": [
       "@unit",

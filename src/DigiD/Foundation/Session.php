@@ -2,37 +2,37 @@
 
 namespace Yard\DigiD\Foundation;
 
-/*
-    Use the static method getInstance to get the object.
-*/
 class Session
 {
     const SESSION_STARTED     = true;
     const SESSION_NOT_STARTED = false;
 
-    // The state of the session
+    /**
+     * The state of the session.
+     *
+     * @var bool
+     */
     private $sessionState = self::SESSION_NOT_STARTED;
 
-    // THE only instance of the class
+    /**
+     * @var Session
+     */
     private static $instance;
 
-
-    private function __construct()
+    final private function __construct()
     {
     }
 
-
     /**
-    *    Returns THE instance of 'Session'.
+    *    Returns the instance of 'Session'.
     *    The session is automatically initialized if it wasn't.
     *
-    *    @return    object
+    *    @return    self
     **/
-
-    public static function getInstance()
+    public static function getInstance(): self
     {
-        if (!isset(self::$instance)) {
-            self::$instance = new self;
+        if (null == static::$instance) {
+            self::$instance = new static();
         }
 
         self::$instance->startSession();
@@ -40,81 +40,83 @@ class Session
         return self::$instance;
     }
 
-
     /**
-    *    (Re)starts the session.
+    * Starts the session.
     *
-    *    @return    bool    TRUE if the session has been initialized, else FALSE.
+    * @return bool TRUE if the session has been initialized, else FALSE.
     **/
-
-    public function startSession()
+    public function startSession(): bool
     {
         if (self::SESSION_NOT_STARTED == $this->sessionState) {
             $this->sessionState = session_start();
         }
-
         return $this->sessionState;
     }
 
-
     /**
-    *    Stores datas in the session.
-    *    Example: $instance->foo = 'bar';
+    *    Stores data in session.
+    *    Example: $instance->set('foo', 'bar');
     *
-    *    @param    name    Name of the datas.
-    *    @param    value    Your datas.
-    *    @return    void
+    *    @param    string $name    Name of the data.
+    *    @param    string $value
+    *    @param    string $namespace
+    *    @return   void
     **/
-
-    public function __set($name, $value)
+    public function set(string $name, ?string $value, string $namespace = ''): void
     {
-        $_SESSION[$name] = $value;
-    }
-
-    public function set($name, $value)
-    {
-        $_SESSION[$name] = $value;
-    }
-
-    /**
-    *    Gets datas from the session.
-    *    Example: echo $instance->foo;
-    *
-    *    @param    name    Name of the datas to get.
-    *    @return    mixed    Datas stored in session.
-    **/
-
-    public function __get($value)
-    {
-        if (isset($_SESSION[$value])) {
-            return $_SESSION[$value];
+        if ($namespace) {
+            $_SESSION[$namespace][$name] = $value;
+        } else {
+            $_SESSION[$name] = $value;
         }
     }
 
-    public function get($value)
+    /**
+    *    Get data from session.
+    *    Example: echo $instance->get('foo');
+    *
+    *    @param    string $value  Name of the datas to get.
+    *    @param    string $namespace
+    *    @return   mixed    Data stored in session.
+    **/
+    public function get($value, $namespace = '')
     {
-        if (isset($_SESSION[$value])) {
-            return $_SESSION[$value];
+        if ($namespace) {
+            return $_SESSION[$namespace][$value] ?? null;
+        } else {
+            return $_SESSION[$value] ?? null;
         }
     }
 
-    public function __isset($name)
+    /**
+     * Check if value exists.
+     *
+     * @param string $name
+     *
+     * @return boolean
+     */
+    public function __isset($name): bool
     {
         return isset($_SESSION[$name]);
     }
 
-    public function __unset($name)
+    /**
+     * Remove value from session
+     *
+     * @param string $name
+     * @return void
+     */
+    public function __unset($name): void
     {
         unset($_SESSION[$name]);
     }
 
     /**
-    *    Destroys the current session.
+    * Destroys the current session.
     *
-    *    @return    bool    TRUE is session has been deleted, else FALSE.
+    * @return    bool    TRUE is session has been deleted, else FALSE.
     **/
-
-    public function destroy()
+    public function destroy(): bool
     {
         if (self::SESSION_STARTED == $this->sessionState) {
             $this->sessionState = !session_destroy();

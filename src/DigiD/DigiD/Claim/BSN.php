@@ -4,21 +4,17 @@ namespace Yard\DigiD\DigiD\Claim;
 
 use SimpleXMLElement;
 
-class BSN
+class BSN extends AbstractClaim
 {
-    /** @var array|string */
-    protected $data;
-
     /** @var string */
     protected $nameID = '';
 
-    /**
-     * @param array|SimpleXMLElement $data
-     */
-    public function __construct($data)
+    public function __construct(array $data = [])
     {
-        $this->nameID = is_array($data) ? $this->getFullNameID($data[0]) : $this->getFullNameID($data);
-        $this->data   = $data;
+        parent::__construct($data);
+        if (!empty($this->data)) {
+            $this->nameID = is_array($this->data) ? $this->getFullNameID($this->data[0]) : $this->getFullNameID($this->data);
+        }
     }
 
     /**
@@ -30,7 +26,7 @@ class BSN
      */
     private function getFullNameID(SimpleXMLElement $nameID): string
     {
-        return json_decode(json_encode($nameID))->{'0'} ?? '';
+        return (string) $nameID[0] ?? '';
     }
 
     /**
@@ -42,5 +38,15 @@ class BSN
     {
         $bsn = explode(':', $this->nameID);
         return (int) end($bsn);
+    }
+
+    /**
+     * Get the value of nameID
+     *
+     * @return string
+     */
+    public function getNameID(): string
+    {
+        return $this->nameID;
     }
 }

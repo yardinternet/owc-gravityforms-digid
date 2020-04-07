@@ -5,10 +5,11 @@ namespace Yard\DigiD\DigiD;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Wizkunde\SAMLBase\Metadata\ResolveService;
 use Yard\DigiD\DigiD\Binding\Artifact;
+use Yard\DigiD\DigiD\Binding\Redirect;
+use Yard\DigiD\Foundation\ServiceProvider;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\make;
 use function Yard\DigiD\Foundation\Helpers\resolve;
-use Yard\DigiD\Foundation\ServiceProvider;
 
 class DigiDServiceProvider extends ServiceProvider
 {
@@ -21,18 +22,26 @@ class DigiDServiceProvider extends ServiceProvider
     {
         $this->loadResolvers();
 
-        resolve('route')->get('/digid/metadata', ['\Yard\DigiD\DigiD\DigiDController', 'metadata']);
-        resolve('route')->get('/digid/acs', ['\Yard\DigiD\DigiD\DigiDController', 'acsResolve']);
+        $controller = resolve(\Yard\DigiD\DigiD\DigiDController::class);
+        resolve('route')->get('/digid/acs', [$controller, 'acsResolve']);
+        resolve('route')->get('/digid/logged_out', [$controller, 'loggedOut']);
+        resolve('route')->get('/digid/logout', [$controller, 'logOut']);
+        resolve('route')->get('/digid/metadata', [$controller, 'metadata']);
     }
 
-    private function loadResolvers()
+    /**
+     * Load all the dependencies.
+     *
+     * @return void
+     */
+    private function loadResolvers(): void
     {
         make('digid', function () {
             return new DigiD(new AuthnRequest);
         });
 
         make('twig_loader', function () {
-            return new \Twig_Loader_Filesystem(__DIR__ .'/../DigiD/views');
+            return new \Twig_Loader_Filesystem(GF_DIGID_ROOT_PATH .'/views');
         });
 
         make('twig', function () {
@@ -41,7 +50,6 @@ class DigiDServiceProvider extends ServiceProvider
 
         make('guzzle_http', function () {
             return new \GuzzleHttp\Client([
-                'verify'  => false,
                 'cert'    => config('digid.certificate.public'),
                 'ssl_key' => config('digid.certificate.private'),
             ]);
@@ -75,18 +83,6 @@ class DigiDServiceProvider extends ServiceProvider
             return $signature;
         });
 
-        make('samlbase_unique_id_generator', function () {
-            return new \Wizkunde\SAMLBase\Configuration\UniqueID;
-        });
-
-        make('samlbase_timestamp_generator', function () {
-            return new \Wizkunde\SAMLBase\Configuration\Timestamp;
-        });
-
-        make('samlbase_metadata', function () {
-            return new \Wizkunde\SAMLBase\Metadata\IDPMetadata;
-        });
-
         make('resolver', function () {
             return new ResolveService(resolve('guzzle_http'));
         });
@@ -102,14 +98,27 @@ class DigiDServiceProvider extends ServiceProvider
                     'IsPassive'              => 'false',
                     'NameIDFormat'           => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
                     'ComparisonLevel'        => 'minimum',
+                    'Destination'            => config('digid.url.destination')
                 ]);
+        });
+
+        make('samlbase_binding_redirect', function () {
+            $redirect = new Redirect;
+            $redirect->setMetadata(resolve('resolver')->resolve(resolve('\Wizkunde\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata')));
+            $redirect->setUniqueIdService(resolve('\Wizkunde\SAMLBase\Configuration\UniqueID'));
+            $redirect->setTimestampService(resolve('\Wizkunde\SAMLBase\Configuration\Timestamp'));
+            $redirect->setSignatureService(resolve('samlbase_signature'));
+            $redirect->setSettings(resolve('samlbase_idp_settings'));
+            $redirect->setTwigService(resolve('twig'));
+            $redirect->setHttpService(resolve('guzzle_http'));
+            return $redirect;
         });
 
         make('samlbase_binding_artifact', function () {
             $artifact = new Artifact;
-            $artifact->setMetadata(resolve('resolver')->resolve(resolve('samlbase_metadata'), config('digid.url.idp.metadata')));
-            $artifact->setUniqueIdService(resolve('samlbase_unique_id_generator'));
-            $artifact->setTimestampService(resolve('samlbase_timestamp_generator'));
+            $artifact->setMetadata(resolve('resolver')->resolve(resolve('\Wizkunde\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata')));
+            $artifact->setUniqueIdService(resolve('\Wizkunde\SAMLBase\Configuration\UniqueID'));
+            $artifact->setTimestampService(resolve('\Wizkunde\SAMLBase\Configuration\Timestamp'));
             $artifact->setSignatureService(resolve('samlbase_signature'));
             $artifact->setSettings(resolve('samlbase_idp_settings'));
             $artifact->setTwigService(resolve('twig'));

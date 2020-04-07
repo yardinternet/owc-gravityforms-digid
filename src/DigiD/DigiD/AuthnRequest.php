@@ -18,6 +18,9 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 use function Yard\DigiD\Foundation\Helpers\config;
 
+/**
+ * @deprecated
+ */
 class AuthnRequest extends ProtocolAuthnRequest
 {
     /** @var RequestedAuthnContext */
@@ -36,9 +39,9 @@ class AuthnRequest extends ProtocolAuthnRequest
     }
 
     /**
-     * @return string|null
+     * @return RequestedAuthnContext
      */
-    public function getRequestedAuthnContextString()
+    public function getRequestedAuthnContextString(): RequestedAuthnContext
     {
         return $this->requestedAuthnContext;
     }

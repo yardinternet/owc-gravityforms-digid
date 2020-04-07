@@ -2,8 +2,7 @@
 
 namespace Yard\DigiD\Foundation;
 
-use DI\ContainerBuilder;
-use Exception;
+use function Yard\DigiD\Foundation\Helpers\resolve;
 
 class Plugin
 {
@@ -61,17 +60,25 @@ class Plugin
      *
      * @param string $rootPath
      */
-    public function __construct($rootPath = '')
+    final private function __construct($rootPath = '')
     {
-        $this->buildContainer();
         $this->rootPath = $rootPath;
+        require_once __DIR__ .'/Helpers.php';
+        $this->buildContainer();
         load_plugin_textdomain($this->getName(), false, $this->getName() . '/languages/');
     }
 
-    public static function getInstance() : self
+    /**
+     * Return the Plugin instance
+     *
+     * @param string $rootPath
+     *
+     * @return self
+     */
+    public static function getInstance($rootPath = '') : self
     {
         if (null == static::$instance) {
-            static::$instance = new static();
+            static::$instance = new static($rootPath);
         }
 
         return static::$instance;
@@ -82,15 +89,30 @@ class Plugin
      */
     protected function buildContainer()
     {
-        $builder         = new ContainerBuilder();
+        $builder         = new \DI\ContainerBuilder();
+        $session_factory = new \Aura\Session\SessionFactory;
+        $session         = $session_factory->newInstance($_COOKIE);
+        $session->start();
+
         $builder->addDefinitions([
-            // 'session' => new \duncan3dc\Sessions\SessionInstance($this->getName()),
-            'session' => Session::getInstance(),
-            'route'   => new \Yard\DigiD\Foundation\Routing\Router(get_blog_details()->path ?? '')
+            'config'  => new \Yard\DigiD\Foundation\Config($this->rootPath.'/config'),
+            'loader'  => Loader::getInstance(),
+            'route'   => new \Yard\DigiD\Foundation\Routing\Router(get_blog_details()->path ?? ''),
+            'session' => $session,
+            'teams'   => (new \Monolog\Logger('microsoft-teams-logger'))->pushHandler(new \Rspeekenbrink\MonologMicrosoftTeams\MicrosoftTeamsHandler(
+                getenv('MS_TEAMS_WEBHOOK'),
+                $this->getName(),
+                \Monolog\Logger::INFO
+            ))
         ]);
         $this->container = $builder->build();
     }
 
+    /**
+     * Return container
+     *
+     * @return \DI\Container
+     */
     public function getContainer() :  \DI\Container
     {
         return $this->container;
@@ -103,27 +125,12 @@ class Plugin
      */
     public function boot(): void
     {
-        require_once __DIR__ .'/Helpers.php';
-
-        $this->config = new Config($this->rootPath.'/config');
-        $this->config->boot();
-
-        $this->loader = Loader::getInstance();
+        $this->config = resolve('config');
+        $this->loader = resolve('loader');
 
         $this->bootServiceProviders();
 
-        $this->loader->addAction('wp_enqueue_scripts', $this, 'enqueueScripts');
         $this->loader->register();
-    }
-
-    /**
-     * Enqueue scripts within WordPress.
-     *
-     * @return void
-     */
-    public function enqueueScripts(): void
-    {
-        wp_enqueue_style(GF_DIGID_PLUGIN_SLUG, $this->resourceUrl(GF_DIGID_PLUGIN_SLUG .'.css', 'css'), []);
     }
 
     /**
@@ -188,7 +195,7 @@ class Plugin
             $service = new $service($this);
 
             if (!$service instanceof ServiceProvider) {
-                throw new Exception('Provider must extend ServiceProvider.');
+                throw new \Exception('Provider must extend ServiceProvider.');
             }
 
             $service->register();

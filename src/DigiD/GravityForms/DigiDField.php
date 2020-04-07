@@ -1,12 +1,11 @@
 <?php
 
-namespace Yard\DigiD\GravityForms\DigiD;
+namespace Yard\DigiD\GravityForms;
 
 use GF_Field;
-use Yard\DigiD\Foundation\Plugin;
 
-use Yard\DigiD\GravityForms\DigiD\Inputs\HiddenInput;
-use Yard\DigiD\GravityForms\DigiD\Inputs\LinkInput;
+use Yard\DigiD\GravityForms\Fields\DigiDLoginField;
+use Yard\DigiD\GravityForms\Fields\HiddenField;
 
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\resolve;
@@ -30,7 +29,6 @@ class DigiDField extends GF_Field
      */
     public function __construct($data = [])
     {
-        $this->bsn = resolve('session')->get('digid_bsn');
         parent::__construct($data);
     }
 
@@ -118,14 +116,14 @@ class DigiDField extends GF_Field
     protected function getFields(array $value): array
     {
         return [
-            (new LinkInput($this, $value, Plugin::getInstance()->getContainer()->get('digid')))
+            (new DigiDLoginField($this, $value, resolve('digid'), resolve('session')))
                 ->setFieldID(2)
                 ->setFieldName('digid')
                 ->setFieldText(__('DigiD', config('core.text_domain'))),
-            (new HiddenInput($this, $value))
+            (new HiddenField($this, $value))
                 ->setFieldID(1)
                 ->setFieldName('bsn')
-                ->setValue($this->bsn)
+                ->setValue(resolve('session')->getSegment('digid')->get('bsn'))
         ];
     }
 
@@ -157,7 +155,6 @@ class DigiDField extends GF_Field
      */
     public function get_form_editor_inline_script_on_page_render()
     {
-
         // set the default field label for the field
         $script = sprintf("function SetDefaultValues_%s(field) {
         field.label = '%s';
@@ -185,9 +182,7 @@ class DigiDField extends GF_Field
     public function get_value_entry_detail($value, $currency = '', $use_text = false, $format = 'html', $media = 'screen')
     {
         if (is_array($value)) {
-            $bsn                           = trim(rgget($this->id . '.1', $value));
-
-            $return = $bsn;
+            $return = trim(rgget($this->id . '.1', $value));
         } else {
             $return = '';
         }

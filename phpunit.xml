@@ -18,7 +18,10 @@
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/DigiD</directory>
+            <directory suffix=".php">./src/DigiD/</directory>
+            <exclude>
+                <file>./src/DigiD/GravityForms/DigiDField.php</file>
+            </exclude>
         </whitelist>
     </filter>
     <php>

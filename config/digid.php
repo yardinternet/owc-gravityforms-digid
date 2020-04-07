@@ -3,7 +3,12 @@
 use function \Yard\DigiD\Foundation\Helpers\storage_path;
 
 return [
-    'issuer' => 'https://preprod-formulieren.gemeentehw.nl/digid',
+    'issuer'        => 'https://preprod-formulieren.gemeentehw.nl/digid',
+    'organization'  => [
+        'name'        => 'Gemeente Hoeksche Waard',
+        'displayName' => 'Gemeente Hoeksche Waard',
+        'url'	        => 'https://www.gemeentehw.nl/'
+    ],
     'url'    => [
         'base'        => 'https://preprod-formulieren.gemeentehw.nl/',
         'metadata'    => 'https://preprod-formulieren.gemeentehw.nl/digid/metadata',

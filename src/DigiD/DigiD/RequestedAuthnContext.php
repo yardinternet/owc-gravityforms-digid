@@ -17,6 +17,9 @@ use LightSaml\Model\Context\DeserializationContext;
 use LightSaml\Model\Context\SerializationContext;
 use LightSaml\SamlConstants;
 
+/**
+ * @deprecated
+ */
 class RequestedAuthnContext extends AbstractSamlModel
 {
     /**
