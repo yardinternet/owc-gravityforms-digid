@@ -31,8 +31,17 @@ class StatusTest extends TestCase
     /** @test */
     public function it_returns_nothing_if_empty_data_is_provided()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty class name is not allowed');
         $status   = new Status([]);
         $this->assertEmpty($status->getStatus());
+    }
+
+    /** @test */
+    public function it_returns_an_error_if_invalid_data_is_provided()
+    {
+        $status   = new Status(['asdf']);
+        $this->assertEquals('RequestIncorrect', $status->getStatus());
     }
 
     /** @test */

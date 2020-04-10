@@ -5,7 +5,7 @@ namespace Yard\DigiD\DigiD\Claim;
 use SimpleXMLElement;
 use Wizkunde\SAMLBase\Configuration\SessionID;
 
-class Attributes
+class Attributes implements ClaimInterface
 {
     const ARTIFACT_STATUSCODE = '//samlp:ArtifactResponse//samlp:Status//samlp:StatusCode';
     const LOGOUT_STATUSCODE   = '//samlp:LogoutResponse//samlp:Status//samlp:StatusCode';
@@ -16,7 +16,6 @@ class Attributes
 
     /** @var SimpleXMLElement */
     protected $xml;
-
 
     /** @var string $response */
     public function __construct(string $response)

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+<samlp:AuthnRequest
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-	ID="{{ UniqueID }}"
+    ID="{{ UniqueID }}"
     Version="2.0"
     IssueInstant="{{ Timestamp }}"
     Destination="{{ Destination }}"

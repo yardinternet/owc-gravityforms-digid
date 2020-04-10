@@ -5,6 +5,7 @@ namespace Yard\Tests\DigiD\DigiD\Claim;
 use WP_Mock;
 use Yard\DigiD\DigiD\Claim\Attributes;
 use Yard\DigiD\DigiD\Claim\BSN;
+use Yard\DigiD\DigiD\Claim\Logout;
 use Yard\DigiD\DigiD\Claim\Status;
 use Yard\Tests\DigiD\TestCase;
 
@@ -35,8 +36,16 @@ class AttributesTest extends TestCase
         $attributes = new Attributes($response);
         $this->assertInstanceOf(Status::class, $attributes->status());
         $this->assertInstanceOf(BSN::class, $attributes->bsn());
+        $this->assertInstanceOf(Logout::class, $attributes->logout());
     }
 
+    /** @test */
+    public function session_id_is_returned_correctly()
+    {
+        $response   = $this->loadStub('SUCCESS.xml');
+        $attributes = new Attributes($response);
+        $this->assertEquals('26d224be1e436ba652b39b8cde970c5d4432583', $attributes->sessionID());
+    }
 
     protected function loadStub($stub = '')
     {

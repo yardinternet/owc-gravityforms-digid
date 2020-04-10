@@ -3,7 +3,6 @@
 namespace Yard\DigiD\DigiD;
 
 use Yard\DigiD\DigiD\Claim\Attributes;
-
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
 class DigiDController
@@ -23,18 +22,20 @@ class DigiDController
         $session = resolve('session')->getSegment('digid');
 
         try {
-            $responseData = resolve('samlbase_binding_artifact')
+            $responseData = resolve('yard::digid:artifact-binding')
                 ->resolveArtifact($_REQUEST['SAMLart']);
-        } catch (\GuzzleHttp\Exception\ClientException $e ) {
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             $session->setFlash('error', __('Something gone wrong'));
             return $this->redirectTo();
         }
 
+        // $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/AuthnRequest.xml'));
         // $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/DENIED.xml'));
         // $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/SUCCESS.xml'));
+
         $attributes   = new Attributes($responseData);
 
-		$session->set('session_id', $attributes->sessionID());
+        $session->set('session_id', $attributes->sessionID());
         $session->set('status_code', $attributes->status()->get()->getStatusCode());
         if ($attributes->status()->get()->isSuccess()) {
             $session->set('bsn', $attributes->bsn()->getID());
@@ -42,7 +43,7 @@ class DigiDController
         } else {
             $session->set('bsn', '');
             $session->set('nameID', '');
-            $session->setFlash('error', 'Error occured!');
+            $session->setFlash('error', $attributes->status()->get()->message());
         }
 
         resolve('teams')->info('Attributes are filled', [
@@ -112,10 +113,10 @@ class DigiDController
             return $this->redirectTo();
         }
 
-        $settings = resolve('samlbase_idp_settings');
+        $settings = resolve('yard::digid::idp-settings');
         $settings->setValue('NameID', $nameID);
 
-        $redirectUrl = resolve('samlbase_binding_redirect')
+        $redirectUrl = resolve('yard::digid::redirect-binding')
             ->setSettings($settings)
             ->getURL('LogoutRequest');
 
@@ -133,5 +134,17 @@ class DigiDController
         header('Content-Type: application/xml');
         echo DigiDMetadata::make()->toXML();
         exit;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return string
+     */
+    public static function getAuthNRequestURL(): string
+    {
+        $httpResponse = new \Symfony\Component\HttpFoundation\RedirectResponse(resolve('yard::digid::redirect-binding')
+            ->getURL());
+        return $httpResponse->getTargetUrl();
     }
 }

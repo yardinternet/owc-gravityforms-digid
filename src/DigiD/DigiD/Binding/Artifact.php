@@ -5,6 +5,7 @@ namespace Yard\DigiD\DigiD\Binding;
 use Wizkunde\SAMLBase\Binding\Artifact as BindingArtifact;
 
 use function Yard\DigiD\Foundation\Helpers\config;
+use function Yard\DigiD\Foundation\Helpers\view;
 
 /**
  * Class Redirect
@@ -37,5 +38,25 @@ class Artifact extends BindingArtifact
 
         /** @var \GuzzleHttp\Psr7\Response $response */
         return (string) $response->getBody()->getContents();
+    }
+
+    protected function buildEnvelope($requestType = 'ArtifactResolve')
+    {
+        $requestTemplate = view(
+            'xml/' . $requestType . '.php',
+            array_merge($this->getSettings()->getValues(), [
+                'ProtocolBinding' => $this->getProtocolBinding(),
+                'UniqueID'        => $this->getUniqueIdService()->generate(),
+                'Timestamp'       => $this->getTimestampService()->generate()->toFormat(),
+            ])
+        );
+
+        $signedTemplate = $this->signTemplate($requestTemplate);
+
+        $signedTemplate = str_replace('<?xml version="1.0"?>', '', $signedTemplate);
+        return view(
+            'xml/SoapEnvelope.php',
+            ['SAMLContent' => $signedTemplate]
+        );
     }
 }

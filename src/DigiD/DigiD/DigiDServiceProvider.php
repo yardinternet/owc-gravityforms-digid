@@ -6,10 +6,10 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Wizkunde\SAMLBase\Metadata\ResolveService;
 use Yard\DigiD\DigiD\Binding\Artifact;
 use Yard\DigiD\DigiD\Binding\Redirect;
-use Yard\DigiD\Foundation\ServiceProvider;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\make;
 use function Yard\DigiD\Foundation\Helpers\resolve;
+use Yard\DigiD\Foundation\ServiceProvider;
 
 class DigiDServiceProvider extends ServiceProvider
 {
@@ -36,58 +36,32 @@ class DigiDServiceProvider extends ServiceProvider
      */
     private function loadResolvers(): void
     {
-        make('digid', function () {
-            return new DigiD(new AuthnRequest);
-        });
-
-        make('twig_loader', function () {
-            return new \Twig_Loader_Filesystem(GF_DIGID_ROOT_PATH .'/views');
-        });
-
-        make('twig', function () {
-            return new \Twig_Environment(resolve('twig_loader'));
-        });
-
-        make('guzzle_http', function () {
+        make('yard::guzzle-http', function () {
             return new \GuzzleHttp\Client([
                 'cert'    => config('digid.certificate.public'),
                 'ssl_key' => config('digid.certificate.private'),
             ]);
         });
 
-        make('SigningCertificate', function () {
+        make('yard::digid:signing-certificate', function () {
             $certificate = new \Wizkunde\SAMLBase\Certificate();
             $certificate->setPublicKey(config('digid.certificate.public'), true);
             $certificate->setPrivateKey(config('digid.certificate.private'), true);
             return $certificate;
         });
 
-        make('EncryptionCertificate', function () {
-            $certificate = new \Wizkunde\SAMLBase\Certificate();
-            $certificate->setPublicKey(config('digid.certificate.public'), true);
-            $certificate->setPrivateKey(config('digid.certificate.private'), true);
-            return $certificate;
-        });
-
-        make('samlbase_encryption', function () {
-            return (new \Wizkunde\SAMLBase\Security\Encryption())
-                ->setCertificate(
-                    resolve('EncryptionCertificate')
-                );
-        });
-
-        make('samlbase_signature', function () {
+        make('yard::digid::signature', function () {
             $signature = new \Wizkunde\SAMLBase\Security\Signature();
             $signature->setSigningAlgorithm(XMLSecurityDSig::SHA1);
-            $signature->setCertificate(resolve('SigningCertificate'));
+            $signature->setCertificate(resolve('yard::digid:signing-certificate'));
             return $signature;
         });
 
-        make('resolver', function () {
-            return new ResolveService(resolve('guzzle_http'));
+        make('\Wizkunde\SAMLBase\Metadata\ResolveService', function () {
+            return new ResolveService();
         });
 
-        make('samlbase_idp_settings', function () {
+        make('yard::digid::idp-settings', function () {
             return (new \Wizkunde\SAMLBase\Configuration\Settings())
                 ->setValues([
                     'NameID'                 => config('digid.issuer'),
@@ -102,27 +76,25 @@ class DigiDServiceProvider extends ServiceProvider
                 ]);
         });
 
-        make('samlbase_binding_redirect', function () {
+        make('yard::digid::redirect-binding', function () {
             $redirect = new Redirect;
-            $redirect->setMetadata(resolve('resolver')->resolve(resolve('\Wizkunde\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata')));
+            $redirect->setMetadata(resolve('\Wizkunde\SAMLBase\Metadata\ResolveService')->resolve(resolve('\Wizkunde\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata')));
             $redirect->setUniqueIdService(resolve('\Wizkunde\SAMLBase\Configuration\UniqueID'));
             $redirect->setTimestampService(resolve('\Wizkunde\SAMLBase\Configuration\Timestamp'));
-            $redirect->setSignatureService(resolve('samlbase_signature'));
-            $redirect->setSettings(resolve('samlbase_idp_settings'));
-            $redirect->setTwigService(resolve('twig'));
-            $redirect->setHttpService(resolve('guzzle_http'));
+            $redirect->setSignatureService(resolve('yard::digid::signature'));
+            $redirect->setSettings(resolve('yard::digid::idp-settings'));
+            $redirect->setHttpService(resolve('yard::guzzle-http'));
             return $redirect;
         });
 
-        make('samlbase_binding_artifact', function () {
+        make('yard::digid:artifact-binding', function () {
             $artifact = new Artifact;
-            $artifact->setMetadata(resolve('resolver')->resolve(resolve('\Wizkunde\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata')));
+            $artifact->setMetadata(resolve('\Wizkunde\SAMLBase\Metadata\ResolveService')->resolve(resolve('\Wizkunde\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata')));
             $artifact->setUniqueIdService(resolve('\Wizkunde\SAMLBase\Configuration\UniqueID'));
             $artifact->setTimestampService(resolve('\Wizkunde\SAMLBase\Configuration\Timestamp'));
-            $artifact->setSignatureService(resolve('samlbase_signature'));
-            $artifact->setSettings(resolve('samlbase_idp_settings'));
-            $artifact->setTwigService(resolve('twig'));
-            $artifact->setHttpService(resolve('guzzle_http'));
+            $artifact->setSignatureService(resolve('yard::digid::signature'));
+            $artifact->setSettings(resolve('yard::digid::idp-settings'));
+            $artifact->setHttpService(resolve('yard::guzzle-http'));
             return $artifact;
         });
     }

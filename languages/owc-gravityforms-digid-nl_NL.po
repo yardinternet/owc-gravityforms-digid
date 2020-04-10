@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OWC GravityForms DigiD\n"
-"POT-Creation-Date: 2020-04-03 14:45+0200\n"
-"PO-Revision-Date: 2020-04-03 14:47+0200\n"
+"POT-Creation-Date: 2020-04-10 16:16+0200\n"
+"PO-Revision-Date: 2020-04-10 16:16+0200\n"
 "Last-Translator: Edwin Siebel <edwin@yard.nl>\n"
 "Language-Team: Yard Internet <info@yard.nl>\n"
 "Language: nl\n"
@@ -20,14 +20,38 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-2: vendor\n"
 "X-Poedit-SearchPathExcluded-3: languages\n"
 
-#: src/DigiD/GravityForms/DigiD/DigiDField.php:43
-#: src/DigiD/GravityForms/DigiD/DigiDField.php:123
+#: src/DigiD/DigiD/Claim/StatusCodes/AuthnFailed.php:16
+msgid "Login cancelled"
+msgstr "Login geannuleerd"
+
+#: src/DigiD/DigiD/Claim/StatusCodes/RequestDenied.php:16
+msgid "Access denied"
+msgstr "Toegang geweigerd"
+
+#: src/DigiD/DigiD/Claim/StatusCodes/Requester.php:16
+#: src/DigiD/DigiD/Claim/StatusCodes/Responder.php:16
+msgid "Unknown error"
+msgstr "Onbekende fout"
+
+#: src/DigiD/DigiD/DigiDController.php:28
+msgid "Something gone wrong"
+msgstr "Er is een fout onstaan"
+
+#: src/DigiD/GravityForms/DigiDField.php:42
+#: src/DigiD/GravityForms/DigiDField.php:122
 msgid "DigiD"
 msgstr "DigiD"
 
-#: src/DigiD/GravityForms/DigiD/DigiDField.php:107
+#: src/DigiD/GravityForms/DigiDField.php:106
 msgid "This field is required."
 msgstr "Dit veld is verplicht."
+
+#~ msgid ""
+#~ "Plugin has not been installed using Composer. Please install plugin using "
+#~ "Composer."
+#~ msgstr ""
+#~ "Plugin is niet geïnstalleerd met behulp van Composer. Installeer de "
+#~ "plugin met behulp van Composer."
 
 #~ msgid "DigiD Address"
 #~ msgstr "Adres"

@@ -2,7 +2,7 @@
 
 namespace Yard\DigiD\DigiD\Claim;
 
-class Logout extends AbstractClaim
+class Logout implements ClaimInterface
 {
     use StatusTrait;
 
@@ -12,11 +12,17 @@ class Logout extends AbstractClaim
     /** @var string */
     protected $fullStatus = '';
 
+    /** @var array */
+    protected $data = [];
+
+    /**
+     * @param array $data
+     */
     public function __construct(array $data = [])
     {
-        parent::__construct($data);
+        $this->data   = $data;
         if (!empty($this->data)) {
-            $this->fullStatus             = $this->getMeaningfullStatusCode($this->data);
+            $this->fullStatus             = $this->getMeaningfulStatusCode($this->data);
             $this->status                 = $this->parseStatus($this->fullStatus);
         }
     }

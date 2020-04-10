@@ -6,10 +6,11 @@ use Aura\Session\Segment;
 use Aura\Session\Session;
 use StdClass;
 use Yard\DigiD\DigiD\DigiD;
-use Yard\DigiD\Foundation\Plugin;
-
+use Yard\DigiD\DigiD\DigiDController;
 use function Yard\DigiD\Foundation\Helpers\resolve;
+
 use function Yard\DigiD\Foundation\Helpers\view;
+use Yard\DigiD\Foundation\Plugin;
 
 class DigiDLoginField extends AbstractField
 {
@@ -23,10 +24,9 @@ class DigiDLoginField extends AbstractField
      * @param StdClass $field
      * @param array $value
      */
-    public function __construct(StdClass $field, array $value, DigiD $digid, Session $session)
+    public function __construct(StdClass $field, array $value, Session $session)
     {
         parent::__construct($field, $value);
-        $this->digid   = $digid;
         $this->session = $session->getSegment('digid');
     }
 
@@ -108,8 +108,8 @@ class DigiDLoginField extends AbstractField
     {
         return view('digid/digidField.php', [
             'error' => $this->session->getFlash('error'),
-            'logo' => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
-            'link' => $this->digid->getAuthNRequestURL()
+            'logo'  => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
+            'link'  => DigiDController::getAuthNRequestURL()
         ]);
     }
 }

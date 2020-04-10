@@ -6,6 +6,7 @@ use DOMDocument;
 
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\resolve;
+use function Yard\DigiD\Foundation\Helpers\view;
 
 class DigiDMetadata
 {
@@ -17,16 +18,6 @@ class DigiDMetadata
     public static function make(): self
     {
         return new static();
-    }
-
-    /**
-     * Get the template file.
-     *
-     * @return string
-     */
-    protected function getTemplate(): string
-    {
-        return \file_get_contents(GF_DIGID_ROOT_PATH .'/views/metadata.php');
     }
 
     /**
@@ -43,33 +34,11 @@ class DigiDMetadata
             'SLOURL'                   => config('digid.url.logout'),
             'SLOGGEDOUTURL'            => config('digid.url.logged_out'),
             'EntityID'                 => config('digid.issuer'),
-            'ServiceProviderPublicKey' => resolve('SigningCertificate')->getPublicKey()->getX509Certificate(),
+            'ServiceProviderPublicKey' => resolve('yard::digid:signing-certificate')->getPublicKey()->getX509Certificate(),
             'OrganizationName'         => config('digid.organization.name'),
             'OrganizationDisplayName'  => config('digid.organization.displayName'),
             'OrganizationURL'          => config('digid.organization.url'),
         ];
-    }
-
-    /**
-     * Search and replace of variables.
-     * Searching for ${VARIABLE}.
-     *
-     * @param string $template
-     * @param array $variables
-     *
-     * @return string
-     */
-    protected function parseTemplate(): string
-    {
-        $variables = $this->getConfig();
-        return preg_replace_callback(
-            '#{\s?(.*?)\s?}#',
-            function ($match) use ($variables) {
-                $match[1] = trim($match[1], '$');
-                return $variables[$match[1]];
-            },
-            ' ' . $this->getTemplate() . ' '
-        );
     }
 
     /**
@@ -80,9 +49,9 @@ class DigiDMetadata
     protected function buildMetadata(): DOMDocument
     {
         $document = new DOMDocument();
-        $document->loadXML($this->parseTemplate());
+        $document->loadXML(view('xml/metadata.php', $this->getConfig()));
 
-        resolve('samlbase_signature')->signMetadata($document);
+        resolve('yard::digid::signature')->signMetadata($document);
 
         return $document;
     }

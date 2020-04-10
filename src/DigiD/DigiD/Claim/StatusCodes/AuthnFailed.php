@@ -4,7 +4,7 @@ namespace Yard\DigiD\DigiD\Claim\StatusCodes;
 
 use function Yard\DigiD\Foundation\Helpers\config;
 
-class Responder extends AbstractStatusCode implements StatusCodeInterface
+class AuthnFailed extends AbstractStatusCode implements StatusCodeInterface
 {
     public function isSuccess(): bool
     {
@@ -13,6 +13,6 @@ class Responder extends AbstractStatusCode implements StatusCodeInterface
 
     public function message(): string
     {
-        return __('Unknown error', config('core.text_domain'));
+        return __('Login cancelled', config('core.text_domain'));
     }
 }

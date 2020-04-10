@@ -4,6 +4,8 @@ namespace Yard\DigiD\DigiD\Binding;
 
 use Wizkunde\SAMLBase\Binding\BindingAbstract;
 
+use function Yard\DigiD\Foundation\Helpers\view;
+
 /**
  * Class Redirect
  *
@@ -26,8 +28,8 @@ class Redirect extends BindingAbstract
      */
     public function buildRequest($requestType = 'AuthnRequest')
     {
-        $requestTemplate = $this->getTwigService()->render(
-            $requestType . '.xml.twig',
+        $requestTemplate = view(
+            'xml/'. $requestType . '.php',
             array_merge($this->getSettings()->getValues(), [
                 'ProtocolBinding' => $this->getProtocolBinding(),
                 'UniqueID'        => $this->getUniqueIdService()->generate(),

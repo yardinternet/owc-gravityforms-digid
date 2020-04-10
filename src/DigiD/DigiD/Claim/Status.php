@@ -2,7 +2,7 @@
 
 namespace Yard\DigiD\DigiD\Claim;
 
-class Status extends AbstractClaim
+class Status implements ClaimInterface
 {
     use StatusTrait;
 
@@ -17,6 +17,7 @@ class Status extends AbstractClaim
     const STATUS_PARTIAL_LOGOUT       = 'urn:oasis:names:tc:SAML:2.0:status:PartialLogout';
     const STATUS_PROXY_COUNT_EXCEEDED = 'urn:oasis:names:tc:SAML:2.0:status:ProxyCountExceeded';
     const STATUS_REQUEST_DENIED       = 'urn:oasis:names:tc:SAML:2.0:status:RequestDenied';
+    const STATUS_REQUEST_INCORRECT    = 'urn:oasis:names:tc:SAML:2.0:status:RequestIncorrect';
 
     /** @var string */
     protected $status = '';
@@ -24,11 +25,17 @@ class Status extends AbstractClaim
     /** @var string */
     protected $fullStatus = '';
 
+    /** @var array */
+    protected $data = [];
+
+    /**
+     * @param array $data
+     */
     public function __construct(array $data = [])
     {
-        parent::__construct($data);
+        $this->data   = $data;
         if (!empty($this->data)) {
-            $this->fullStatus = $this->getMeaningfullStatusCode($this->data);
+            $this->fullStatus = $this->getMeaningfulStatusCode($this->data);
             $this->status     = $this->parseStatus($this->fullStatus);
         }
     }

@@ -1,15 +1,13 @@
 ## TODO
 
-- Refactor
-    * remove LigthSAML package for BaseSAML
-
 - Add
-	* Cookie lifetime =>
-	* CSRF token
-	* Error handling
-	* Flash messages
+    * Cookie lifetime
+    * CSRF token
 
 - Done
     * session destroy op form start
     * session destroy op submit
     * logout
+    * remove LigthSAML package for BaseSAML
+    * Error handling
+    * Flash messages

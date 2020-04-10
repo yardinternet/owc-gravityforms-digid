@@ -35,10 +35,30 @@ class View
     {
         $this->bindAll($vars);
         ob_start();
-        extract($this->bindings);
         include($this->templateDirectory . $templateFile);
         $data = trim(ob_get_clean());
-        return $data;
+        return $this->parseTemplate($data, $this->bindings);
+    }
+
+    /**
+     * Search and replace of variables.
+     * Searching for {{VARIABLE}}.
+     *
+     * @param string $templateFile
+     * @param array $bindings
+     *
+     * @return string
+     */
+    protected function parseTemplate(string $template, array $bindings = []): string
+    {
+        return preg_replace_callback(
+            '#{{\s?(.*?)\s?}}#',
+            function ($match) use ($bindings) {
+                $match[1] = trim($match[1], '');
+                return $bindings[$match[1]] ?? '';
+            },
+            $template
+        );
     }
 
     /**

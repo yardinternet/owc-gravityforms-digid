@@ -8,4 +8,9 @@ class Success extends AbstractStatusCode implements StatusCodeInterface
     {
         return true;
     }
+
+    public function message(): string
+    {
+        return '';
+    }
 }

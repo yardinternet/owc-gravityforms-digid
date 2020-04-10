@@ -2,9 +2,9 @@
 
 namespace Yard\DigiD\GravityForms;
 
-use Yard\DigiD\Foundation\ServiceProvider;
-
 use function Yard\DigiD\Foundation\Helpers\resolve;
+
+use Yard\DigiD\Foundation\ServiceProvider;
 
 class GravityFormsServiceProvider extends ServiceProvider
 {
@@ -15,37 +15,44 @@ class GravityFormsServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        add_action('gform_loaded', function () {
-            \GF_Fields::register(new DigiDField);
-        }, 5);
+        $this->plugin->loader->addAction('gform_loaded', $this, 'loadField', 5);
+        $this->plugin->loader->addFilter('gform_pre_render', $this, 'clearFormOnFirstRender', 10, 3);
+        $this->plugin->loader->addAction('gform_after_submission', $this, 'clearFormAfterSubmission', 10, 2);
+    }
 
-        add_filter('gform_pre_render', function ($form, $ajax, $field_values) {
-            if (!count(array_filter($form['fields'], function ($item) {
-                return  is_a($item, DigiDField::class);
-            }))) {
-                return $form;
-            }
+    public function loadField(): void
+    {
+        \GF_Fields::register(new DigiDField);
+    }
 
-            if (isset($_REQUEST['gf_token']) and (!empty($_REQUEST['gf_token']))) {
-                return $form;
-            }
-
-			/** @TODO clear form at first load, not at every view */
-            // resolve('session')->clear();
-            // resolve('teams')->info('Form is render; session is cleared');
-
+    public function clearFormOnFirstRender($form, $ajax, $field_values)
+    {
+        if (!count(array_filter($form['fields'], function ($item) {
+            return  is_a($item, DigiDField::class);
+        }))) {
             return $form;
-        }, 10, 3);
+        }
 
-        add_action('gform_after_submission', function ($entry, $form) {
-            if (!count(array_filter($form['fields'], function ($item) {
-                return  is_a($item, DigiDField::class);
-            }))) {
-                return;
-            }
+        if (isset($_REQUEST['gf_token']) and (!empty($_REQUEST['gf_token']))) {
+            return $form;
+        }
 
-            resolve('session')->clear();
-            resolve('teams')->info('Form is submitted; session is cleared');
-        }, 10, 2);
+        /** @TODO clear form at first load, not at every view */
+        // resolve('session')->clear();
+        // resolve('teams')->info('Form is render; session is cleared');
+
+        return $form;
+    }
+
+    public function clearFormAfterSubmission($entry, $form)
+    {
+        if (!count(array_filter($form['fields'], function ($item) {
+            return  is_a($item, DigiDField::class);
+        }))) {
+            return;
+        }
+
+        resolve('session')->clear();
+        resolve('teams')->info('Form is submitted; session is cleared');
     }
 }

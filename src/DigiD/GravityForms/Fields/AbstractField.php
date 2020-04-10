@@ -118,7 +118,12 @@ abstract class AbstractField
      */
     protected function getSpanField(): string
     {
-        return "<span id='input_{$this->field->id}_{$this->form['id']}.{$this->fieldID}.container' class='ginput_{$this->fieldPosition} {$this->css_prefix} {$this->fieldID} {$this->cssClass}' {$this->style}>";
+        $cssClass = implode(" ", array_filter([
+            trim("ginput_{$this->fieldPosition}"),
+            trim($this->css_prefix),
+            trim($this->cssClass)
+        ]));
+        return "<span id=\"input_{$this->field->id}_{$this->form["id"]}.{$this->fieldID}.container\" class=\"{$cssClass}\" {$this->style}>";
     }
 
     /**

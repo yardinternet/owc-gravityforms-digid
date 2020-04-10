@@ -31,6 +31,9 @@ trait StatusTrait
      */
     public function getStatus(): string
     {
+        if (empty($this->status)) {
+            throw new Exception('Empty class name is not allowed');
+        }
         return $this->status;
     }
 
@@ -59,21 +62,28 @@ trait StatusTrait
         return end($status);
     }
 
-    private function areEqual(array $statusCodes): bool
-    {
-        return 2 > count(array_unique($statusCodes));
-    }
-
-    protected function getMeaningfullStatusCode(array $statusCodes): string
+    /**
+     * Returns the last and most meaningful statuscode.
+     *
+     * @param SimpleXMLElement[] $statusCodes
+     * @return string
+     */
+    protected function getMeaningfulStatusCode(array $statusCodes): string
     {
         $statusCodes = array_map(function ($item) {
+            if (! is_a($item, SimpleXMLElement::class)) {
+                return;
+            }
             return $this->getFullStatus($item);
         }, $statusCodes);
 
-        if ($this->areEqual($statusCodes)) {
-            return $statusCodes[0];
+        $statusCodes = \array_filter($statusCodes);
+        $statusCodes = \array_unique($statusCodes);
+
+        if (1 > count($statusCodes)) {
+            return Status::STATUS_REQUEST_INCORRECT;
         }
 
-        return $statusCodes[1];
+        return end($statusCodes);
     }
 }

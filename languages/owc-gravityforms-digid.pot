@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OWC GravityForms DigiD\n"
-"POT-Creation-Date: 2020-04-03 14:45+0200\n"
+"POT-Creation-Date: 2020-04-10 16:15+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,11 +18,28 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-2: vendor\n"
 "X-Poedit-SearchPathExcluded-3: languages\n"
 
-#: src/DigiD/GravityForms/DigiD/DigiDField.php:43
-#: src/DigiD/GravityForms/DigiD/DigiDField.php:123
+#: src/DigiD/DigiD/Claim/StatusCodes/AuthnFailed.php:16
+msgid "Login cancelled"
+msgstr ""
+
+#: src/DigiD/DigiD/Claim/StatusCodes/RequestDenied.php:16
+msgid "Access denied"
+msgstr ""
+
+#: src/DigiD/DigiD/Claim/StatusCodes/Requester.php:16
+#: src/DigiD/DigiD/Claim/StatusCodes/Responder.php:16
+msgid "Unknown Error"
+msgstr ""
+
+#: src/DigiD/DigiD/DigiDController.php:28
+msgid "Something gone wrong"
+msgstr ""
+
+#: src/DigiD/GravityForms/DigiDField.php:42
+#: src/DigiD/GravityForms/DigiDField.php:122
 msgid "DigiD"
 msgstr ""
 
-#: src/DigiD/GravityForms/DigiD/DigiDField.php:107
+#: src/DigiD/GravityForms/DigiDField.php:106
 msgid "This field is required."
 msgstr ""

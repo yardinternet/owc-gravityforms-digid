@@ -8,6 +8,7 @@ use Yard\DigiD\GravityForms\Fields\DigiDLoginField;
 use Yard\DigiD\GravityForms\Fields\HiddenField;
 
 use function Yard\DigiD\Foundation\Helpers\config;
+use function Yard\DigiD\Foundation\Helpers\dd;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
 if (! class_exists('\GFForms')) {
@@ -116,7 +117,7 @@ class DigiDField extends GF_Field
     protected function getFields(array $value): array
     {
         return [
-            (new DigiDLoginField($this, $value, resolve('digid'), resolve('session')))
+            (new DigiDLoginField($this, $value, resolve('session')))
                 ->setFieldID(2)
                 ->setFieldName('digid')
                 ->setFieldText(__('DigiD', config('core.text_domain'))),
@@ -142,10 +143,55 @@ class DigiDField extends GF_Field
             return $item->render();
         }, $this->getFields($value)));
 
-        return "<div class='ginput_complex{$this->class_suffix} ginput_container ginput_container_digid' id='input_{$form['id']}_{$this->id}'>
-					{$output}
-                <div class='gf_clear gf_clear_complex'></div>
+        return "<div class=\"ginput_complex{$this->class_suffix} ginput_container ginput_container_digid\" id=\"input_{$form['id']}_{$this->id}\">
+                    {$output}
+                <div class=\"gf_clear gf_clear_complex\"></div>
             </div>";
+    }
+
+    /**
+     * Returns the field markup; including field label, description, validation, and the form editor admin buttons.
+     *
+     * The {FIELD} placeholder will be replaced in GFFormDisplay::get_field_content with the markup returned by GF_Field::get_field_input().
+     *
+     * @param string|array $value                The field value. From default/dynamic population, $_POST, or a resumed incomplete submission.
+     * @param bool         $force_frontend_label Should the frontend label be displayed in the admin even if an admin label is configured.
+     * @param array        $form                 The Form Object currently being processed.
+     *
+     * @return string
+     */
+    public function get_field_content($value, $force_frontend_label, $form)
+    {
+        $field_label = $this->get_field_label($force_frontend_label, $value);
+
+        $validation_message_id = 'validation_message_' . $form['id'] . '_' . $this->id;
+        $validation_message    = ($this->failed_validation && ! empty($this->validation_message)) ? sprintf("<div id='%s' class='gfield_description validation_message' aria-live='polite'>%s</div>", $validation_message_id, $this->validation_message) : '';
+
+        $is_form_editor  = $this->is_form_editor();
+        $is_entry_detail = $this->is_entry_detail();
+        $is_admin        = $is_form_editor || $is_entry_detail;
+
+        $required_div = $is_admin || $this->isRequired ? sprintf("<span class='gfield_required'>%s</span>", $this->isRequired ? '*' : '') : '';
+
+        $admin_buttons = $this->get_admin_buttons();
+
+        $target_input_id = $this->get_first_input_id($form);
+
+        $for_attribute = empty($target_input_id) ? '' : "for='{$target_input_id}'";
+
+        $description = $this->get_description($this->description, 'gfield_description');
+		$bsn    = resolve('session')->getSegment('digid')->get('bsn');
+        if (!empty($bsn)) {
+            $description = '';
+        }
+        if ($this->is_description_above($form)) {
+            $clear         = $is_admin ? "<div class='gf_clear'></div>" : '';
+            $field_content = sprintf("%s<label class='%s' $for_attribute >%s%s</label>%s{FIELD}%s$clear", $admin_buttons, esc_attr($this->get_field_label_class()), esc_html($field_label), $required_div, $description, $validation_message);
+        } else {
+            $field_content = sprintf("%s<label class='%s' $for_attribute >%s%s</label>{FIELD}%s%s", $admin_buttons, esc_attr($this->get_field_label_class()), esc_html($field_label), $required_div, $description, $validation_message);
+        }
+
+        return $field_content;
     }
 
     /**

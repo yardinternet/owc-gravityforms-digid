@@ -1,3 +1,3 @@
-<div class="alert"><?php echo $error; ?></div>
+<div class="alert">{{ error }}</div>
 
-<a href="<?php echo $link; ?>"><img src="<?php echo $logo ;?>"></a>
+<a href="{{ link }}"><img src="{{ logo }}" alt="DigiD logo"></a>

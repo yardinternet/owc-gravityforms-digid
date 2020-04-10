@@ -2,7 +2,7 @@
 /**
  * Plugin Name: OWC GravityForms DigiD
  * Plugin URI: https://www.yard.nl
- * Description: Add a DigiD field to GravityForms.
+ * Description: Add a DigiD login field to GravityForms
  * Author: Yard Digital Agency
  * Author URI: https://www.yard.nl
  * Version: 0.1
@@ -24,9 +24,10 @@ define('GF_DIGID_PLUGIN_SLUG', 'owc-gravityforms-digid');
 define('GF_DIGID_ROOT_PATH', __DIR__);
 define('GF_DIGID_VERSION', '0.1');
 
-if (file_exists(__DIR__ .'/vendor/autoload.php')) {
-    require_once __DIR__ .'/vendor/autoload.php';
-}
+// if (!file_exists(__DIR__ .'/vendor/autoload.php')) {
+//     throw new \RuntimeException(__('Plugin has not been installed using Composer. Please install plugin using Composer.', GF_DIGID_PLUGIN_SLUG));
+// }
+// require_once __DIR__ .'/vendor/autoload.php';
 
 /**
  * Manual loaded file: the autoloader.

@@ -26,7 +26,6 @@ parameters:
     autoload_directories:
         - %currentWorkingDirectory%/src/
         - %currentWorkingDirectory%/tests/
-        # - %currentWorkingDirectory%/vendor/wp-premium/
     ignoreErrors:
         # Uses func_get_args()
         # Fixed in WordPress 5.3
