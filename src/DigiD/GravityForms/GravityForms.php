@@ -1,0 +1,108 @@
+<?php
+
+namespace Yard\DigiD\GravityForms;
+
+use GFFormDisplay;
+
+use function Yard\DigiD\Foundation\Helpers\resolve;
+
+class GravityForms
+{
+    /**
+     * Register Field
+     *
+     * @return void
+     */
+    public function registerField(): void
+    {
+        \GF_Fields::register(new DigiDField);
+    }
+
+    /**
+     * Clears session on first render.
+     *
+     * @param array $form
+     * @param bool $ajax
+     * @param array $field_values
+     *
+     * @return array
+     */
+    public function clearFormOnFirstRender(array $form, bool $ajax, array $field_values): array
+    {
+        if (!count(array_filter($form['fields'], function ($item) {
+            return  is_a($item, DigiDField::class);
+        }))) {
+            return $form;
+        }
+
+        if ($this->hasToken()) {
+            return $form;
+        }
+
+        if ($this->isFormPaginated($form)) {
+            resolve('session')->clear();
+            resolve('teams')->info('Form is render; session is cleared');
+            return $form;
+        }
+
+        if ($this->isFirstPaginatedView($form)) {
+            resolve('session')->clear();
+            resolve('teams')->info('Form is render; session is cleared');
+
+            return $form;
+        }
+
+        return $form;
+    }
+
+    public function clearFormAfterSubmission(array $entry, array $form)
+    {
+        if (!count(array_filter($form['fields'], function ($item) {
+            return  is_a($item, DigiDField::class);
+        }))) {
+            return;
+        }
+
+        resolve('session')->clear();
+        resolve('teams')->info('Form is submitted; session is cleared');
+    }
+
+    protected function hasToken(): bool
+    {
+        return isset($_REQUEST['gf_token']) and (!empty($_REQUEST['gf_token']));
+    }
+
+    protected function isFormPaginated(array $form): bool
+    {
+        return (1 >= count($form['pagination']['pages']));
+    }
+
+    protected function isFirstPaginatedView(array $form): bool
+    {
+        return (($this->getCurrentPage($form) === $this->getSourcePage($form))
+            and $this->isFirstPage($form));
+    }
+
+    protected function getSourcePage(array $form): int
+    {
+        return (int) GFFormDisplay::get_source_page($form['id']);
+    }
+
+    protected function getCurrentPage(array $form): int
+    {
+        return (int) GFFormDisplay::get_current_page($form['id']);
+    }
+
+    protected function isFirstPage(array $form): bool
+    {
+        return (1 === GFFormDisplay::get_current_page($form['id']));
+    }
+
+    protected function isLastPage(array $form): bool
+    {
+        $pageNumber = GFFormDisplay::get_current_page($form['id']);
+        $lastPage   = count($form['pagination']['pages']);
+
+        return $pageNumber >= $lastPage;
+    }
+}

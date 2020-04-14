@@ -90,20 +90,28 @@ class Plugin
     protected function buildContainer()
     {
         $builder         = new \DI\ContainerBuilder();
-        $session_factory = new \Aura\Session\SessionFactory;
-        $session         = $session_factory->newInstance($_COOKIE);
-        $session->start();
-
         $builder->addDefinitions([
-            'config'  => new \Yard\DigiD\Foundation\Config($this->rootPath.'/config'),
-            'loader'  => Loader::getInstance(),
-            'route'   => new \Yard\DigiD\Foundation\Routing\Router(get_blog_details()->path ?? ''),
-            'session' => $session,
-            'teams'   => (new \Monolog\Logger('microsoft-teams-logger'))->pushHandler(new \Rspeekenbrink\MonologMicrosoftTeams\MicrosoftTeamsHandler(
-                getenv('MS_TEAMS_WEBHOOK'),
-                $this->getName(),
-                \Monolog\Logger::INFO
-            ))
+            'app'	     => $this,
+            'config'   => function () {
+                return new \Yard\DigiD\Foundation\Config($this->rootPath.'/config');
+            },
+            'loader'   => Loader::getInstance(),
+            'route'    => function () {
+                return	new \Yard\DigiD\Foundation\Routing\Router(get_blog_details()->path ?? '');
+            },
+            'session'  => function () {
+                $session_factory         = new \Aura\Session\SessionFactory;
+                $session         = $session_factory->newInstance($_COOKIE);
+                $session->start();
+                return $session;
+            },
+            'teams'    => function () {
+                return (new \Monolog\Logger('microsoft-teams-logger'))->pushHandler(new \Rspeekenbrink\MonologMicrosoftTeams\MicrosoftTeamsHandler(
+                    getenv('MS_TEAMS_WEBHOOK'),
+                    $this->getName(),
+                    \Monolog\Logger::INFO
+                ));
+            }
         ]);
         $this->container = $builder->build();
     }

@@ -3,14 +3,14 @@
 namespace Yard\DigiD\GravityForms\Fields;
 
 use Aura\Session\Segment;
-use Aura\Session\Session;
 use StdClass;
 use Yard\DigiD\DigiD\DigiD;
 use Yard\DigiD\DigiD\DigiDController;
-use function Yard\DigiD\Foundation\Helpers\resolve;
-
-use function Yard\DigiD\Foundation\Helpers\view;
 use Yard\DigiD\Foundation\Plugin;
+
+use function Yard\DigiD\Foundation\Helpers\encrypt;
+use function Yard\DigiD\Foundation\Helpers\resolve;
+use function Yard\DigiD\Foundation\Helpers\view;
 
 class DigiDLoginField extends AbstractField
 {
@@ -24,10 +24,10 @@ class DigiDLoginField extends AbstractField
      * @param StdClass $field
      * @param array $value
      */
-    public function __construct(StdClass $field, array $value, Session $session)
+    public function __construct(StdClass $field, array $value, Segment $session)
     {
         parent::__construct($field, $value);
-        $this->session = $session->getSegment('digid');
+        $this->session = $session;
     }
 
     /**
@@ -38,21 +38,26 @@ class DigiDLoginField extends AbstractField
     public function render(): string
     {
         if ($this->is_admin || ! rgar($this->getInput(), 'isHidden')) {
-            $bsn = $this->session->get('bsn');
-            resolve('teams')->info('Isset BSN?', [
-                'bsn'          => $bsn,
-            ]);
+            if (!is_admin()) {
+                $bsn = $this->session->get('bsn', '');
+                if (! empty($bsn)) {
+                    $bsn = encrypt($bsn);
+                }
+                resolve('teams')->info('Isset BSN?', [
+                    'bsn'          => $bsn,
+                ]);
 
-            if (!empty($bsn)) {
-                return view('digid/logout.php', ['logoutLink' => site_url('/digid/logout')]);
+                if (!empty($bsn)) {
+                    return view('digid/logout.php', ['logoutLink' => site_url('/digid/logout')]);
+                }
+
+                $this->session->set('resume_link', $this->getResumeLink());
+                resolve('teams')->info('Set resume_link', [
+                    'user_agent'                        => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                    'resume_link_from_session'          => $this->session->get('resume_link'),
+                    'resume_link'                       => $this->getResumeLink(),
+                ]);
             }
-
-            $this->session->set('resume_link', $this->getResumeLink());
-
-            resolve('teams')->info('Set resume_link', [
-                'resume_link_from_session'          => $this->session->get('resume_link'),
-                'resume_link'                       => $this->getResumeLink(),
-            ]);
 
             return "{$this->getSpanField()}
                         {$this->getLabelField()}
@@ -70,6 +75,15 @@ class DigiDLoginField extends AbstractField
      */
     protected function getResumeLink(): string
     {
+        // If form is not yet created.
+        if (1 > $this->field->formId) {
+            return '';
+        }
+
+        if (is_admin()) {
+            return '';
+        }
+
         add_filter('gform_incomplete_submission_pre_save', function ($submission_json, $resume_token, $form) {
             $submissionData = \json_decode($submission_json);
             $submissionData->page_number = \GFFormDisplay::get_current_page($this->field->formId);
@@ -80,11 +94,12 @@ class DigiDLoginField extends AbstractField
         $resume                  = \GFAPI::submit_form(
             $this->field->formId,
             [
-                'gf_submitting_24'            => true,
-                'saved_for_later'             => true,
-                'gform_save'                  => true,
+                'gf_submitting_'. $this->field->formId => true,
+                'saved_for_later'                      => true,
+                'gform_save'                           => true,
             ]
         );
+
         $resumeToken             = $resume['resume_token'] ?? null;
         return sprintf('%s?gf_token=%s', get_permalink(), $resumeToken);
     }
@@ -109,7 +124,7 @@ class DigiDLoginField extends AbstractField
         return view('digid/digidField.php', [
             'error' => $this->session->getFlash('error'),
             'logo'  => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
-            'link'  => DigiDController::getAuthNRequestURL()
+            'link'  => is_admin() ? '' : DigiDController::getAuthNRequestURL()
         ]);
     }
 }

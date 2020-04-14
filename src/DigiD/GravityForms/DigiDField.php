@@ -2,13 +2,14 @@
 
 namespace Yard\DigiD\GravityForms;
 
+use Aura\Session\Segment;
 use GF_Field;
 
 use Yard\DigiD\GravityForms\Fields\DigiDLoginField;
 use Yard\DigiD\GravityForms\Fields\HiddenField;
-
 use function Yard\DigiD\Foundation\Helpers\config;
-use function Yard\DigiD\Foundation\Helpers\dd;
+use function Yard\DigiD\Foundation\Helpers\decrypt;
+use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
 if (! class_exists('\GFForms')) {
@@ -25,12 +26,16 @@ class DigiDField extends GF_Field
     /** @var ?string */
     protected $bsn;
 
+    /** @var Segment */
+    protected $session;
+
     /**
      * @param array $data
      */
     public function __construct($data = [])
     {
         parent::__construct($data);
+        $this->session = resolve('session')->getSegment('digid');
     }
 
     /**
@@ -100,8 +105,7 @@ class DigiDField extends GF_Field
      */
     public function validate($value, $form)
     {
-        $bsn_id = $this->id . '.1';
-        $bsn    = rgget($bsn_id, $value);
+        $bsn    = rgget($this->id . '.1', $value);
         if (rgblank($bsn)) {
             $this->failed_validation  = true;
             $this->validation_message = empty($this->errorMessage) ? esc_html__('This field is required.', config('core.text_domain')) : $this->errorMessage;
@@ -116,15 +120,19 @@ class DigiDField extends GF_Field
      */
     protected function getFields(array $value): array
     {
+        $bsn   = $this->session->get('bsn', '');
+        if (!empty($bsn)) {
+            $bsn = encrypt($bsn);
+        }
         return [
-            (new DigiDLoginField($this, $value, resolve('session')))
+            (new DigiDLoginField($this, $value, $this->session))
                 ->setFieldID(2)
                 ->setFieldName('digid')
                 ->setFieldText(__('DigiD', config('core.text_domain'))),
             (new HiddenField($this, $value))
                 ->setFieldID(1)
                 ->setFieldName('bsn')
-                ->setValue(resolve('session')->getSegment('digid')->get('bsn'))
+                ->setValue($bsn)
         ];
     }
 
@@ -180,7 +188,7 @@ class DigiDField extends GF_Field
         $for_attribute = empty($target_input_id) ? '' : "for='{$target_input_id}'";
 
         $description = $this->get_description($this->description, 'gfield_description');
-		$bsn    = resolve('session')->getSegment('digid')->get('bsn');
+        $bsn         = $this->session->get('bsn', '');
         if (!empty($bsn)) {
             $description = '';
         }
@@ -192,6 +200,25 @@ class DigiDField extends GF_Field
         }
 
         return $field_content;
+    }
+
+    /**
+    * Format the entry value for display on the entries list page.
+    * Return a value that's safe to display on the page.
+    */
+    public function get_value_save_entry($value, $form, $input_name, $lead_id, $lead)
+    {
+        return decrypt($value);
+    }
+
+    /**
+* Format the entry value for display on the entries list page.
+* Return a value that's safe to display on the page.
+*/
+    public function get_value_entry_list($value, $entry, $field_id, $columns, $form)
+    {
+        //Escapes value so that it is safe to be displayed on the entry list page
+        return esc_html(decrypt($value));
     }
 
     /**
@@ -228,7 +255,7 @@ class DigiDField extends GF_Field
     public function get_value_entry_detail($value, $currency = '', $use_text = false, $format = 'html', $media = 'screen')
     {
         if (is_array($value)) {
-            $return = trim(rgget($this->id . '.1', $value));
+            $return = decrypt(trim(rgget($this->id . '.1', $value)));
         } else {
             $return = '';
         }
@@ -238,5 +265,14 @@ class DigiDField extends GF_Field
         }
 
         return $return;
+    }
+
+    /**
+    * Format the entry value before it is used in entry exports and by framework add-ons using GFAddOn::get_field_value().
+    */
+    public function get_value_export($entry, $input_id = '', $use_text = false, $is_csv = false)
+    {
+        //Export doesn’t require encoding, but field data may require some manipulation or formatting before it is exported
+        return decrypt(rgar($entry, $input_id));
     }
 }

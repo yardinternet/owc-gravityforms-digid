@@ -3,6 +3,9 @@
 namespace Yard\DigiD\DigiD;
 
 use Yard\DigiD\DigiD\Claim\Attributes;
+
+use function Yard\DigiD\Foundation\Helpers\decrypt;
+use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
 class DigiDController
@@ -38,8 +41,8 @@ class DigiDController
         $session->set('session_id', $attributes->sessionID());
         $session->set('status_code', $attributes->status()->get()->getStatusCode());
         if ($attributes->status()->get()->isSuccess()) {
-            $session->set('bsn', $attributes->bsn()->getID());
-            $session->set('nameID', $attributes->bsn()->getNameID());
+            $session->set('bsn', encrypt($attributes->bsn()->getID()));
+            $session->set('nameID', encrypt($attributes->bsn()->getNameID()));
         } else {
             $session->set('bsn', '');
             $session->set('nameID', '');
@@ -49,8 +52,8 @@ class DigiDController
         resolve('teams')->info('Attributes are filled', [
             'session_id'   => $attributes->sessionID(),
             'status_code'  => $attributes->status()->get()->getStatusCode(),
-            'bsn'          => $attributes->bsn()->getID(),
-            'nameID'       => $attributes->bsn()->getNameID(),
+            'bsn'          => encrypt($attributes->bsn()->getID()),
+            'nameID'       => encrypt($attributes->bsn()->getNameID()),
             'resume_link'  => $session->get('resume_link'),
             'message'      => $session->get('message')
         ]);
@@ -109,7 +112,7 @@ class DigiDController
      */
     public function logOut()
     {
-        if (null === ($nameID = resolve('session')->getSegment('digid')->get('nameID', null))) {
+        if (null === ($nameID = decrypt(resolve('session')->getSegment('digid')->get('nameID', null)))) {
             return $this->redirectTo();
         }
 

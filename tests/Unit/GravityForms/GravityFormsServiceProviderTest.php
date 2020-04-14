@@ -7,6 +7,7 @@ use WP_Mock;
 use Yard\DigiD\Foundation\Config;
 use Yard\DigiD\Foundation\Loader;
 use Yard\DigiD\Foundation\Plugin;
+use Yard\DigiD\GravityForms\GravityForms;
 use Yard\DigiD\GravityForms\GravityFormsServiceProvider;
 use Yard\Tests\DigiD\TestCase;
 
@@ -34,14 +35,14 @@ class LoaderTest extends TestCase
     {
         $this->plugin->loader->shouldReceive('addAction')->withArgs([
             'gform_loaded',
-            $this->service,
-            'loadField',
+            GravityForms::class,
+            'registerField',
             5,
         ])->once();
 
         $this->plugin->loader->shouldReceive('addFilter')->withArgs([
             'gform_pre_render',
-            $this->service,
+            GravityForms::class,
             'clearFormOnFirstRender',
             10,
             3
@@ -49,7 +50,7 @@ class LoaderTest extends TestCase
 
         $this->plugin->loader->shouldReceive('addAction')->withArgs([
             'gform_after_submission',
-            $this->service,
+            GravityForms::class,
             'clearFormAfterSubmission',
             10,
             2

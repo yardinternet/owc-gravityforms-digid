@@ -2,6 +2,13 @@
 
 namespace Yard\DigiD\Foundation\Helpers;
 
+use Yard\DigiD\Foundation\Plugin;
+
+function app(): Plugin
+{
+    return resolve('app');
+}
+
 function storage_path($path): string
 {
     return \ABSPATH . '../../storage/' . $path;
@@ -47,4 +54,14 @@ function dd(...$args): void
 function view(string $template, array $vars = []): string
 {
     return resolve(\Yard\DigiD\Foundation\View::class)->render($template, $vars);
+}
+
+function encrypt($string): string
+{
+    return resolve(\Yard\DigiD\Foundation\Cryptor::class)->encrypt($string);
+}
+
+function decrypt($string): string
+{
+    return resolve(\Yard\DigiD\Foundation\Cryptor::class)->decrypt($string);
 }

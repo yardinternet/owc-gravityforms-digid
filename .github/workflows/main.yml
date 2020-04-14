@@ -19,4 +19,4 @@ jobs:
       - name: Install composer deps and run phpunit
         run: |
           composer install --no-interaction --no-progress --prefer-dist --ignore-platform-reqs
-          composer unit
+          ./vendor/bin/phpunit --stderr --testsuite 'Unit Test Suite'

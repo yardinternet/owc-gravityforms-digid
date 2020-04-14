@@ -6,10 +6,10 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Wizkunde\SAMLBase\Metadata\ResolveService;
 use Yard\DigiD\DigiD\Binding\Artifact;
 use Yard\DigiD\DigiD\Binding\Redirect;
+use Yard\DigiD\Foundation\ServiceProvider;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\make;
 use function Yard\DigiD\Foundation\Helpers\resolve;
-use Yard\DigiD\Foundation\ServiceProvider;
 
 class DigiDServiceProvider extends ServiceProvider
 {
@@ -20,6 +20,10 @@ class DigiDServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        if (is_admin()) {
+            return;
+        }
+
         $this->loadResolvers();
 
         $controller = resolve(\Yard\DigiD\DigiD\DigiDController::class);
