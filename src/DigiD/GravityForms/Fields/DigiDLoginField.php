@@ -37,10 +37,10 @@ class DigiDLoginField extends AbstractField
      */
     public function render(): string
     {
-        if ($this->is_admin || ! rgar($this->getInput(), 'isHidden')) {
+        if ($this->is_admin || !rgar($this->getInput(), 'isHidden')) {
             if (!is_admin()) {
                 $bsn = $this->session->get('bsn', '');
-                if (! empty($bsn)) {
+                if (!empty($bsn)) {
                     $bsn = encrypt($bsn);
                 }
                 resolve('teams')->info('Isset BSN?', [
@@ -48,7 +48,7 @@ class DigiDLoginField extends AbstractField
                 ]);
 
                 if (!empty($bsn)) {
-                    return view('digid/logout.php', ['logoutLink' => site_url('/digid/logout')]);
+                    return view('digid/logout.php', ['logoutLink' => site_url('/digid/logout'), 'JsSessionFilePath' => plugins_url("assets/js/countdown.js", GF_DIGID_PLUGIN_SLUG . '/plugin.php')]);
                 }
 
                 $this->session->set('resume_link', $this->getResumeLink());
@@ -94,7 +94,7 @@ class DigiDLoginField extends AbstractField
         $resume                  = \GFAPI::submit_form(
             $this->field->formId,
             [
-                'gf_submitting_'. $this->field->formId => true,
+                'gf_submitting_' . $this->field->formId => true,
                 'saved_for_later'                      => true,
                 'gform_save'                           => true,
             ]
