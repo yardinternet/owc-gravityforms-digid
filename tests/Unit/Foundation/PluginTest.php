@@ -44,7 +44,7 @@ class PluginTest extends TestCase
     /** @test */
     public function version_of_plugin_is_correct()
     {
-        $this->assertEquals('0.0.1', $this->plugin->getVersion());
+        $this->assertEquals(GF_DIGID_VERSION, $this->plugin->getVersion());
     }
 
     /** @test */

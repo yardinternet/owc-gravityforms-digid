@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<xml version="1.0" encoding="UTF-8">
 <samlp:LogoutRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     Version="2.0"
@@ -10,3 +10,4 @@
     <saml:NameID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Format="{{ NameIDFormat }}" SPNameQualifier="{{ Issuer }}">{{ email }}</saml:NameID>
     <samlp:SessionIndex>{{ SsoId }}</samlp:SessionIndex>
 </samlp:LogoutRequest>
+</xml>

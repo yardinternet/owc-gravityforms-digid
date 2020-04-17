@@ -20,7 +20,7 @@ class RepositoryTest extends TestCase
     /** @test */
     public function gets_value_correctly(): void
     {
-        $repository = new Config(GF_DIGID_PLUGIN_SLUG . '/tests/Stubs/config');
+        $repository = new Config(GF_DIGID_ROOT_PATH . '/tests/Stubs/config');
 
         $this->assertEquals($repository->get(''), '');
 
@@ -49,7 +49,7 @@ class RepositoryTest extends TestCase
     /** @test */
     public function check_setting_of_path(): void
     {
-        $repository = new Config(GF_DIGID_PLUGIN_SLUG . '/tests/Stubs/config');
+        $repository = new Config(GF_DIGID_ROOT_PATH . '/tests/Stubs/config');
 
         $path = '/test/path/config/';
         $repository->setPath($path);
@@ -60,7 +60,7 @@ class RepositoryTest extends TestCase
     /** @test */
     public function check_setting_of_protected_nodes(): void
     {
-        $repository = new Config(GF_DIGID_PLUGIN_SLUG . '/tests/Stubs/config');
+        $repository = new Config(GF_DIGID_ROOT_PATH . '/tests/Stubs/config');
 
         $expectedConfig = [
             'test'      => [
@@ -91,7 +91,7 @@ class RepositoryTest extends TestCase
             'directory' => 'test',
         ];
 
-        $repository = new Config(GF_DIGID_PLUGIN_SLUG . '/tests/Stubs/config');
+        $repository = new Config(GF_DIGID_ROOT_PATH . '/tests/Stubs/config');
 
         $repository->set('directory', 'test');
         $this->assertEquals($expectedConfig, $repository->all());
@@ -134,7 +134,7 @@ class RepositoryTest extends TestCase
             ],
         ];
 
-        $repository = new Config(GF_DIGID_PLUGIN_SLUG . '/tests/Stubs/config');
+        $repository = new Config(GF_DIGID_ROOT_PATH . '/tests/Stubs/config');
 
         $repository->set('directory.testfile', 'test');
         $this->assertEquals($expectedConfig, $repository->all());
@@ -189,7 +189,7 @@ class RepositoryTest extends TestCase
             ],
         ];
 
-        $repository = new Config(GF_DIGID_PLUGIN_SLUG . '/tests/Stubs/config');
+        $repository = new Config(GF_DIGID_ROOT_PATH . '/tests/Stubs/config');
 
         $repository->set('directory.multi', 'test');
         $this->assertEquals($expectedConfig, $repository->all());
@@ -208,7 +208,7 @@ class RepositoryTest extends TestCase
             ],
         ];
 
-        $repository = new Config(GF_DIGID_PLUGIN_SLUG . '/tests/Stubs/config');
+        $repository = new Config(GF_DIGID_ROOT_PATH . '/tests/Stubs/config');
 
         $repository->set('directory.multi.deep', 'test');
         $this->assertEquals($expectedConfig, $repository->all());
@@ -254,7 +254,7 @@ class RepositoryTest extends TestCase
             ],
         ];
 
-        $repository = new Config(GF_DIGID_PLUGIN_SLUG . '/tests/Stubs/config');
+        $repository = new Config(GF_DIGID_ROOT_PATH . '/tests/Stubs/config');
 
         $repository->set('doesnotexist.directory.multi.deep');
         $this->assertEquals($expectedConfig, $repository->all());
@@ -276,7 +276,7 @@ class RepositoryTest extends TestCase
             ''          => null,
         ];
 
-        $repository = new Config(GF_DIGID_PLUGIN_SLUG . '/tests/Stubs/config');
+        $repository = new Config(GF_DIGID_ROOT_PATH . '/tests/Stubs/config');
 
         $repository->set([null => null]);
         $this->assertEquals($expectedConfig, $repository->all());

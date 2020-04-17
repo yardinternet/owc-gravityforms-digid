@@ -6,10 +6,10 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Wizkunde\SAMLBase\Metadata\ResolveService;
 use Yard\DigiD\DigiD\Binding\Artifact;
 use Yard\DigiD\DigiD\Binding\Redirect;
-use Yard\DigiD\Foundation\ServiceProvider;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\make;
 use function Yard\DigiD\Foundation\Helpers\resolve;
+use Yard\DigiD\Foundation\ServiceProvider;
 
 class DigiDServiceProvider extends ServiceProvider
 {
@@ -66,6 +66,7 @@ class DigiDServiceProvider extends ServiceProvider
         });
 
         make('yard::digid::idp-settings', function () {
+            $metaData = resolve('\Wizkunde\SAMLBase\Metadata\ResolveService')->resolve(resolve('\Wizkunde\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata'));
             return (new \Wizkunde\SAMLBase\Configuration\Settings())
                 ->setValues([
                     'NameID'                 => config('digid.issuer'),
@@ -76,7 +77,8 @@ class DigiDServiceProvider extends ServiceProvider
                     'IsPassive'              => 'false',
                     'NameIDFormat'           => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
                     'ComparisonLevel'        => 'minimum',
-                    'Destination'            => config('digid.url.destination')
+                    'Destination'            => $metaData['SingleSignOnServiceRedirect']['Location'],
+                    'ArtifactResolve'        => $metaData['ArtifactResolutionService']['Location']
                 ]);
         });
 

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OWC GravityForms DigiD\n"
-"POT-Creation-Date: 2020-04-10 16:16+0200\n"
-"PO-Revision-Date: 2020-04-10 16:16+0200\n"
+"POT-Creation-Date: 2020-04-19 13:09+0200\n"
+"PO-Revision-Date: 2020-04-19 13:10+0200\n"
 "Last-Translator: Edwin Siebel <edwin@yard.nl>\n"
 "Language-Team: Yard Internet <info@yard.nl>\n"
 "Language: nl\n"
@@ -21,8 +21,15 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-3: languages\n"
 
 #: src/DigiD/DigiD/Claim/StatusCodes/AuthnFailed.php:16
-msgid "Login cancelled"
-msgstr "Login geannuleerd"
+#, php-format
+msgid ""
+"An error has occurred in the communication with DigiD. Please try again "
+"later. If this error persists, please check the website %s for the latest "
+"information."
+msgstr ""
+"Er is een fout opgetreden in de communicatie met DigiD. Probeert u het later "
+"nogmaals. Indien deze fout blijft aanhouden, kijk dan op de website %s voor "
+"de laatste informatie."
 
 #: src/DigiD/DigiD/Claim/StatusCodes/RequestDenied.php:16
 msgid "Access denied"
@@ -33,18 +40,95 @@ msgstr "Toegang geweigerd"
 msgid "Unknown error"
 msgstr "Onbekende fout"
 
-#: src/DigiD/DigiD/DigiDController.php:28
+#: src/DigiD/DigiD/DigiDController.php:31
 msgid "Something gone wrong"
 msgstr "Er is een fout onstaan"
 
-#: src/DigiD/GravityForms/DigiDField.php:42
-#: src/DigiD/GravityForms/DigiDField.php:122
+#: src/DigiD/GravityForms/DigiDField.php:48
+#: src/DigiD/GravityForms/DigiDField.php:131
 msgid "DigiD"
 msgstr "DigiD"
 
-#: src/DigiD/GravityForms/DigiDField.php:106
+#: src/DigiD/GravityForms/DigiDField.php:111
 msgid "This field is required."
 msgstr "Dit veld is verplicht."
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:91
+msgid "Service Provider (SP)"
+msgstr "Service Provider (SP)"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:94
+msgid "Issuer"
+msgstr "Issuer"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:101
+msgid "Organization name"
+msgstr "Organisatie naam"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:107
+msgid "Organization url"
+msgstr "Organisatie url"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:115
+msgid "Identity Provider (IDP)"
+msgstr "Identity Provider (IDP)"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:118
+msgid "Metadata url"
+msgstr "Metadata url"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:127
+msgid "Certificates"
+msgstr "Certificaten"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:128
+msgid ""
+"Location of the certificates should <strong>not</strong> be publicly "
+"accessible and <strong>not</strong> in version control."
+msgstr ""
+"De locatie van de certificaten mag <strong>niet</strong> openbaar "
+"toegankelijk zijn en <strong>niet</strong> in versiebeheer."
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:130
+msgid ""
+"If site is a multisite, place the certificates in a subdirectory which "
+"should be named the <u>ID</u> of the subsite."
+msgstr ""
+"Als de site een multisite is, plaats dan de certificaten in een subdirectory "
+"die de <u>ID</u> van de subsite moet heten."
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:133
+#, php-format
+msgid "E.g., for this site: %s."
+msgstr "Bijvoorbeeld, voor deze site: %s."
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:138
+msgid "Certificates root location"
+msgstr "Certificaten hoofdlocatie"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:146
+msgid "Public certificate location"
+msgstr "Publiek certificaat locatie"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:153
+msgid "Private certificate location"
+msgstr "Privaat certificaat locatie"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:184
+msgid "No certificate selected"
+msgstr "Geen certificaat geselecteerd"
+
+#~ msgid "Login cancelled"
+#~ msgstr "Login geannuleerd"
+
+#~ msgid "DigiD Issuer"
+#~ msgstr "DigiD Issuer"
+
+#~ msgid "DigiD IDP metadata url"
+#~ msgstr "DigiD IDP metadata url"
+
+#~ msgid "Organization displayName"
+#~ msgstr "Weergave van de organisatie naam"
 
 #~ msgid ""
 #~ "Plugin has not been installed using Composer. Please install plugin using "
@@ -52,9 +136,6 @@ msgstr "Dit veld is verplicht."
 #~ msgstr ""
 #~ "Plugin is niet geïnstalleerd met behulp van Composer. Installeer de "
 #~ "plugin met behulp van Composer."
-
-#~ msgid "DigiD Address"
-#~ msgstr "Adres"
 
 #~ msgid "This field is required. Please enter a complete address."
 #~ msgstr "Dit veld is verplicht. Voer een volledig adres in."

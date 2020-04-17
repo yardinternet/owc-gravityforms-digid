@@ -6,11 +6,11 @@ use Aura\Session\Segment;
 use StdClass;
 use Yard\DigiD\DigiD\DigiD;
 use Yard\DigiD\DigiD\DigiDController;
-use Yard\DigiD\Foundation\Plugin;
-
 use function Yard\DigiD\Foundation\Helpers\encrypt;
+
 use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
+use Yard\DigiD\Foundation\Plugin;
 
 class DigiDLoginField extends AbstractField
 {

@@ -5,12 +5,12 @@ namespace Yard\DigiD\GravityForms;
 use Aura\Session\Segment;
 use GF_Field;
 
-use Yard\DigiD\GravityForms\Fields\DigiDLoginField;
-use Yard\DigiD\GravityForms\Fields\HiddenField;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\decrypt;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
+use Yard\DigiD\GravityForms\Fields\DigiDLoginField;
+use Yard\DigiD\GravityForms\Fields\HiddenField;
 
 if (! class_exists('\GFForms')) {
     die();

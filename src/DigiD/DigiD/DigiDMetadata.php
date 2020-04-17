@@ -28,9 +28,8 @@ class DigiDMetadata
     protected function getConfig(): array
     {
         return [
-            'BaseURL'                  => config('digid.url.base'),
             'ACSURL'                   => config('digid.url.acs'),
-            'ARSURL'                   => config('digid.url.ars'),
+            'ARSURL'                   => resolve('yard::digid::idp-settings')->getValue('ArtifactResolve'),
             'SLOURL'                   => config('digid.url.logout'),
             'SLOGGEDOUTURL'            => config('digid.url.logged_out'),
             'EntityID'                 => config('digid.issuer'),

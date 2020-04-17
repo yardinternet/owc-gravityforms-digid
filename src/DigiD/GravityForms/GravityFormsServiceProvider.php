@@ -17,5 +17,19 @@ class GravityFormsServiceProvider extends ServiceProvider
         $this->plugin->loader->addAction('gform_loaded', $gravityForm, 'registerField', 5);
         $this->plugin->loader->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 3);
         $this->plugin->loader->addAction('gform_after_submission', $gravityForm, 'clearFormAfterSubmission', 10, 2);
+
+        $this->registerSettingsAddon();
+    }
+
+
+    private function registerSettingsAddon(): void
+    {
+        if (! method_exists('\GFForms', 'include_addon_framework')) {
+            return;
+        }
+
+        \GFForms::include_addon_framework();
+        \GFAddOn::register(GravityFormsAddon::class);
+        GravityFormsAddon::get_instance();
     }
 }

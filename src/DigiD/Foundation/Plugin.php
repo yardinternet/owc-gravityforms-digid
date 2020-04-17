@@ -18,7 +18,7 @@ class Plugin
      *
      * @var string
      */
-    const VERSION = '0.0.1';
+    const VERSION = GF_DIGID_VERSION;
 
     /**
      * Path to the root of the plugin.
@@ -60,7 +60,7 @@ class Plugin
      *
      * @param string $rootPath
      */
-    final private function __construct($rootPath = '')
+    private function __construct($rootPath = '')
     {
         $this->rootPath = $rootPath;
         require_once __DIR__ .'/Helpers.php';
