@@ -2,6 +2,8 @@
 
 namespace Yard\DigiD\GravityForms;
 
+use GFAddOn;
+use GFForms;
 use Yard\DigiD\Foundation\ServiceProvider;
 
 class GravityFormsServiceProvider extends ServiceProvider
@@ -13,6 +15,15 @@ class GravityFormsServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        if (! method_exists('GFForms', 'include_addon_framework')) {
+            return;
+        }
+
+        GFForms::include_addon_framework();
+        GFAddOn::register(\Yard\DigiD\GravityForms\GravityFormsAddon::class);
+        GravityFormsAddon::get_instance();
+
+
         $gravityForm = new GravityForms;
         $this->plugin->loader->addAction('gform_loaded', $gravityForm, 'registerField', 5);
         $this->plugin->loader->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 3);

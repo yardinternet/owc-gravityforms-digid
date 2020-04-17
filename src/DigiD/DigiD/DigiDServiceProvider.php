@@ -7,6 +7,7 @@ use Wizkunde\SAMLBase\Metadata\ResolveService;
 use Yard\DigiD\DigiD\Binding\Artifact;
 use Yard\DigiD\DigiD\Binding\Redirect;
 use function Yard\DigiD\Foundation\Helpers\config;
+use function Yard\DigiD\Foundation\Helpers\dd;
 use function Yard\DigiD\Foundation\Helpers\make;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 use Yard\DigiD\Foundation\ServiceProvider;
