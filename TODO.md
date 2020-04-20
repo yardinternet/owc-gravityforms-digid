@@ -2,7 +2,8 @@
 
 -   Add
 
-    -   refactor Javascript to OOP
+    -   Add babel for IE support
+    -   Write JS tests
 
 -   Done
     -   Clear form at first load, not at every view
@@ -14,3 +15,4 @@
     -   Error handling
     -   Flash messages
     -   Cookie lifetime
+    -   refactor Javascript to OOP

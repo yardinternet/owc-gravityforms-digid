@@ -7,7 +7,9 @@ use StdClass;
 use Yard\DigiD\DigiD\DigiD;
 use Yard\DigiD\DigiD\DigiDController;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
+use Yard\DigiD\GravityForms\DigiDSession;
 
+use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
 use Yard\DigiD\Foundation\Plugin;
@@ -48,7 +50,11 @@ class DigiDLoginField extends AbstractField
                 ]);
 
                 if (!empty($bsn)) {
-                    return view('digid/logout.php', ['logoutLink' => site_url('/digid/logout'), 'JsSessionFilePath' => plugins_url("assets/js/countdown.js", GF_DIGID_PLUGIN_SLUG . '/plugin.php')]);
+                    $digiDSession = new DigiDSession(config('digid.session.lifetime'), config('digid.session.resume-lifetime'));
+                    $sessionLifeTime = $digiDSession->getSessionLifeTime();
+                    $sessionResumeLifeTime = $digiDSession->getSessionResumeLifeTime();
+
+                    return view('digid/logout.php', ['logoutLink' => site_url('/digid/logout'), 'JsSessionFilePath' => plugins_url("assets/js/countdown.js", GF_DIGID_PLUGIN_SLUG . '/plugin.php'), 'SessionLifeTime' => $sessionLifeTime, 'SessionResumeLifeTime' => $sessionResumeLifeTime]);
                 }
 
                 $this->session->set('resume_link', $this->getResumeLink());
