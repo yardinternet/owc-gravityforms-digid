@@ -13,7 +13,7 @@ class GravityFormsAddon extends GFAddOn
          *
          * @var string
          */
-    protected $_version = '1.0';
+    protected $_version = '1.0.0';
 
     /**
      * Minimal required GF version.

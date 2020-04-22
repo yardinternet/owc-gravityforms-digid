@@ -1,6 +1,10 @@
-### Changelog
+# Changelog
 
-requires: 4.9
-tested: 5.3.2
+* requires: 4.9
+* tested: 5.4
 
-## v0.1
+## v1.0.0
+
+### Add:
+- DigiD login field
+- Settings page
