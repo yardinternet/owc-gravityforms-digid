@@ -9,7 +9,7 @@ const MODAL_HTML = `
             </div>
             <div class='modal-body | mb-4'>
                 Uw sessie is mogelijk verlopen. Als u te lang niks hebt gedaan, wordt u uit veiligheidsoverwegingen door DigiD uitgelogd.
-                Kies 'Ja' om uw sessie te verlengen, mogelijk moet u opnieuw inloggen met DigiD.
+                Kies 'Verlengen' om uw sessie te verlengen, mogelijk moet u opnieuw inloggen met DigiD.
             </div>
             <div class='modal-footer | d-flex justify-content-between'>
                 <button type='button' id='js-resumeSession' tabindex='0' role='button' class='btn btn-primary mr-2'>Verlengen</button>
@@ -42,7 +42,7 @@ class Countdown {
      * Create session if there is none.
      * Initiate timer and countdown.
      */
-    createSession() {
+    createSession = () => {
         if (undefined === localStorage.sessionTTL) {
             localStorage.sessionTTL = JSON.stringify(this.createLifeTimeObject(this._sessionTTL));
             this.initiateTimer();
@@ -56,7 +56,7 @@ class Countdown {
      * 
      * @param {int} seconds 
      */
-    createLifeTimeObject(seconds) {
+    createLifeTimeObject = (seconds) => {
         const lifetime = seconds;
         return {
             value: lifetime,
@@ -67,14 +67,14 @@ class Countdown {
     /**
      * Initiate countdown
      */
-    initiateCountDownInterval() {
+    initiateCountDownInterval = () =>  {
         this._countDownInterval = setInterval(this.countDown, 1000);
     }
 
     /**
      * Run countdown.
      */
-    countDown() {
+    countDown = () => {
         if (undefined === localStorage.sessionTTL) {
             return;
         }
@@ -102,7 +102,7 @@ class Countdown {
     /**
      * Stop countdown when timer is finished.
      */
-    stopCountDown() {
+    stopCountDown = () => {
         clearInterval(this.countDownInterval);
         const countDownDiv = document.getElementsByClassName('gform_heading');
     
@@ -115,21 +115,21 @@ class Countdown {
      * Create object and return property: expiry.
      * Property is used for validating the session.
      */
-    parseJSON() {
+    parseJSON = () => {
         return JSON.parse(localStorage.sessionTTL).expiry
     }
 
     /**
      * initiate timer interval
      */
-    initiateTimer() {
+    initiateTimer = () => {
         this._timerInterval = setInterval(this.beginTimer, 1000);
     }
 
     /**
      * Is used for validating the session.
      */
-    beginTimer() {
+    beginTimer = () => {
         if (undefined === localStorage.sessionTTL) {
             this.openModal();
         }
@@ -144,14 +144,14 @@ class Countdown {
     /**
      * Stop timer; fires after the session is expired.
      */
-    stopTimer() {
+    stopTimer = () => {
         clearInterval(this._timerInterval);
     }
 
     /**
      * Open modal; user input defines the action to execute.
      */
-    openModal() {
+    openModal = () => {
         // clear session and stop timer & countdown interval
         this.stopTimer();
         this.stopCountDown();
@@ -177,7 +177,7 @@ class Countdown {
     /**
      * Extend session from modal.
      */
-    resumeSession() {
+    resumeSession = () => {
         localStorage.sessionTTL = JSON.stringify(this.createLifeTimeObject(this._resumeSessionTTL));
 
         const modal = document.getElementById('modalWrapper');
@@ -200,7 +200,7 @@ class Countdown {
     /**
      * When modal is visible this function launches a timer.
      */
-    startResumeCheck() {
+    startResumeCheck = () => {
         const endSession = this.endSession;
         const resumeCheck = setInterval(function() {
             if (undefined === localStorage.sessionTTL) {
@@ -215,7 +215,7 @@ class Countdown {
     /**
      * Exterminate session.
      */
-    endSession() {
+    endSession = () => {
         const logoutLink = document.getElementById('logoutLink').href;
         setTimeout(function() {
             window.location.href = logoutLink;
@@ -227,7 +227,7 @@ class Countdown {
      * 
      * @param {object} event 
      */
-    a11yClick(event){
+    a11yClick = (event) => {
         if(event.type === 'click'){
             return true;
         }

@@ -54,7 +54,7 @@ class DigiDLoginField extends AbstractField
                     $sessionLifeTime = $digiDSession->getSessionLifeTime();
                     $sessionResumeLifeTime = $digiDSession->getSessionResumeLifeTime();
 
-                    return view('digid/logout.php', ['logoutLink' => site_url('/digid/logout'), 'JsSessionFilePath' => plugins_url("assets/js/countdown.js", GF_DIGID_PLUGIN_SLUG . '/plugin.php'), 'SessionLifeTime' => $sessionLifeTime, 'SessionResumeLifeTime' => $sessionResumeLifeTime]);
+                    return view('digid/logout.php', ['logoutLink' => site_url('/digid/logout'), 'JsSessionFilePath' => plugins_url("dist/app.js", GF_DIGID_PLUGIN_SLUG . '/plugin.php'), 'SessionLifeTime' => $sessionLifeTime, 'SessionResumeLifeTime' => $sessionResumeLifeTime]);
                 }
 
                 $this->session->set('resume_link', $this->getResumeLink());
