@@ -7,7 +7,9 @@ use StdClass;
 use Yard\DigiD\DigiD\DigiD;
 use Yard\DigiD\DigiD\DigiDController;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
+use Yard\DigiD\GravityForms\DigiDSession;
 
+use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
 use Yard\DigiD\Foundation\Plugin;
@@ -37,10 +39,10 @@ class DigiDLoginField extends AbstractField
      */
     public function render(): string
     {
-        if ($this->is_admin || ! rgar($this->getInput(), 'isHidden')) {
+        if ($this->is_admin || !rgar($this->getInput(), 'isHidden')) {
             if (!is_admin()) {
                 $bsn = $this->session->get('bsn', '');
-                if (! empty($bsn)) {
+                if (!empty($bsn)) {
                     $bsn = encrypt($bsn);
                 }
                 resolve('teams')->info('Isset BSN?', [
@@ -48,7 +50,11 @@ class DigiDLoginField extends AbstractField
                 ]);
 
                 if (!empty($bsn)) {
-                    return view('digid/logout.php', ['logoutLink' => site_url('/digid/logout')]);
+                    $digiDSession = new DigiDSession(config('digid.session.lifetime'), config('digid.session.resume-lifetime'));
+                    $sessionLifeTime = $digiDSession->getSessionLifeTime();
+                    $sessionResumeLifeTime = $digiDSession->getSessionResumeLifeTime();
+
+                    return view('digid/logout.php', ['logoutLink' => site_url('/digid/logout'), 'JsSessionFilePath' => plugins_url("dist/app.js", GF_DIGID_PLUGIN_SLUG . '/plugin.php'), 'SessionLifeTime' => $sessionLifeTime, 'SessionResumeLifeTime' => $sessionResumeLifeTime]);
                 }
 
                 $this->session->set('resume_link', $this->getResumeLink());
@@ -94,7 +100,7 @@ class DigiDLoginField extends AbstractField
         $resume                  = \GFAPI::submit_form(
             $this->field->formId,
             [
-                'gf_submitting_'. $this->field->formId => true,
+                'gf_submitting_' . $this->field->formId => true,
                 'saved_for_later'                      => true,
                 'gform_save'                           => true,
             ]

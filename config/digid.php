@@ -9,6 +9,10 @@ return [
         'displayName' => GravityFormsSettings::make()->get('organization-name'),
         'url'         => GravityFormsSettings::make()->get('organization-url'),
     ],
+    'session' => [
+        'lifetime' => GravityFormsSettings::make()->get('lifetime'),
+        'resume-lifetime' => GravityFormsSettings::make()->get('resume-lifetime'),
+    ],
     'url'    => [
         'idp'         => [
             'metadata' => GravityFormsSettings::make()->get('ipd-metadata-url')

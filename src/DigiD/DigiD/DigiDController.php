@@ -17,7 +17,7 @@ class DigiDController
      */
     public function acsResolve()
     {
-        if (! isset($_GET['SAMLart'])) {
+        if (!isset($_GET['SAMLart'])) {
             return $this->redirectTo();
         }
 
@@ -75,7 +75,7 @@ class DigiDController
             $url = $session->get('resume_link');
         }
 
-        header('Location: '. $url);
+        header('Location: ' . $url);
         exit;
     }
 
@@ -123,7 +123,7 @@ class DigiDController
             ->setSettings($settings)
             ->getURL('LogoutRequest');
 
-        header('Location: ' .$redirectUrl);
+        header('Location: ' . $redirectUrl);
         exit;
     }
 

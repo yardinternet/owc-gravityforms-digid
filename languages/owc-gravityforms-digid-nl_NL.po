@@ -114,6 +114,30 @@ msgstr "Publiek certificaat locatie"
 msgid "Private certificate location"
 msgstr "Privaat certificaat locatie"
 
+#: src/DigiD/GravityForms/GravityFormsAddon.php:162
+msgid "Session settings"
+msgstr "Sessie instellingen"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:163
+msgid "When defining the values below please fill in a number that defines the minutes. Example: '15' means '15 minutes'."
+msgstr "Voer, bij het definieren van de waardes hieronder, een nummer in dat de minuten representeer. Voorbeeld: '15' staat voor '15 minuten'."
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:167
+msgid "The '<b>session lifetime</b>' defines how long the current session is allowed to exist."
+msgstr "De '<b>levensduur van een sessie</b>' definieert hoelang er toegestaan is om de huidige sessie te laten bestaan."
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:165
+msgid "And the '<b>session resume lifetime</b>' defines the amount of minutes which will be used for extending the existing session."
+msgstr "En de '<b>levensduur van een sessie na hervatten</b>' definieert de hoeveelheid in minuten die gebruikt worden om de huidige sessie te verlengen."
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:172
+msgid "Session lifetime"
+msgstr "Levensduur sessie"
+
+#: src/DigiD/GravityForms/GravityFormsAddon.php:179
+msgid "Resume session lifetime"
+msgstr "Hervatten levensduur sessie"
+
 #: src/DigiD/GravityForms/GravityFormsAddon.php:184
 msgid "No certificate selected"
 msgstr "Geen certificaat geselecteerd"

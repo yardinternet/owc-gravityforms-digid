@@ -9,10 +9,10 @@ use function Yard\DigiD\Foundation\Helpers\storage_path;
 class GravityFormsAddon extends GFAddOn
 {
     /**
-         * Version number.
-         *
-         * @var string
-         */
+     * Version number.
+     *
+     * @var string
+     */
     protected $_version = '1.0.0';
 
     /**
@@ -34,7 +34,7 @@ class GravityFormsAddon extends GFAddOn
      *
      * @var string
      */
-    protected $_path = GF_DIGID_ROOT_PATH .'/plugin.php';
+    protected $_path = GF_DIGID_ROOT_PATH . '/plugin.php';
 
     /**
      * The physical path to the main plugin file.
@@ -79,10 +79,10 @@ class GravityFormsAddon extends GFAddOn
     }
 
     /**
-    * Configures the settings which should be rendered on the Form Settings > Simple Add-On tab.
-    *
-    * @return array
-    */
+     * Configures the settings which should be rendered on the Form Settings > Simple Add-On tab.
+     *
+     * @return array
+     */
     public function plugin_settings_fields()
     {
         $prefix = "owc-digid-";
@@ -126,13 +126,13 @@ class GravityFormsAddon extends GFAddOn
             [
                 'title'       => esc_html__('Certificates', config('core.text_domain')),
                 'description' => '<p>' . __('Location of the certificates should <strong>not</strong> be publicly accessible and <strong>not</strong> in version control.', config('core.text_domain'))
-                 . '<br/>'.
-                        __('If site is a multisite, place the certificates in a subdirectory which should be named the <u>ID</u> of the subsite.', config('core.text_domain'))
-                     . '<br />'.
-                        sprintf(
-                            __('E.g., for this site: %s.', config('core.text_domain')),
-                            \sprintf('<code>%s/%s</code>', $this->getRootPathToCertificates(), is_multisite() ? get_current_blog_id() : '')
-                        ) .'</p>',
+                    . '<br/>' .
+                    __('If site is a multisite, place the certificates in a subdirectory which should be named the <u>ID</u> of the subsite.', config('core.text_domain'))
+                    . '<br />' .
+                    sprintf(
+                        __('E.g., for this site: %s.', config('core.text_domain')),
+                        \sprintf('<code>%s/%s</code>', $this->getRootPathToCertificates(), is_multisite() ? get_current_blog_id() : '')
+                    ) . '</p>',
                 'fields'      => [
                     [
                         'label'             => esc_html__('Certificates root location', config('core.text_domain')),
@@ -140,24 +140,50 @@ class GravityFormsAddon extends GFAddOn
                         'class'             => 'medium',
                         'name'              => "{$prefix}location-root-path-certificates",
                         'default_value'     => $this->getRootPathToCertificates(),
-                        'required'	         => true
+                        'required'             => true
                     ],
                     [
                         'label'             => esc_html__('Public certificate location', config('core.text_domain')),
                         'type'              => 'select',
                         'name'              => "{$prefix}public-certificate",
                         'choices'           => $this->getPublicCertificates(),
-                        'required'	         => true
+                        'required'             => true
                     ],
                     [
                         'label'             => esc_html__('Private certificate location', config('core.text_domain')),
                         'type'              => 'select',
                         'name'              => "{$prefix}private-certificate",
                         'choices'           => $this->getPrivateCertificates(),
-                        'required'	         => true,
+                        'required'             => true,
+                    ]
+                ]
+            ],
+            [
+                // description onder de velden
+                'title'  => esc_html__('Session settings', config('core.text_domain')),
+                'description' => '<p>' . __('When defining the values below please fill in a number that defines the minutes. Example: \'15\' means \'15 minutes\'.', config('core.text_domain'))
+                    . '</br>' .
+                    __('The \'<b>session lifetime</b>\' defines how long the current session is allowed to exist.', config('core.text_domain'))
+                    . '</br>' .
+                    __('And the \'<b>session resume lifetime</b>\' defines the amount of minutes which will be used for extending the existing session.', config('core.text_domain'))
+                    . '</p>',
+                'fields' => [
+                    [
+                        'label'             => esc_html__('Session lifetime', config('core.text_domain')),
+                        'type'              => 'text',
+                        'class'             => 'medium',
+                        'name'              => "{$prefix}lifetime",
+                        'required'          => true
+                    ],
+                    [
+                        'label'             => esc_html__('Resume session lifetime', config('core.text_domain')),
+                        'type'              => 'text',
+                        'class'             => 'medium',
+                        'name'              => "{$prefix}resume-lifetime",
+                        'required'          => true
                     ]
                 ],
-            ],
+            ]
         ];
     }
 
@@ -168,7 +194,7 @@ class GravityFormsAddon extends GFAddOn
      */
     private function getPublicCertificates(): array
     {
-        return $this->formatListOfCertificates(glob($this->getCertificateLocation() .'/*.{cer}', GLOB_BRACE));
+        return $this->formatListOfCertificates(glob($this->getCertificateLocation() . '/*.{cer}', GLOB_BRACE));
     }
 
     /**
@@ -202,7 +228,7 @@ class GravityFormsAddon extends GFAddOn
      */
     private function getPrivateCertificates(): array
     {
-        return $this->formatListOfCertificates(glob($this->getCertificateLocation() .'/*.{key}', GLOB_BRACE));
+        return $this->formatListOfCertificates(glob($this->getCertificateLocation() . '/*.{key}', GLOB_BRACE));
     }
 
     /**
