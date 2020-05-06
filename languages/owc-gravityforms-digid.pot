@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OWC GravityForms DigiD\n"
-"POT-Creation-Date: 2020-04-19 13:09+0200\n"
+"POT-Creation-Date: 2020-05-06 12:32+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,111 +17,108 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-1: docs\n"
 "X-Poedit-SearchPathExcluded-2: vendor\n"
 "X-Poedit-SearchPathExcluded-3: languages\n"
+"X-Poedit-SearchPathExcluded-4: node_modules\n"
 
-#: src/DigiD/DigiD/Claim/StatusCodes/AuthnFailed.php:16
+#: src/DigiD/Claim/StatusCodes/AuthnFailed.php:17
+msgid "Login cancelled"
+msgstr ""
+
+#: src/DigiD/Claim/StatusCodes/RequestDenied.php:18
+#: src/DigiD/Claim/StatusCodes/Requester.php:18
+#: src/DigiD/Claim/StatusCodes/Responder.php:18
 #, php-format
 msgid "An error has occurred in the communication with DigiD. Please try again later. If this error persists, please check the website %s for the latest information."
 msgstr ""
 
-#: src/DigiD/DigiD/Claim/StatusCodes/RequestDenied.php:16
-msgid "Access denied"
+#: src/DigiD/DigiDController.php:32
+msgid "Something went wrong. Please try again."
 msgstr ""
 
-#: src/DigiD/DigiD/Claim/StatusCodes/Requester.php:16
-#: src/DigiD/DigiD/Claim/StatusCodes/Responder.php:16
-msgid "Unknown error"
-msgstr ""
-
-#: src/DigiD/DigiD/DigiDController.php:31
-msgid "Something gone wrong"
-msgstr ""
-
-#: src/DigiD/GravityForms/DigiDField.php:48
-#: src/DigiD/GravityForms/DigiDField.php:131
+#: src/DigiD/DigiDField.php:48 src/DigiD/DigiDField.php:131
 msgid "DigiD"
 msgstr ""
 
-#: src/DigiD/GravityForms/DigiDField.php:111
+#: src/DigiD/DigiDField.php:111
 msgid "This field is required."
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:91
+#: src/DigiD/GravityFormsAddon.php:91
 msgid "Service Provider (SP)"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:94
+#: src/DigiD/GravityFormsAddon.php:94
 msgid "Issuer"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:101
+#: src/DigiD/GravityFormsAddon.php:101
 msgid "Organization name"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:107
+#: src/DigiD/GravityFormsAddon.php:107
 msgid "Organization url"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:115
+#: src/DigiD/GravityFormsAddon.php:115
 msgid "Identity Provider (IDP)"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:118
+#: src/DigiD/GravityFormsAddon.php:118
 msgid "Metadata url"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:127
+#: src/DigiD/GravityFormsAddon.php:127
 msgid "Certificates"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:128
+#: src/DigiD/GravityFormsAddon.php:128
 msgid "Location of the certificates should <strong>not</strong> be publicly accessible and <strong>not</strong> in version control."
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:130
+#: src/DigiD/GravityFormsAddon.php:130
 msgid "If site is a multisite, place the certificates in a subdirectory which should be named the <u>ID</u> of the subsite."
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:133
+#: src/DigiD/GravityFormsAddon.php:133
 #, php-format
 msgid "E.g., for this site: %s."
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:138
+#: src/DigiD/GravityFormsAddon.php:138
 msgid "Certificates root location"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:146
+#: src/DigiD/GravityFormsAddon.php:146
 msgid "Public certificate location"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:153
+#: src/DigiD/GravityFormsAddon.php:153
 msgid "Private certificate location"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:162
+#: src/DigiD/GravityFormsAddon.php:163
 msgid "Session settings"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:163
+#: src/DigiD/GravityFormsAddon.php:164
 msgid "When defining the values below please fill in a number that defines the minutes. Example: '15' means '15 minutes'."
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:167
+#: src/DigiD/GravityFormsAddon.php:166
 msgid "The '<b>session lifetime</b>' defines how long the current session is allowed to exist."
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:165
+#: src/DigiD/GravityFormsAddon.php:168
 msgid "And the '<b>session resume lifetime</b>' defines the amount of minutes which will be used for extending the existing session."
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:172
+#: src/DigiD/GravityFormsAddon.php:172
 msgid "Session lifetime"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:179
+#: src/DigiD/GravityFormsAddon.php:179
 msgid "Resume session lifetime"
 msgstr ""
 
-#: src/DigiD/GravityForms/GravityFormsAddon.php:210
+#: src/DigiD/GravityFormsAddon.php:210
 msgid "No certificate selected"
 msgstr ""

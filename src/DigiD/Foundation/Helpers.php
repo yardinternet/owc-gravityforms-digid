@@ -65,3 +65,88 @@ function decrypt($string): string
 {
     return resolve(\Yard\DigiD\Foundation\Cryptor::class)->decrypt($string);
 }
+
+/**
+ * Return the default value of the given value.
+ *
+ * @param  mixed  $value
+ * @return mixed
+ */
+function value($value)
+{
+    return $value instanceof \Closure ? $value() : $value;
+}
+
+/**
+ * Gets the value of an environment variable.
+ *
+ * @param  string  $key
+ * @param  mixed   $default
+ * @return mixed
+ */
+function env($key, $default = null)
+{
+    $value = getenv($key);
+
+    if (false === $value) {
+        return value($default);
+    }
+
+    switch (strtolower($value)) {
+        case 'true':
+        case '(true)':
+            return true;
+        case 'false':
+        case '(false)':
+            return false;
+        case 'empty':
+        case '(empty)':
+            return '';
+        case 'null':
+        case '(null)':
+            return;
+    }
+
+    if (1 < strlen($value) && startsWith($value, '"') && endsWith($value, '"')) {
+        return substr($value, 1, -1);
+    }
+
+    return $value;
+}
+
+/**
+ * Determine if a given string starts with a given substring.
+ *
+ * @param  string  $haystack
+ * @param  string|array  $needles
+ * @return bool
+ */
+function startsWith($haystack, $needles)
+{
+    foreach ((array) $needles as $needle) {
+        if ('' !== $needle && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+ /**
+ * Determine if a given string ends with a given substring.
+ *
+ * @param  string  $haystack
+ * @param  string|array  $needles
+ * @return bool
+ */
+function endsWith($haystack, $needles)
+{
+    foreach ((array) $needles as $needle) {
+        if (substr($haystack, -strlen($needle)) === (string) $needle) {
+            return true;
+        }
+    }
+
+    return false;
+}

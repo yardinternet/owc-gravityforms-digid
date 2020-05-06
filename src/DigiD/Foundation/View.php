@@ -5,7 +5,7 @@ namespace Yard\DigiD\Foundation;
 class View
 {
     /** @var string */
-    protected $templateDirectory = GF_DIGID_ROOT_PATH . '/views/';
+    protected $templateDirectory = GF_DIGID_ROOT_PATH . '/resources/views/';
 
     /** @var array */
     protected $vars         = [];

@@ -1,6 +1,6 @@
 <?php
 
-use Yard\DigiD\GravityForms\GravityFormsSettings;
+use Yard\DigiD\GravityFormsSettings;
 
 return [
     'issuer'        => GravityFormsSettings::make()->get('issuer'),
@@ -10,16 +10,16 @@ return [
         'url'         => GravityFormsSettings::make()->get('organization-url'),
     ],
     'session' => [
-        'lifetime' => GravityFormsSettings::make()->get('lifetime'),
+        'lifetime'        => GravityFormsSettings::make()->get('lifetime'),
         'resume-lifetime' => GravityFormsSettings::make()->get('resume-lifetime'),
     ],
     'url'    => [
         'idp'         => [
             'metadata' => GravityFormsSettings::make()->get('ipd-metadata-url')
         ],
-        'acs'         => '/digid/acs',
-        'logged_out'  => '/digid/logged_out',
-        'logout'      => '/digid/logout',
+        'acs'         => \site_url('/digid/acs'),
+        'logged_out'  => \site_url('/digid/logged_out'),
+        'logout'      => \site_url('/digid/logout'),
     ],
     'certificate' => [
         'public'  => GravityFormsSettings::make()->get('public-certificate'),

@@ -1,5 +1,5 @@
 module.exports = {
-    entry: './assets/js/countdown.js',
+    entry: './resources/js/countdown.js',
     mode: 'production',
     module: {
       rules: [
@@ -14,7 +14,7 @@ module.exports = {
       extensions: ['*', '.js']
     },
     output: {
-      path: __dirname + '/dist',
+      path: __dirname + '/resources/js/dist',
       publicPath: '/',
       filename: 'app.js'
     },

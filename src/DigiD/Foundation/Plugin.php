@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yard\DigiD\Foundation;
 
+use function Yard\DigiD\Foundation\Helpers\env;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
 class Plugin
@@ -11,14 +14,14 @@ class Plugin
      *
      * @var string
      */
-    const NAME = 'owc-gravityforms-digid';
+    public const NAME = 'owc-gravityforms-digid';
 
     /**
      * Version of the plugin.
      *
      * @var string
      */
-    const VERSION = GF_DIGID_VERSION;
+    public const VERSION = GF_DIGID_VERSION;
 
     /**
      * Path to the root of the plugin.
@@ -32,14 +35,14 @@ class Plugin
      *
      * @var \Yard\DigiD\Foundation\Config
      */
-    public $config;
+    protected $config;
 
     /**
      * Instance of the hook loader.
      *
      * @var \Yard\DigiD\Foundation\Loader
      */
-    public $loader;
+    protected $loader;
 
     /**
      * @var \DI\Container
@@ -77,7 +80,7 @@ class Plugin
      */
     public static function getInstance($rootPath = '') : self
     {
-        if (null == static::$instance) {
+        if (null === static::$instance) {
             static::$instance = new static($rootPath);
         }
 
@@ -106,8 +109,11 @@ class Plugin
                 return $session;
             },
             'teams'    => function () {
+                if (true === env('MS_TEAMS_DISABLE_LOGGING', true)) {
+                    return (new \Monolog\Logger('microsoft-teams-logger'))->pushHandler(new \Monolog\Handler\NullHandler());
+                }
                 return (new \Monolog\Logger('microsoft-teams-logger'))->pushHandler(new \Rspeekenbrink\MonologMicrosoftTeams\MicrosoftTeamsHandler(
-                    getenv('MS_TEAMS_WEBHOOK'),
+                    env('MS_TEAMS_WEBHOOK'),
                     $this->getName(),
                     \Monolog\Logger::INFO
                 ));
@@ -208,5 +214,25 @@ class Plugin
 
             $service->register();
         }
+    }
+
+    /**
+     * Get instance of the hook loader.
+     *
+     * @return  \Yard\eHerkenning\Foundation\Loader
+     */
+    public function getLoader()
+    {
+        return $this->loader;
+    }
+
+    /**
+     * Get instance of the configuration repository.
+     *
+     * @return  \Yard\eHerkenning\Foundation\Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 }
