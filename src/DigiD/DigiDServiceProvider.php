@@ -28,7 +28,7 @@ class DigiDServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 3);
+        $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 1);
         $this->plugin->getLoader()->addAction('gform_after_submission', $gravityForm, 'clearFormAfterSubmission', 10, 2);
 
         $this->loadResolvers();

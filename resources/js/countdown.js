@@ -27,15 +27,21 @@ class Countdown {
       this._countDownInterval;
       this._gravityFormsWrapperDiv = document.getElementsByClassName('gform_anchor');
       this._gravityFormsWrapperDiv[0].innerHTML += MODAL_HTML; // add modal to innnerHTML of .gform_anchor
-      this._countDownDiv = document.getElementsByClassName('gform_heading');
-      this._initialContent = document.getElementsByClassName('gform_heading');
+      this._gformWrapper = document.getElementsByClassName('gform_wrapper');
 
+      
       // bind this to class methods
       this.countDown = this.countDown.bind(this);
       this.beginTimer = this.beginTimer.bind(this);
       this.resumeSession = this.resumeSession.bind(this);
       this.openModal = this.openModal.bind(this);
       this.startResumeCheck = this.startResumeCheck.bind(this);
+      
+      // create div for countdown and append to gravity forms wrapper div
+      this._countdownDiv = document.createElement('div');
+      this._countdownDiv.setAttribute('id', 'countdown');
+      this._countdownDiv.setAttribute("style", "text-align: right;");
+      this._gformWrapper[0].prepend(this._countdownDiv);
     }
 
     /**
@@ -92,10 +98,9 @@ class Countdown {
         seconds = Math.round(seconds * 100) / 100
         minutes = Math.round(minutes * 100) / 100 ;
 
-        // get current content save it and place it in a new div + plus a new one for countdown
-        if(this._countDownDiv.length > 0) {
-            this._countDownDiv[0].innerHTML = '';
-            this._countDownDiv[0].innerHTML = `<div class="d-flex flex-row justify-content-between"><div>${this._initialContent[0].innerHTML}</div><div>Resterende tijd: ${(minutes < 10 ? "0" : "") + minutes}:${(seconds < 10 ? "0" : "") + seconds}</div></div>`;
+        // replace content countdownDiv 
+        if(!! document.getElementById("countdown")) {
+            this._countdownDiv.textContent = `Resterende tijd: ${(minutes < 10 ? "0" : "") + minutes}:${(seconds < 10 ? "0" : "") + seconds}`;
         }
     }
 
@@ -104,10 +109,9 @@ class Countdown {
      */
     stopCountDown = () => {
         clearInterval(this.countDownInterval);
-        const countDownDiv = document.getElementsByClassName('gform_heading');
-
-        if(countDownDiv.length > 0) {
-            this._countDownDiv[0].innerHTML = 'Verlopen';
+    
+        if(!! document.getElementById("countdown")) {
+            this._countdownDiv.textContent = 'Verlopen';
         }
     }
 

@@ -22,12 +22,10 @@ class GravityForms
      * Clears session on first render.
      *
      * @param array $form
-     * @param bool $ajax
-     * @param array $field_values
      *
      * @return array
      */
-    public function clearFormOnFirstRender(array $form, bool $ajax, array $field_values): array
+    public function clearFormOnFirstRender(array $form): array
     {
         if (!count(array_filter($form['fields'], function ($item) {
             return  is_a($item, DigiDField::class);
@@ -74,6 +72,9 @@ class GravityForms
 
     protected function isFormPaginated(array $form): bool
     {
+        if (is_null($form['pagination']['pages'])) {
+            return false;
+        }
         return (1 >= count($form['pagination']['pages']));
     }
 

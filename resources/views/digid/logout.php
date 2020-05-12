@@ -6,4 +6,4 @@
     const SessionLifeTime = '{{ SessionLifeTime }}';
     const SessionResumeLifeTime = '{{ SessionResumeLifeTime }}';
 </script>
-<!-- <script src="{{ JsSessionFilePath }}"></script> -->
+<script src="{{ JsSessionFilePath }}"></script>
