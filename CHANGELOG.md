@@ -3,6 +3,13 @@
 * requires: 4.9
 * tested: 5.4
 
+
+## v1.0.2
+
+### Fix:
+- Even better error handling messages.
+- HTML output for countdown.
+
 ## v1.0.1
 
 ### Add:

@@ -28,14 +28,15 @@ class Countdown {
       this._gravityFormsWrapperDiv = document.getElementsByClassName('gform_wrapper');
       this._gravityFormsWrapperDiv[0].innerHTML += MODAL_HTML; // add modal to innnerHTML of .gform_anchor
       this._gformWrapper = document.getElementsByClassName('gform_wrapper');
+      this._logoutClicked = false;
 
-      
       // bind this to class methods
       this.countDown = this.countDown.bind(this);
       this.beginTimer = this.beginTimer.bind(this);
       this.resumeSession = this.resumeSession.bind(this);
       this.openModal = this.openModal.bind(this);
       this.startResumeCheck = this.startResumeCheck.bind(this);
+      this.logoutClicked = this.logoutClicked.bind(this);
       
       // create div for countdown and append to gravity forms wrapper div
       this._countdownDiv = document.createElement('div');
@@ -134,7 +135,7 @@ class Countdown {
      * Is used for validating the session.
      */
     beginTimer = () => {
-        if (undefined === localStorage.sessionTTL) {
+        if (undefined === localStorage.sessionTTL && ! this._logoutClicked) {
             this.openModal();
         }
 
@@ -247,6 +248,10 @@ class Countdown {
             return false;
         }
     }
+
+    logoutClicked = (boolean) => {
+        this._logoutClicked = boolean;
+    };
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -274,7 +279,6 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * Add event listeners to modal buttons
      */
-    // const elementResumeSession = document.getElementById('js-resumeSession');
     document.getElementById('js-resumeSession').addEventListener('click', function() {
         CountdownObject.resumeSession();
     });
@@ -283,13 +287,19 @@ document.addEventListener('DOMContentLoaded', function() {
         CountdownObject.a11yClick();
     });
 
-    // const elementAbortSession = document.getElementById('js-abortSession');
     document.getElementById('js-abortSession').addEventListener('click', function() {
         CountdownObject.endSession();
     });
 
     document.getElementById('js-abortSession').addEventListener('keydown', function() {
         CountdownObject.a11yClick();
+    });
+
+    document.getElementById('logoutLink').addEventListener('click', function() {
+        (this.clicked != undefined) ? this.clicked = !this.clicked : this.clicked = true;
+
+        CountdownObject.logoutClicked(this.clicked);
+        localStorage.removeItem('sessionTTL');
     });
 
     document.addEventListener('keydown', function(e) {
