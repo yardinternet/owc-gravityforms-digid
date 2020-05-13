@@ -25,7 +25,7 @@ class Countdown {
       this._resumeSessionTTL = resumeSessionTTL;
       this._timerInterval;
       this._countDownInterval;
-      this._gravityFormsWrapperDiv = document.getElementsByClassName('gform_anchor');
+      this._gravityFormsWrapperDiv = document.getElementsByClassName('gform_wrapper');
       this._gravityFormsWrapperDiv[0].innerHTML += MODAL_HTML; // add modal to innnerHTML of .gform_anchor
       this._gformWrapper = document.getElementsByClassName('gform_wrapper');
 
