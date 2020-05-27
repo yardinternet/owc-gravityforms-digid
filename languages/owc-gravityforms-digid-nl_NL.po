@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OWC GravityForms DigiD\n"
-"POT-Creation-Date: 2020-05-06 12:32+0200\n"
-"PO-Revision-Date: 2020-05-06 12:32+0200\n"
+"POT-Creation-Date: 2020-05-27 11:05+0200\n"
+"PO-Revision-Date: 2020-05-27 11:05+0200\n"
 "Last-Translator: Edwin Siebel <edwin@yard.nl>\n"
 "Language-Team: Yard Internet <info@yard.nl>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.3.1\n"
 "X-Poedit-KeywordsList: __;_x;_e;_ex;_n;_nx;esc_attr__;esc_attr_e;esc_attr_x;"
 "esc_html__;esc_html_e;esc_html_x;_n_noop;_nx_noop\n"
 "X-Poedit-Basepath: ..\n"
@@ -49,6 +49,10 @@ msgstr "DigiD"
 #: src/DigiD/DigiDField.php:111
 msgid "This field is required."
 msgstr "Dit veld is verplicht."
+
+#: src/DigiD/Fields/DigiDLoginField.php:151
+msgid "Login to"
+msgstr "Inloggen bij"
 
 #: src/DigiD/GravityFormsAddon.php:91
 msgid "Service Provider (SP)"
