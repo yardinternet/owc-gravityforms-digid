@@ -24,12 +24,16 @@ class DigiDServiceProvider extends ServiceProvider
         $this->plugin->getLoader()->addAction('gform_loaded', $gravityForm, 'registerField', 5);
         $this->registerSettingsAddon();
 
+
         if (\is_admin()) {
             return;
         }
 
+        $this->plugin->getLoader()->addAction('wp_enqueue_scripts', $this, 'loadAssets');
+
         $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 1);
         $this->plugin->getLoader()->addAction('gform_after_submission', $gravityForm, 'clearFormAfterSubmission', 10, 2);
+
 
         $this->loadResolvers();
 
@@ -38,6 +42,12 @@ class DigiDServiceProvider extends ServiceProvider
         resolve('route')->get('/digid/logged_out', [$controller, 'loggedOut']);
         resolve('route')->get('/digid/logout', [$controller, 'logOut']);
         resolve('route')->get('/digid/metadata', [$controller, 'metadata']);
+    }
+
+    public function loadAssets(): void
+    {
+        wp_register_script('gravityforms_digid', plugin_dir_url(GF_DIGID_PLUGIN_FILE) . 'dist/app.js');
+        wp_enqueue_script('gravityforms_digid');
     }
 
     private function registerSettingsAddon(): void
