@@ -25,9 +25,12 @@ class Countdown {
       this._resumeSessionTTL = resumeSessionTTL;
       this._timerInterval;
       this._countDownInterval;
-      this._gravityFormsWrapperDiv = document.getElementsByClassName('gform_wrapper');
-      this._gravityFormsWrapperDiv[0].innerHTML += MODAL_HTML; // add modal to innnerHTML of .gform_anchor
-      this._gformWrapper = document.getElementsByClassName('gform_wrapper');
+    //   this._gravityFormsWrapperDiv = document.getElementsByClassName('gform_wrapper');
+    this._gravityFormsWrapperDiv = document.getElementById('readspeaker');
+    //   this._gravityFormsWrapperDiv[0].setAttribute('id', 'lala');
+      this._gravityFormsWrapperDiv.innerHTML += MODAL_HTML; // add modal to innnerHTML of .gform_anchor
+    //   this._gformWrapper = document.getElementsByClassName('gform_wrapper');
+      this._gformWrapper = document.getElementById('readspeaker');
       this._logoutClicked = false;
 
       // bind this to class methods
@@ -42,7 +45,7 @@ class Countdown {
       this._countdownDiv = document.createElement('div');
       this._countdownDiv.setAttribute('id', 'countdown');
       this._countdownDiv.setAttribute("style", "text-align: right;");
-      this._gformWrapper[0].prepend(this._countdownDiv);
+      this._gformWrapper.prepend(this._countdownDiv);
     }
 
     /**
@@ -51,6 +54,14 @@ class Countdown {
      */
     createSession = () => {
         if (undefined === localStorage.sessionTTL) {
+            localStorage.sessionTTL = JSON.stringify(this.createLifeTimeObject(this._sessionTTL));
+            this.initiateTimer();
+            this.initiateCountDownInterval();
+        }
+    }
+
+    updateSession = () => {
+        if (undefined !== localStorage.sessionTTL) {
             localStorage.sessionTTL = JSON.stringify(this.createLifeTimeObject(this._sessionTTL));
             this.initiateTimer();
             this.initiateCountDownInterval();
@@ -67,7 +78,7 @@ class Countdown {
         const lifetime = seconds;
         return {
             value: lifetime,
-            expiry: Date.now() + (lifetime * 1000)
+            expiry: Date.now() + (lifetime * 1000) 
         }
     }
 
@@ -100,7 +111,8 @@ class Countdown {
         minutes = Math.round(minutes * 100) / 100 ;
 
         // replace content countdownDiv 
-        if(!! document.getElementById("countdown")) {
+        // console.log(document.getElementById("countdown"));
+        if(null !== document.getElementById("countdown")) {
             this._countdownDiv.textContent = `Resterende tijd: ${(minutes < 10 ? "0" : "") + minutes}:${(seconds < 10 ? "0" : "") + seconds}`;
         }
     }
@@ -121,7 +133,12 @@ class Countdown {
      * Property is used for validating the session.
      */
     parseJSON = () => {
-        return JSON.parse(localStorage.sessionTTL).expiry
+        // checken of er een sessie is anders return je date now - 1
+        if(undefined !== localStorage.sessionTTL) {
+            return JSON.parse(localStorage.sessionTTL).expiry
+        } else {
+            return Date.now() - 1000;
+        }
     }
 
     /**
@@ -135,6 +152,7 @@ class Countdown {
      * Is used for validating the session.
      */
     beginTimer = () => {
+        console.log('begintime runs');
         if (undefined === localStorage.sessionTTL && ! this._logoutClicked) {
             this.openModal();
         }
@@ -160,6 +178,7 @@ class Countdown {
         // clear session and stop timer & countdown interval
         this.stopTimer();
         this.stopCountDown();
+
         localStorage.removeItem('sessionTTL');
 
         const modalWrapper = document.getElementById('modalWrapper');
@@ -176,7 +195,7 @@ class Countdown {
             modalDialog.style.cssText = 'max-width: 500px; margin: 5rem auto; background-color: #ffffff; padding: 2rem;';
         }
 
-        this.startResumeCheck();
+        // this.startResumeCheck();
     }
 
     /**
@@ -254,13 +273,17 @@ class Countdown {
     };
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+// document.addEventListener('DOMContentLoaded', function() {
+    console.log('loaded');
     let CountdownObject;
+    
 
     if(localStorage.sessionTTL === undefined) {
+        console.log('session not alive');
         CountdownObject = new Countdown(SessionLifeTime, SessionResumeLifeTime);
         CountdownObject.createSession();
     } else {
+        console.log('session alive');
         const json = JSON.parse(localStorage.sessionTTL);
 
         const now = new Date().getTime();
@@ -270,10 +293,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Calculate remaining seconds
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
+        
+        // CountdownObject.stopCountDown();
+        // CountdownObject.stopTimer();
         CountdownObject = new Countdown(seconds, SessionResumeLifeTime);
-        CountdownObject.initiateTimer();
-        CountdownObject.initiateCountDownInterval();
+        CountdownObject.updateSession();
+        // CountdownObject.initiateTimer();
+        // CountdownObject.initiateCountDownInterval();
     }
 
     /**
@@ -312,4 +338,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return;
     });
-});
+// });

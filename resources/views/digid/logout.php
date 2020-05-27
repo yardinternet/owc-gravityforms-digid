@@ -5,5 +5,19 @@
 <script>
     const SessionLifeTime = '{{ SessionLifeTime }}';
     const SessionResumeLifeTime = '{{ SessionResumeLifeTime }}';
+    const JsSessionFilePath = '{{ JsSessionFilePath }}';
 </script>
-<script src="{{ JsSessionFilePath }}"></script>
+<script>
+    console.log(document.getElementById('JsSessionFilePath'));
+    if (!document.getElementById('JsSessionFilePath')) {
+        var script = document.createElement('script');
+        script.onload = function() {
+            //do stuff with the script
+        };
+        script.src = JsSessionFilePath;
+        script.id = "JsSessionFilePath"
+
+        document.head.appendChild(script);
+    }
+</script>
+<!-- <script id="JsSessionFilePath" src="{{ JsSessionFilePath }}"></script> -->

@@ -35,7 +35,7 @@ class DigiDController
 
         // $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/AuthnRequest.xml'));
         // $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/DENIED.xml'));
-        // $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/SUCCESS.xml'));
+        $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/SUCCESS.xml'));
 
         $attributes   = new Attributes($responseData);
 
