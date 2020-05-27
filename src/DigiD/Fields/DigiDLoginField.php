@@ -52,11 +52,7 @@ class DigiDLoginField extends AbstractField
                 if (!empty($bsn)) {
                     $digiDSession          = new DigiDSession(config('digid.session.lifetime'), config('digid.session.resume-lifetime'));
                     return view('digid/logout.php', [
-                        'logoutLink'        => \site_url('/digid/logout'),
-                        'JsSessionFilePath' => \plugins_url(
-                            'resources/js/dist/app.js',
-                            GF_DIGID_PLUGIN_SLUG . '/plugin.php'
-                        ),
+                        'logoutLink'            => \site_url('/digid/logout'),
                         'SessionLifeTime'       => $digiDSession->getSessionLifeTime(),
                         'SessionResumeLifeTime' => $digiDSession->getSessionResumeLifeTime()
                     ]);

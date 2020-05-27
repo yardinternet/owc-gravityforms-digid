@@ -1,21 +1,32 @@
+const path = require('path');
+
 module.exports = {
-    entry: './resources/js/countdown.js',
-    mode: 'production',
+    entry: './resources/js/index.js',
+	mode: (process.env.NODE_ENV ? process.env.NODE_ENV : 'development'),
+	output: {
+        library: 'Countdown',
+        libraryTarget: 'umd',
+        globalObject: '(typeof self !== "undefined" ? self : this)',
+        libraryExport: 'default',
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'app.js',
+        publicPath: '/'
+    },
     module: {
       rules: [
         {
-          test: /\.(js)$/,
-          exclude: /node_modules/,
-          use: ['babel-loader']
+			test: /\.(js)$/,
+			exclude: /node_modules/,
+			use: {
+				loader: 'babel-loader',
+				options: {
+					presets: ['@babel/preset-env']
+				}
+			}
         }
       ]
     },
     resolve: {
       extensions: ['*', '.js']
-    },
-    output: {
-      path: __dirname + '/resources/js/dist',
-      publicPath: '/',
-      filename: 'app.js'
     },
   };
