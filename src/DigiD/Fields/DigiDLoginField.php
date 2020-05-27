@@ -39,8 +39,8 @@ class DigiDLoginField extends AbstractField
      */
     public function render(): string
     {
-        if ($this->is_admin || ! \rgar($this->getInput(), 'isHidden')) {
-            if (! \is_admin()) {
+        if ($this->is_admin || !\rgar($this->getInput(), 'isHidden')) {
+            if (!\is_admin()) {
                 $bsn = $this->session->get('bsn', '');
                 if (!empty($bsn)) {
                     $bsn = encrypt($bsn);
@@ -135,7 +135,29 @@ class DigiDLoginField extends AbstractField
         return view('digid/digidField.php', [
             'error' => $this->session->getFlash('error'),
             'logo'  => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
-            'link'  => \is_admin() ? '' : DigiDController::getAuthNRequestURL()
+            'link'  => \is_admin() ? '' : DigiDController::getAuthNRequestURL(),
+            'title' => $this->getFieldTitle(),
+            'subtitle' => $this->getFieldSubTitle()
         ]);
+    }
+
+    /**
+     * Get the input field display title.
+     *
+     * @return string
+     */
+    protected function getFieldTitle(): string
+    {
+        return apply_filters('owc_gravityforms_digid_field_display_title', __('Login to', config('core.text_domain')));
+    }
+
+    /**
+     * Get the input field display subtitle.
+     *
+     * @return string
+     */
+    protected function getFieldSubTitle(): string
+    {
+        return apply_filters('owc_gravityforms_digid_field_display_subtitle', get_bloginfo('name'));
     }
 }
