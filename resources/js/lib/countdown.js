@@ -6,7 +6,6 @@ export class Countdown {
 		}
 
 		this.insertModalHTML();
-		this.insertCountdownHTML();
 
 		this.timerInterval;
 		this.countDownInterval;
@@ -37,18 +36,6 @@ export class Countdown {
 					</div>
 				</div>
 			</div>`);
-		}
-	}
-
-	/**
-	 * Insert the div container for the countdown.
-	 */
-	insertCountdownHTML() {
-		const gfWrapper = document.getElementsByClassName('gform_wrapper');
-		const template = `<div id="js-countdown" style="text-align:right;"></div>`;
-
-		if (gfWrapper) {
-			gfWrapper[0].insertAdjacentHTML('afterbegin', template);
 		}
 	}
 

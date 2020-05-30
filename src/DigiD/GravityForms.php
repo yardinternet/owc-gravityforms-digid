@@ -65,6 +65,21 @@ class GravityForms
         resolve('teams')->info('Form is submitted; session is cleared');
     }
 
+    /**
+     * Prepend custom div element for countdown
+     *
+     * @param string $form_tag
+     * @param array $form
+     * 
+     * @return string
+     */
+    public function addCountDownHTML($form_tag, $form): string
+    {
+        $form_tag = str_replace("<form ", "<div id=\"js-countdown\" style=\"text-align:right; min-height: 30px;\"></div><form ", $form_tag);
+
+        return $form_tag;
+    }
+
     protected function hasToken(): bool
     {
         return isset($_REQUEST['gf_token']) and (!empty($_REQUEST['gf_token']));
