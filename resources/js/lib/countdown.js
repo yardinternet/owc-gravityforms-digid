@@ -29,9 +29,9 @@ export class Countdown {
 							Uw sessie is mogelijk verlopen. Als u te lang niks hebt gedaan, wordt u uit veiligheidsoverwegingen door DigiD uitgelogd.
 							Kies 'Verlengen' om uw sessie te verlengen, mogelijk moet u opnieuw inloggen met DigiD.
 						</div>
-						<div class='modal-footer | d-flex justify-content-between'>
+						<div class='modal-footer | d-flex justify-content-end'>
+						<button type='button' id='js-abortSession' tabindex='0' role='button' class='btn btn-outline-primary' data-dismiss='modal'>Sluiten</button>
 							<button type='button' id='js-resumeSession' tabindex='0' role='button' class='btn btn-primary mr-2'>Verlengen</button>
-							<button type='button' id='js-abortSession' tabindex='0' role='button' class='btn btn-secondary' data-dismiss='modal'>Sluiten</button>
 						</div>
 					</div>
 				</div>
