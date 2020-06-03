@@ -3,6 +3,17 @@
 - requires: 4.9
 - tested: 5.4
 
+## v1.0.6
+
+### Change
+
+- Change CSS in JS
+
+## v1.0.5
+
+### Change
+
+
 ## v1.0.4
 
 ### Change
