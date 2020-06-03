@@ -2,8 +2,8 @@
 <p>U bent succesvol ingelogd. Klik op volgende knop.</p>
 
 <script>
-    const SessionLifeTime = '{{ SessionLifeTime }}';
-    const SessionResumeLifeTime = '{{ SessionResumeLifeTime }}';
+    var SessionLifeTime = '{{ SessionLifeTime }}';
+	var SessionResumeLifeTime = '{{ SessionResumeLifeTime }}';
 
 	document.addEventListener('DOMContentLoaded', function() {
 		var instance = new Countdown(SessionLifeTime, SessionResumeLifeTime);

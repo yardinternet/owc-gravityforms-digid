@@ -1,14 +1,39 @@
 export class Countdown {
 	constructor(sessionTTL, resumeSessionTTL) {
-		this.options = {
-			sessionTTL,
-			resumeSessionTTL
-		}
+		this.options = { sessionTTL, resumeSessionTTL }
 
 		this.insertModalHTML();
 
 		this.timerInterval;
 		this.countDownInterval;
+	}
+
+	/**
+	 * Get TTL value from Session Storage.
+	 */
+	get sessionTTL() {
+		return sessionStorage.getItem('sessionTTL');
+	}
+
+	/**
+	 * Get session expiration time from Session Storage.
+	 */
+	get sessionExpiration() {
+		return sessionStorage.getItem('sessionExpiration');
+	}
+
+	/**
+	 * Set TTL value in Session Storage.
+	 */
+	set sessionTTL(duration) {
+		sessionStorage.setItem('sessionTTL', duration);
+	}
+
+	/**
+	 * Set session expiration time in Session Storage.
+	 */
+	set sessionExpiration(duration) {
+		sessionStorage.setItem('sessionExpiration', duration);
 	}
 
 	/**
@@ -43,13 +68,26 @@ export class Countdown {
      * Initialize the plugin.
      */
 	init() {
-		if (!localStorage.sessionTTL) {
-			this.sessionStart();
-		} else {
-			this.sessionResume();
-		}
+		const sessionTTL = this.sessionTTL;
+		const sessionExpiration = this.sessionExpiration;
 
 		this.registerEventHandlers();
+
+		if (sessionTTL) {
+			const data = JSON.parse(sessionExpiration);
+
+			const now = new Date();
+			const expiration = new Date(data);
+
+			if (now.getTime() > expiration.getTime()) {
+				return this.sessionEnd();
+			} else {
+				return this.sessionResumeCurrent();
+			}
+		}
+
+
+		return this.sessionStart();
 	}
 
 	/**
@@ -57,32 +95,56 @@ export class Countdown {
 	 * This is only a visual representation for the real session that goes on in the back-end.
 	 */
 	sessionStart() {
-		const format = this.createTTL(this.options.sessionTTL);
-		localStorage.sessionTTL = JSON.stringify(format);
+		const duration = Date.now() + (this.options.sessionTTL * 1000);
 
-		this.initTimer();
+		this.sessionTTL = JSON.stringify(this.options.sessionTTL);
+		this.sessionExpiration = JSON.stringify(duration);
+
+		this.timerInit();
 		this.initCountdown();
 	}
 
 	/**
 	 * Resume the current session, calculate the time left.
+	 * i.e. on page reload / tab switch.
 	 */
-	sessionResume() {
-		const parse = JSON.parse(localStorage.sessionTTL);
-        const now = new Date().getTime();
-        const distance = new Date(parse.expiry) - now;
+	sessionResumeCurrent() {
+		const sessionExpiration = JSON.parse(this.sessionExpiration);
+
+		const now = new Date().getTime();
+		const expiration = new Date(sessionExpiration);
+		const distance = expiration - now;
 		const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-		this.options.sessionTTL = seconds;
+		this.sessionTTL = seconds;
 
-		this.initTimer();
+		this.timerInit();
+		this.initCountdown();
+	}
+
+	/**
+	 * Resume new session.
+	 * i.e. on extending the TTL from the modal.
+	 */
+	sessionResumeNew() {
+		const duration = Date.now() + (this.options.resumeSessionTTL * 1000);
+
+		this.closeModal();
+
+		this.sessionTTL = JSON.stringify(this.options.resumeSessionTTL);
+		this.sessionExpiration = JSON.stringify(duration);
+
+		this.timerInit();
 		this.initCountdown();
 	}
 
 	/**
      * End session and go to logout page.
      */
-    sessionEnd = () => {
+	sessionEnd = () => {
+		this.clearSessionTTL();
+		this.clearSessionExpiration();
+
         const logoutLink = document.getElementById('logoutLink').href;
         return window.location.href = logoutLink;
     }
@@ -95,29 +157,25 @@ export class Countdown {
 		const abort = document.getElementById('js-abortSession');
 		const logout = document.getElementById('logoutLink');
 
-		resume.addEventListener('click', e => this.sessionResume(e));
+		resume.addEventListener('click', e => this.sessionResumeNew(e));
 		resume.addEventListener('keydown', e => this.a11yClick(e));
 		abort.addEventListener('click', e => this.sessionEnd(e));
 		abort.addEventListener('keydown', e => this.a11yClick(e));
 
-		document.addEventListener('keydown', e => this.closeModal(e));
+		document.addEventListener('keydown', e => {
+			const ESCAPE_KEY = 27;
+			const modal = document.getElementById('modalWrapper');
+
+			if (e.keyCode === ESCAPE_KEY && modal.classList.contains('show')) {
+				this.sessionEnd();
+				this.closeModal();
+			}
+		});
 
 		if (logout) {
 			logout.addEventListener('click', e => this.logout(e));
 		}
 	}
-
-    /**
-     * Format TTL object for local storage.
-     *
-     * @param {int} seconds
-     */
-    createTTL = seconds => {
-        return {
-            value: seconds,
-            expiry: Date.now() + (seconds * 1000)
-        }
-    }
 
     /**
      * Init countdown.
@@ -129,10 +187,12 @@ export class Countdown {
      */
 	countdown = () => {
 		const countdownElem = document.getElementById('js-countdown');
-		if (!localStorage.sessionTTL) return;
+		if (!this.sessionTTL) return;
+
+		const expiration = JSON.parse(this.sessionExpiration);
 
         const now = new Date().getTime();
-        const distance = new Date(this.parseJSON()) - now;
+        const distance = new Date(expiration) - now;
 
         // Time calculations for minutes and seconds.
         let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -159,25 +219,17 @@ export class Countdown {
     }
 
     /**
-     * Create object and return property: expiry.
-     * Property is used for validating the session.
-     */
-	parseJSON = () => JSON.parse(localStorage.sessionTTL).expiry;
-
-    /**
      * Init timer interval.
      */
-    initTimer = () => this.timerInterval = setInterval(this.beginTimer, 1000);
+    timerInit = () => this.timerInterval = setInterval(this.timerStart, 1000);
 
     /**
      * Is used for validating the session.
      */
-    beginTimer = () => {
-        if (undefined === localStorage.sessionTTL && ! this._logoutClicked) {
-            this.openModal();
-        }
+	timerStart = () => {
+		const expiration = JSON.parse(this.sessionExpiration);
 
-        if (Date.now() > this.parseJSON() && localStorage.sessionTTL) {
+        if (Date.now() > expiration) {
             this.openModal();
         }
 
@@ -194,8 +246,9 @@ export class Countdown {
      */
     openModal = () => {
         this.stopTimer();
-        this.stopCountdown();
-        localStorage.removeItem('sessionTTL');
+		this.stopCountdown();
+
+		this.clearSessionTTL();
 
         const modalWrapper = document.getElementById('modalWrapper');
         const modalDialog = document.getElementById('modalDialog');
@@ -218,24 +271,17 @@ export class Countdown {
 	 * Close modal.
 	 */
 	closeModal = e => {
-		const ESCAPE_KEY = 27;
 		const modal = document.getElementById('modalWrapper');
+		const modalDialog = document.getElementById('modalDialog');
 
-		if (e.keyCode === ESCAPE_KEY && modal.classList.contains('show')) {
-			this.sessionEnd();
+		if (modal !== null) {
+			modal.classList.remove('show');
+			modal.setAttribute('aria-hidden', 'true');
+			modal.style.cssText = 'display: none;';
+		}
 
-			const modal = document.getElementById('modalWrapper');
-			const modalDialog = document.getElementById('modalDialog');
-
-			if (modal !== null) {
-				modal.classList.remove('show');
-				modal.setAttribute('aria-hidden', 'true');
-				modal.style.cssText = 'display: none;';
-			}
-
-			if (modalDialog !== null) {
-				modalDialog.style.cssText = "";
-			}
+		if (modalDialog !== null) {
+			modalDialog.style.cssText = "";
 		}
 	}
 
@@ -245,7 +291,7 @@ export class Countdown {
     startResumeCheck() {
 		const that = this;
         const resumeCheck = setInterval(function() {
-            if (undefined === localStorage.sessionTTL) {
+			if (!that.sessionTTL && !that.sessionExpiration) {
                 that.sessionEnd();
                 clearInterval(resumeCheck);
             } else {
@@ -270,10 +316,23 @@ export class Countdown {
 		}
 
 		return true;
-    }
+	}
+
+	/**
+	 * Clear session TTL in Session Storage.
+	 */
+	clearSessionTTL = () => sessionStorage.removeItem('sessionTTL');
+
+	/**
+	 * Clear session expiration in Session Storage.
+	 */
+	clearSessionExpiration = () => sessionStorage.removeItem('sessionExpiration');
 
 	/**
 	 * Handle logout.
 	 */
-	logout = () => localStorage.removeItem('sessionTTL');
+	logout = () => {
+		this.clearSessionTTL();
+		this.clearSessionExpiration();
+	};
 }
