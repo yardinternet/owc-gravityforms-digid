@@ -3,6 +3,16 @@
 - requires: 4.9
 - tested: 5.4
 
+## v1.0.7
+
+### Change
+
+- Local Storage to Session Storage.
+
+### Fix
+
+- Duration of a resumed session.
+
 ## v1.0.6
 
 ### Change
