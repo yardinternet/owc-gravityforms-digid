@@ -91,7 +91,7 @@ export class Countdown {
 	}
 
 	/**
-	 * Start the local storage session.
+	 * Start the session.
 	 * This is only a visual representation for the real session that goes on in the back-end.
 	 */
 	sessionStart() {
