@@ -291,7 +291,7 @@ export class Countdown {
     startResumeCheck() {
 		const that = this;
         const resumeCheck = setInterval(function() {
-			if (!that.sessionTTL && !that.sessionExpiration) {
+			if (!that.sessionTTL) {
                 that.sessionEnd();
                 clearInterval(resumeCheck);
             } else {
