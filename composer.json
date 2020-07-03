@@ -2,12 +2,18 @@
   "name": "plugin/owc-gravityforms-digid",
   "description": "Add a DigiD login field to GravityForms",
   "homepage": "https://www.yard.nl",
+  "authors": [
+      {
+        "name": "Yard Digital Agency",
+        "email": "info@yard.nl",
+        "homepage": "https://www.yard.nl"
+      }
+  ],
   "type": "wordpress-plugin",
   "require": {
-    "php": ">=7.0",
+    "php": ">=7.2",
     "wizkunde/samlbase": "^1.3",
     "php-di/php-di": "^6.0",
-    "ocramius/proxy-manager": "^2.2",
     "aura/session": "^2.1",
     "rspeekenbrink/monolog-microsoft-teams": "^1.0",
     "symfony/http-foundation": "^5.0"
@@ -30,14 +36,14 @@
     }
   },
   "scripts": {
+    "format": "./vendor/bin/php-cs-fixer fix",
+    "phpstan": "./vendor/bin/phpstan analyse --error-format raw --no-progress  --memory-limit 100M",
     "unit": "clear && ./vendor/bin/phpunit --stderr --testsuite 'Unit Test Suite' --colors=always",
     "unit-coverage": "clear && ./vendor/bin/phpunit --stderr --testsuite 'Unit Test Suite' --prepend tests/xdebug-filter.php --colors=always --coverage-html ./tests/coverage",
     "integration": "clear && ./vendor/bin/phpunit --stderr --testsuite 'Integration Test Suite' --colors=always",
     "test": [
       "@unit",
       "@integration"
-    ],
-    "cs": "./vendor/bin/php-cs-fixer fix",
-    "phpstan": "./vendor/bin/phpstan analyse --error-format raw --no-progress  --memory-limit 100M"
+    ]
   }
 }

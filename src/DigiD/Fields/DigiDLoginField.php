@@ -129,10 +129,10 @@ class DigiDLoginField extends AbstractField
     protected function getInputField(): string
     {
         return view('digid/digidField.php', [
-            'error' => $this->session->getFlash('error'),
-            'logo'  => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
-            'link'  => \is_admin() ? '' : DigiDController::getAuthNRequestURL(),
-            'title' => $this->getFieldTitle(),
+            'error'    => $this->session->getFlash('error'),
+            'logo'     => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
+            'link'     => \is_admin() ? '' : DigiDController::getAuthNRequestURL(),
+            'title'    => $this->getFieldTitle(),
             'subtitle' => $this->getFieldSubTitle()
         ]);
     }

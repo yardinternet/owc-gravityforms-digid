@@ -70,7 +70,7 @@ class GravityForms
      *
      * @param string $form_tag
      * @param array $form
-     * 
+     *
      * @return string
      */
     public function addCountDownHTML($form_tag, $form): string

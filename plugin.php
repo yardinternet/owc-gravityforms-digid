@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
 define('GF_DIGID_PLUGIN_FILE', __FILE__);
 define('GF_DIGID_PLUGIN_SLUG', 'owc-gravityforms-digid');
 define('GF_DIGID_ROOT_PATH', __DIR__);
-define('GF_DIGID_VERSION', '1.0.7');
+define('GF_DIGID_VERSION', '1.0.8');
 
 /**
  * Manual loaded file: the autoloader.

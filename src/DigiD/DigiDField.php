@@ -7,6 +7,7 @@ use GF_Field;
 
 use Yard\DigiD\Fields\DigiDLoginField;
 use Yard\DigiD\Fields\HiddenField;
+use Yard\DigiD\Fields\TextField;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\decrypt;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
@@ -112,6 +113,11 @@ class DigiDField extends GF_Field
         }
     }
 
+    protected function hasCertificates(): bool
+    {
+        return (file_exists(config('digid.certificate.public')) or (file_exists(config('digid.certificate.private'))));
+    }
+
     /**
      * Return all the fields available.
      *
@@ -120,6 +126,14 @@ class DigiDField extends GF_Field
      */
     protected function getFields(array $value): array
     {
+        if (!$this->hasCertificates()) {
+            return [
+                (new TextField($this, $value))
+                ->setFieldID(1)
+                ->setFieldName('digid')
+                ->setFieldText(__('DigiD', config('core.text_domain'))),
+            ];
+        }
         $bsn   = $this->session->get('bsn', '');
         if (!empty($bsn)) {
             $bsn = encrypt($bsn);

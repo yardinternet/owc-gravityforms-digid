@@ -3,6 +3,12 @@
 - requires: 4.9
 - tested: 5.4
 
+## v1.0.8
+
+### Change
+
+- Set secure en httponly cookie.
+
 ## v1.0.7
 
 ### Change
