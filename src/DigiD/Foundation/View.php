@@ -16,7 +16,7 @@ class View
      */
     protected $bindings = [];
 
-    public function __construct($templateDirectory = null)
+    public function __construct(string $templateDirectory = null)
     {
         if (null !== $templateDirectory) {
             // Check here whether this directory really exists

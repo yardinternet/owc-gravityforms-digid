@@ -37,7 +37,7 @@
   },
   "scripts": {
     "format": "./vendor/bin/php-cs-fixer fix",
-    "phpstan": "./vendor/bin/phpstan analyse --error-format raw --no-progress  --memory-limit 100M",
+    "phpstan": "./vendor/bin/phpstan analyse",
     "unit": "clear && ./vendor/bin/phpunit --stderr --testsuite 'Unit Test Suite' --colors=always",
     "unit-coverage": "clear && ./vendor/bin/phpunit --stderr --testsuite 'Unit Test Suite' --prepend tests/xdebug-filter.php --colors=always --coverage-html ./tests/coverage",
     "integration": "clear && ./vendor/bin/phpunit --stderr --testsuite 'Integration Test Suite' --colors=always",

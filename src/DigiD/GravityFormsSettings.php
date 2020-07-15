@@ -4,15 +4,18 @@ namespace Yard\DigiD;
 
 class GravityFormsSettings
 {
+    /** @var string */
     protected $prefix = 'owc-digid-';
 
+    /** @var string */
     protected $name = 'gravityformsaddon_owc-gravityforms-digid_settings';
 
-    protected $options;
+    /** @var array */
+    protected $options = [];
 
     final private function __construct()
     {
-        $this->options   = get_option($this->name, []);
+        $this->options = \get_option($this->name, []);
     }
 
     /**
@@ -33,7 +36,7 @@ class GravityFormsSettings
      */
     public function get(string $key): string
     {
-        $key   = $this->prefix . $key;
+        $key = $this->prefix . $key;
         return $this->options[$key] ?? '';
     }
 }

@@ -9,6 +9,7 @@ use Yard\DigiD\Binding\Redirect;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\make;
 use function Yard\DigiD\Foundation\Helpers\resolve;
+use Yard\DigiD\Foundation\Plugin;
 use Yard\DigiD\Foundation\ServiceProvider;
 
 class DigiDServiceProvider extends ServiceProvider
@@ -44,10 +45,15 @@ class DigiDServiceProvider extends ServiceProvider
         resolve('route')->get('/digid/metadata', [$controller, 'metadata']);
     }
 
+    /**
+     * Load the public assets.
+     *
+     * @return void
+     */
     public function loadAssets(): void
     {
-        wp_register_script('gravityforms_digid', plugin_dir_url(GF_DIGID_PLUGIN_FILE) . 'dist/app.js');
-        wp_enqueue_script('gravityforms_digid');
+        \wp_register_script('gravityforms_digid', Plugin::getInstance()->resourceUrl('app.js', 'js/dist'), [], Plugin::VERSION);
+        \wp_enqueue_script('gravityforms_digid');
     }
 
     private function registerSettingsAddon(): void

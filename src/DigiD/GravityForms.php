@@ -4,6 +4,7 @@ namespace Yard\DigiD;
 
 use GFFormDisplay;
 
+use Yard\DigiD\DigiDField;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
 class GravityForms
@@ -53,10 +54,10 @@ class GravityForms
         return $form;
     }
 
-    public function clearFormAfterSubmission(array $entry, array $form)
+    public function clearFormAfterSubmission(array $entry, array $form): void
     {
         if (!count(array_filter($form['fields'], function ($item) {
-            return  is_a($item, DigiDField::class);
+            return is_a($item, DigiDField::class);
         }))) {
             return;
         }

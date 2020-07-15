@@ -7,7 +7,7 @@ abstract class AbstractField
     /** @var array form object */
     protected $form;
 
-    /** @var \stdClass */
+    /** @var object */
     protected $field;
 
     /** @var array Set default value of input. */
@@ -59,10 +59,10 @@ abstract class AbstractField
     protected $cssClass = '';
 
     /**
-     * @param \StdClass $field
+     * @param object $field
      * @param array $value
      */
-    public function __construct(\StdClass $field, array $value)
+    public function __construct(object $field, array $value)
     {
         $this->field                       = $field;
         $this->value                       = $value;

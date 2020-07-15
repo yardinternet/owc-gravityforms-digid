@@ -4,19 +4,13 @@ namespace Yard\DigiD\Foundation;
 
 abstract class SettingsManager
 {
-    /**
-    * Key of the option.
-    *
-    * @var string
-    */
+    /** @var string */
     protected $key = '';
 
-    /**
-    * Setting array of the option.
-    */
+    /** @var string */
     protected $settings;
 
-    public function __construct($key = '')
+    public function __construct(string $key = '')
     {
         if (! empty($key)) {
             $this->key     = $key;
@@ -26,9 +20,11 @@ abstract class SettingsManager
     /**
      * Static constructor for quick setup.
      *
+     * @var string $key
+     *
      * @return self
      */
-    public static function make($key = ''): self
+    public static function make(string $key = ''): self
     {
         $class = get_called_class();
         return new $class($key);
@@ -43,7 +39,7 @@ abstract class SettingsManager
     */
     public function save(array $data): bool
     {
-        return update_option($this->key, $data);
+        return \update_option($this->key, $data);
     }
 
     /**
@@ -55,12 +51,16 @@ abstract class SettingsManager
      */
     public function all($default = [])
     {
-        $all = get_option($this->key, $default);
-
-        return $all;
+        return \get_option($this->key, $default);
     }
 
-    public function get($key, $default = [])
+    /**
+     * @param string $key
+     * @param array $default
+     *
+     * @return mixed
+     */
+    public function get(string $key, $default = [])
     {
         $all = $this->all($default);
 

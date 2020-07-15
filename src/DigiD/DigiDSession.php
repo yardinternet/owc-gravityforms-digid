@@ -4,7 +4,13 @@ namespace Yard\DigiD;
 
 class DigiDSession
 {
-    public function __construct($sessionLifeTime = 0, $sessionResumeLifeTime = 0)
+    /** @var int */
+    protected $sessionLifeTime;
+
+    /** @var int */
+    protected $sessionResumeLifeTime;
+
+    public function __construct(int $sessionLifeTime = 0, int $sessionResumeLifeTime = 0)
     {
         $this->sessionLifeTime       = (int) $sessionLifeTime;
         $this->sessionResumeLifeTime = (int) $sessionResumeLifeTime;

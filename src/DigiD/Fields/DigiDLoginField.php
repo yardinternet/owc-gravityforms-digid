@@ -3,7 +3,6 @@
 namespace Yard\DigiD\Fields;
 
 use Aura\Session\Segment;
-use StdClass;
 use Yard\DigiD\DigiD;
 use Yard\DigiD\DigiDController;
 use Yard\DigiD\DigiDSession;
@@ -23,10 +22,10 @@ class DigiDLoginField extends AbstractField
     protected $session;
 
     /**
-     * @param StdClass $field
+     * @param object $field
      * @param array $value
      */
-    public function __construct(StdClass $field, array $value, Segment $session)
+    public function __construct(object $field, array $value, Segment $session)
     {
         parent::__construct($field, $value);
         $this->session = $session;

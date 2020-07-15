@@ -100,7 +100,7 @@ class Plugin
             },
             'loader'   => Loader::getInstance(),
             'route'    => function () {
-                return	new \Yard\DigiD\Foundation\Routing\Router(\get_blog_details()->path ?? '');
+                return	new \Yard\DigiD\Foundation\Routing\Router(\is_multisite() ? \get_blog_details()->path : '');
             },
             'session'  => function () {
                 $session_factory         = new \Aura\Session\SessionFactory;

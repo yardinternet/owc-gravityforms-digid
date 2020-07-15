@@ -7,7 +7,8 @@
 
 ### Change
 
-- Set secure en httponly cookie.
+- Set secure and httponly cookie.
+- Refactor code.
 
 ## v1.0.7
 

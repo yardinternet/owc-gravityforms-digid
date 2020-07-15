@@ -3,8 +3,6 @@
 namespace Yard\DigiD;
 
 use Aura\Session\Segment;
-use GF_Field;
-
 use Yard\DigiD\Fields\DigiDLoginField;
 use Yard\DigiD\Fields\HiddenField;
 use Yard\DigiD\Fields\TextField;
@@ -17,7 +15,7 @@ if (! class_exists('\GFForms')) {
     die();
 }
 
-class DigiDField extends GF_Field
+class DigiDField extends \GF_Field
 {
     /**
      * @var string $type The field type.
@@ -131,7 +129,7 @@ class DigiDField extends GF_Field
                 (new TextField($this, $value))
                 ->setFieldID(1)
                 ->setFieldName('digid')
-                ->setFieldText(__('DigiD', config('core.text_domain'))),
+                ->setFieldText(\__('DigiD', config('core.text_domain'))),
             ];
         }
         $bsn   = $this->session->get('bsn', '');
@@ -142,7 +140,7 @@ class DigiDField extends GF_Field
             (new DigiDLoginField($this, $value, $this->session))
                 ->setFieldID(2)
                 ->setFieldName('digid')
-                ->setFieldText(__('DigiD', config('core.text_domain'))),
+                ->setFieldText(\__('DigiD', config('core.text_domain'))),
             (new HiddenField($this, $value))
                 ->setFieldID(1)
                 ->setFieldName('bsn')

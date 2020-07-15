@@ -6,7 +6,7 @@
  * Description: Add a DigiD login field to GravityForms
  * Author: Yard Digital Agency
  * Author URI: https://www.yard.nl
- * Version: 1.0.7
+ * Version: 1.0.8
  * License: GPL3.0
  * License URI: https://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain: owc-gravityforms-digid

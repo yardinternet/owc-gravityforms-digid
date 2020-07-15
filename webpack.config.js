@@ -8,7 +8,7 @@ module.exports = {
         libraryTarget: 'umd',
         globalObject: '(typeof self !== "undefined" ? self : this)',
         libraryExport: 'default',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'resources/js/dist'),
         filename: 'app.js',
         publicPath: '/'
     },

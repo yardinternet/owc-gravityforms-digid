@@ -2,17 +2,15 @@
 
 namespace Yard\DigiD\Fields;
 
-use StdClass;
-
 use function Yard\DigiD\Foundation\Helpers\view;
 
 class TextField extends AbstractField
 {
     /**
-     * @param StdClass $field
+     * @param object $field
      * @param array $value
      */
-    public function __construct(StdClass $field, array $value)
+    public function __construct(object $field, array $value)
     {
         parent::__construct($field, $value);
     }
@@ -35,8 +33,6 @@ class TextField extends AbstractField
     public function render(): string
     {
         if ($this->is_admin || ! \rgar($this->getInput(), 'isHidden')) {
-            if (! \is_admin()) {
-            }
             return "{$this->getSpanField()}
                         {$this->getInputField()}
                     </span>";
