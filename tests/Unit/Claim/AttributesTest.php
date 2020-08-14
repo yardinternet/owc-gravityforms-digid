@@ -2,6 +2,7 @@
 
 namespace Yard\Tests\DigiD\Claim;
 
+use InvalidArgumentException;
 use WP_Mock;
 use Yard\DigiD\Claim\Attributes;
 use Yard\DigiD\Claim\BSN;
@@ -45,6 +46,14 @@ class AttributesTest extends TestCase
         $response   = $this->loadStub('SUCCESS.xml');
         $attributes = new Attributes($response);
         $this->assertEquals('26d224be1e436ba652b39b8cde970c5d4432583', $attributes->sessionID());
+    }
+
+    /** @test */
+    public function if_xml_is_invalid()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Data is invalid');
+        new Attributes(false);
     }
 
     protected function loadStub($stub = '')

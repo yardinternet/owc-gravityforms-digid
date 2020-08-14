@@ -2,6 +2,7 @@
 
 namespace Yard\DigiD\Claim;
 
+use InvalidArgumentException;
 use SimpleXMLElement;
 use Wizkunde\SAMLBase\Configuration\SessionID;
 
@@ -22,8 +23,21 @@ class Attributes implements ClaimInterface
     {
         $this->response = $response;
         $this->xml      = simplexml_load_string($this->response);
+        if ($this->isInvalidXML()) {
+            throw new InvalidArgumentException('Data is invalid');
+        }
         $this->xml->registerXPathNamespace('samlp', 'urn:oasis:names:tc:SAML:2.0:protocol');
         $this->xml->registerXPathNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
+    }
+
+    /**
+     * Check if reponse is not false.
+     *
+     * @return bool
+     */
+    protected function isInvalidXML(): bool
+    {
+        return (false === $this->xml);
     }
 
     /**

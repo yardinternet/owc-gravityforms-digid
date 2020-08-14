@@ -2,8 +2,8 @@
 
 namespace Yard\DigiD;
 
+use InvalidArgumentException;
 use Yard\DigiD\Claim\Attributes;
-
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\decrypt;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
@@ -27,17 +27,25 @@ class DigiDController
 
         try {
             $responseData = resolve('yard::digid:artifact-binding')
-                ->resolveArtifact(esc_attr($_REQUEST['SAMLart']));
+                ->resolveArtifact(\esc_attr($_REQUEST['SAMLart']));
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            $session->setFlash('error', __('Something went wrong. Please try again.', config('core.text_domain')));
+            $session->setFlash('error', \__('Something went wrong. Please try again.', config('core.text_domain')));
             return $this->redirectTo();
         }
 
-        // $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/AuthnRequest.xml'));
-        // $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/DENIED.xml'));
-        // $responseData = file_get_contents(\Yard\DigiD\Foundation\Helpers\storage_path('cert/SUCCESS.xml'));
-
-        $attributes   = new Attributes($responseData);
+        try {
+            $attributes   = new Attributes($responseData);
+        } catch (InvalidArgumentException $e) {
+            $session->setFlash('error', \__('Something went wrong. Please try again.', config('core.text_domain')));
+            resolve('teams')->info('InvalidArgumentException', [
+                'repsonseData' => $responseData,
+                'attributes'   => $attributes,
+                'resume_link'  => $session->get('resume_link'),
+                'message'      => $session->get('message'),
+                'exception'    => $e->getMessage()
+            ]);
+            return $this->redirectTo();
+        }
 
         $session->set('session_id', $attributes->sessionID());
         $session->set('status_code', $attributes->status()->get()->getStatusCode());

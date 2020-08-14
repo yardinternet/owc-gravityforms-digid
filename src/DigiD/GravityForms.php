@@ -4,7 +4,6 @@ namespace Yard\DigiD;
 
 use GFFormDisplay;
 
-use Yard\DigiD\DigiDField;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
 class GravityForms

@@ -1,7 +1,12 @@
 # Changelog
 
 - requires: 4.9
-- tested: 5.4
+- tested: 5.4.2
+
+## v1.0.9
+
+### Change
+- Better error handling.
 
 ## v1.0.8
 
