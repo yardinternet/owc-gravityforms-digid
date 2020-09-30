@@ -2,9 +2,9 @@
 
 namespace Yard\DigiD\Claim;
 
+use GoGentoOSS\SAMLBase\Configuration\SessionID;
 use InvalidArgumentException;
 use SimpleXMLElement;
-use Wizkunde\SAMLBase\Configuration\SessionID;
 
 class Attributes implements ClaimInterface
 {

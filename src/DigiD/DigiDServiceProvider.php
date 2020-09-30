@@ -2,8 +2,8 @@
 
 namespace Yard\DigiD;
 
+use GoGentoOSS\SAMLBase\Metadata\ResolveService;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use Wizkunde\SAMLBase\Metadata\ResolveService;
 use Yard\DigiD\Binding\Artifact;
 use Yard\DigiD\Binding\Redirect;
 use function Yard\DigiD\Foundation\Helpers\config;
@@ -82,26 +82,26 @@ class DigiDServiceProvider extends ServiceProvider
         });
 
         make('yard::digid:signing-certificate', function () {
-            $certificate = new \Wizkunde\SAMLBase\Certificate();
+            $certificate = new \GoGentoOSS\SAMLBase\Certificate();
             $certificate->setPublicKey(config('digid.certificate.public'), true);
             $certificate->setPrivateKey(config('digid.certificate.private'), true);
             return $certificate;
         });
 
         make('yard::digid::signature', function () {
-            $signature = new \Wizkunde\SAMLBase\Security\Signature();
+            $signature = new \GoGentoOSS\SAMLBase\Security\Signature();
             $signature->setSigningAlgorithm(XMLSecurityDSig::SHA1);
             $signature->setCertificate(resolve('yard::digid:signing-certificate'));
             return $signature;
         });
 
-        make('\Wizkunde\SAMLBase\Metadata\ResolveService', function () {
+        make('\GoGentoOSS\SAMLBase\Metadata\ResolveService', function () {
             return new ResolveService();
         });
 
         make('yard::digid::idp-settings', function () {
             $metaData = $this->getMetadata();
-            return (new \Wizkunde\SAMLBase\Configuration\Settings())
+            return (new \GoGentoOSS\SAMLBase\Configuration\Settings())
                 ->setValues([
                     'NameID'                 => config('digid.issuer'),
                     'Issuer'                 => config('digid.issuer'),
@@ -119,8 +119,8 @@ class DigiDServiceProvider extends ServiceProvider
         make('yard::digid::redirect-binding', function () {
             $redirect = new Redirect;
             $redirect->setMetadata($this->getMetadata());
-            $redirect->setUniqueIdService(resolve('\Wizkunde\SAMLBase\Configuration\UniqueID'));
-            $redirect->setTimestampService(resolve('\Wizkunde\SAMLBase\Configuration\Timestamp'));
+            $redirect->setUniqueIdService(resolve('\GoGentoOSS\SAMLBase\Configuration\UniqueID'));
+            $redirect->setTimestampService(resolve('\GoGentoOSS\SAMLBase\Configuration\Timestamp'));
             $redirect->setSignatureService(resolve('yard::digid::signature'));
             $redirect->setSettings(resolve('yard::digid::idp-settings'));
             $redirect->setHttpService(resolve('yard::guzzle-http'));
@@ -130,8 +130,8 @@ class DigiDServiceProvider extends ServiceProvider
         make('yard::digid:artifact-binding', function () {
             $artifact = new Artifact;
             $artifact->setMetadata($this->getMetadata());
-            $artifact->setUniqueIdService(resolve('\Wizkunde\SAMLBase\Configuration\UniqueID'));
-            $artifact->setTimestampService(resolve('\Wizkunde\SAMLBase\Configuration\Timestamp'));
+            $artifact->setUniqueIdService(resolve('\GoGentoOSS\SAMLBase\Configuration\UniqueID'));
+            $artifact->setTimestampService(resolve('\GoGentoOSS\SAMLBase\Configuration\Timestamp'));
             $artifact->setSignatureService(resolve('yard::digid::signature'));
             $artifact->setSettings(resolve('yard::digid::idp-settings'));
             $artifact->setHttpService(resolve('yard::guzzle-http'));
@@ -143,7 +143,7 @@ class DigiDServiceProvider extends ServiceProvider
     {
         $metadataKey =  sprintf('%s-%s', 'digid::metadata', md5(config('digid.url.idp.metadata')));
         if (false === ($metadata = get_transient($metadataKey))) {
-            $metadata = resolve('\Wizkunde\SAMLBase\Metadata\ResolveService')->resolve(resolve('\Wizkunde\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata'));
+            $metadata = resolve('\GoGentoOSS\SAMLBase\Metadata\ResolveService')->resolve(resolve('\GoGentoOSS\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata'));
             set_transient($metadataKey, $metadata, 12 * HOUR_IN_SECONDS);
         }
         return $metadata;

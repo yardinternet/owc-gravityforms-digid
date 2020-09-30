@@ -2,7 +2,7 @@
 
 namespace Yard\DigiD\Binding;
 
-use Wizkunde\SAMLBase\Binding\BindingAbstract;
+use GoGentoOSS\SAMLBase\Binding\BindingAbstract;
 
 use function Yard\DigiD\Foundation\Helpers\view;
 
@@ -11,7 +11,7 @@ use function Yard\DigiD\Foundation\Helpers\view;
  *
  * Redirect binding that uses HTTP-GET as a transport for a SAML request
  *
- * @package Wizkunde\SAMLBase\Binding
+ * @package GoGentoOSS\SAMLBase\Binding
  */
 class Redirect extends BindingAbstract
 {
@@ -29,7 +29,7 @@ class Redirect extends BindingAbstract
     public function buildRequest($requestType = 'AuthnRequest')
     {
         $requestTemplate = view(
-            'digid/xml/'. $requestType . '.php',
+            'digid/xml/' . $requestType . '.php',
             array_merge($this->getSettings()->getValues(), [
                 'ProtocolBinding' => $this->getProtocolBinding(),
                 'UniqueID'        => $this->getUniqueIdService()->generate(),
@@ -54,12 +54,12 @@ class Redirect extends BindingAbstract
         /** @var $key XMLSecurityKey */
         $key = $this->getSignatureService() ? $this->getSignatureService()->getCertificate()->getPrivateKey() : null;
         if (null != $key) {
-            $signedURI .= '&SigAlg='.urlencode($key->type);
+            $signedURI .= '&SigAlg=' . urlencode($key->type);
             $signature = $key->signData($signedURI);
-            $signedURI .= '&Signature='.urlencode(base64_encode($signature));
+            $signedURI .= '&Signature=' . urlencode(base64_encode($signature));
         }
 
-        $separator = (0 < strpos((string)$this->buildRequestUrl(), '?')) ? '&' : '?';
-        return (string)$this->buildRequestUrl() . $separator . $signedURI;
+        $separator = (0 < strpos((string) $this->buildRequestUrl(), '?')) ? '&' : '?';
+        return (string) $this->buildRequestUrl() . $separator . $signedURI;
     }
 }

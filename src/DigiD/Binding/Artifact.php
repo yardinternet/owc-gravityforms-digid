@@ -2,7 +2,7 @@
 
 namespace Yard\DigiD\Binding;
 
-use Wizkunde\SAMLBase\Binding\Artifact as BindingArtifact;
+use GoGentoOSS\SAMLBase\Binding\Artifact as BindingArtifact;
 
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\view;
@@ -12,7 +12,7 @@ use function Yard\DigiD\Foundation\Helpers\view;
  *
  * POST binding that uses HTTP-POST as a transport for a SAML request
  *
- * @package Wizkunde\SAMLBase\Binding
+ * @package GoGentoOSS\SAMLBase\Binding
  */
 class Artifact extends BindingArtifact
 {
