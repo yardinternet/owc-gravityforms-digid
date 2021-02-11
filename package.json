@@ -1,13 +1,13 @@
 {
   "name": "owc-gravityforms-digid",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Add a DigiD login field to GravityForms",
   "main": "resources/js/dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yardinternet/owc-gravityforms-digid.git"
   },
-  "author": "Yard Digital Agency",
+  "author": "Yard | Digital Agency",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/yardinternet/owc-gravityforms-digid/issues"

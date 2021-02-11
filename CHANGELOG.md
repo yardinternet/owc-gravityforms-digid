@@ -1,16 +1,24 @@
 # Changelog
 
-- requires: 4.9
-- tested: 5.4.2
+- requires: WordPress 4.9
+- tested: WordPress 5.4.2
+
+## v1.0.11
+
+### Fix
+
+- Update npm package "ini". This package might have CVE-2020-7788.
 
 ## v1.0.10
 
 ### Change
+
 - Update outdated SAML dependency.
 
 ## v1.0.9
 
 ### Change
+
 - Better error handling.
 
 ## v1.0.8
