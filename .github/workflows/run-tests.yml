@@ -10,14 +10,13 @@ on:
       - master
       - develop
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
-      - name: Cache dependencies
+      - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
@@ -28,11 +27,14 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Setup PHP with composer v1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.2'
+          tools: composer:v1
+
       - name: Install dependencies
         run: composer install --no-interaction --no-suggest --prefer-dist
 
-      - name: Execute tests
+      - name: Run unit tests
         run: ./vendor/bin/phpunit --stderr --testsuite 'Unit Test Suite' --colors=always
-
-      # - name: Execute PHPStan
-        # run: ./vendor/bin/phpstan analyse --error-format raw --memory-limit 500M
