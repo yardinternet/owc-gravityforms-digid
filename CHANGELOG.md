@@ -3,6 +3,12 @@
 - requires: WordPress 4.9
 - tested: WordPress 5.4.2
 
+## v1.0.12
+
+### Change
+
+- Styling and text after login using digiD
+  
 ## v1.0.11
 
 ### Fix
