@@ -1,4 +1,4 @@
-<p class="font-weight-bold">'U bent succesvol ingelogd. Klik op de knop 'Volgende'.</p>
+<p class="font-weight-bold">U bent succesvol ingelogd. Klik op de knop 'Volgende'.</p>
 <a id="logoutLink" href="{{ logoutLink }}">Uitloggen</a>
 
 <script>
