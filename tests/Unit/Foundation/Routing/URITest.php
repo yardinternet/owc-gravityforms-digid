@@ -1,10 +1,10 @@
 <?php
 
-namespace Yard\Tests\DigiD\Foundation;
+namespace Tests\Yard\DigiD\Foundation;
 
+use Tests\Yard\DigiD\TestCase;
 use WP_Mock;
 use Yard\DigiD\Foundation\Routing\URI;
-use Yard\Tests\DigiD\TestCase;
 
 class URITest extends TestCase
 {

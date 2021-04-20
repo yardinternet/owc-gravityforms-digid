@@ -1,7 +1,6 @@
 {
   "name": "plugin/owc-gravityforms-digid",
   "description": "Add a DigiD login field to GravityForms",
-  "homepage": "https://www.yard.nl",
   "authors": [
       {
         "name": "Yard | Digital Agency",
@@ -23,7 +22,7 @@
     "phpunit/phpunit": "~8.0",
     "10up/wp_mock": "dev-master",
     "friendsofphp/php-cs-fixer": "^2.0",
-    "szepeviktor/phpstan-wordpress": "^0.6.0"
+    "szepeviktor/phpstan-wordpress": "^0.7.0"
   },
   "autoload": {
     "psr-4": {
@@ -32,14 +31,14 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Yard\\Tests\\DigiD\\": "./tests/Unit"
+      "Tests\\Yard\\DigiD\\": "./tests/Unit"
     }
   },
   "scripts": {
     "format": "./vendor/bin/php-cs-fixer fix",
     "phpstan": "./vendor/bin/phpstan analyse",
-    "unit": "clear && ./vendor/bin/phpunit --stderr --testsuite 'Unit Test Suite' --colors=always",
-    "unit-coverage": "clear && ./vendor/bin/phpunit --stderr --testsuite 'Unit Test Suite' --prepend tests/xdebug-filter.php --colors=always --coverage-html ./tests/coverage",
+    "unit": "clear && ./vendor/bin/phpunit --testdox --stderr --testsuite 'Unit Test Suite' --colors=always",
+    "unit-coverage": "clear && XDEBUG_MODE=coverage ./vendor/bin/phpunit --stderr --testdox --testsuite 'Unit Test Suite' --prepend tests/xdebug-filter.php --colors=always --coverage-html ./tests/coverage",
     "test": [
       "@unit"
     ]

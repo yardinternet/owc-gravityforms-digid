@@ -17,8 +17,11 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+        <whitelist processUncoveredFilesFromWhitelist="false">
             <directory suffix=".php">./src/DigiD/</directory>
+            <exclude>
+                <directory>./vendor</directory>
+            </exclude>
         </whitelist>
     </filter>
     <php>

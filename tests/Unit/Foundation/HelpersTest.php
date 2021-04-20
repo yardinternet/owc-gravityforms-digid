@@ -1,12 +1,12 @@
 <?php
 
-namespace Yard\Tests\DigiD\Foundation;
+namespace Tests\Yard\DigiD\Foundation;
 
 use WP_Mock;
 
 use function Yard\DigiD\Foundation\Helpers\storage_path;
 
-use Yard\Tests\DigiD\TestCase;
+use Tests\Yard\DigiD\TestCase;
 
 class HelpersTest extends TestCase
 {

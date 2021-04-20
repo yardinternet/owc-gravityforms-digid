@@ -1,10 +1,10 @@
 <?php
 
-namespace Yard\Tests\DigiD\Claim;
+namespace Tests\Yard\DigiD\Claim;
 
 use WP_Mock;
 use Yard\DigiD\Claim\BSN;
-use Yard\Tests\DigiD\TestCase;
+use Tests\Yard\DigiD\TestCase;
 
 class BSNTest extends TestCase
 {

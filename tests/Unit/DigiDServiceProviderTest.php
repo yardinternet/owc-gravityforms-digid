@@ -1,6 +1,6 @@
 <?php
 
-namespace Yard\Tests\DigiD;
+namespace Tests\Yard\DigiD;
 
 use Mockery as m;
 use WP_Mock;

@@ -1,13 +1,13 @@
 <?php
 
-namespace Yard\Tests\DigiD\Claim;
+namespace Tests\Yard\DigiD\Claim;
 
 use Exception;
 use WP_Mock;
 use Yard\DigiD\Claim\Status;
 use Yard\DigiD\Claim\StatusCodes\RequestDenied;
 use Yard\DigiD\Claim\StatusCodes\Success;
-use Yard\Tests\DigiD\TestCase;
+use Tests\Yard\DigiD\TestCase;
 
 class StatusTest extends TestCase
 {

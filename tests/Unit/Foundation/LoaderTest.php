@@ -1,10 +1,10 @@
 <?php
 
-namespace Yard\Tests\DigiD\Foundation;
+namespace Tests\Yard\DigiD\Foundation;
 
 use WP_Mock;
 use Yard\DigiD\Foundation\Loader;
-use Yard\Tests\DigiD\TestCase;
+use Tests\Yard\DigiD\TestCase;
 
 class LoaderTest extends TestCase
 {
