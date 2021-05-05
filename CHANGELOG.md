@@ -1,7 +1,18 @@
 # Changelog
 
 - requires: WordPress 4.9
-- tested: WordPress 5.4.2
+- tested: WordPress 5.7.1
+
+## v1.0.14
+
+### Fix
+
+- Notice: Trying to access array offset on value of type null.
+
+### Change
+
+- Translate English sentence.
+- Rewrite namespaces for tests.
 
 ## v1.0.13
 

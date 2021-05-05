@@ -1,12 +1,12 @@
 <?php
 
-namespace Yard\Tests\DigiD\Claim\StatusCodes;
+namespace Tests\Yard\DigiD\Claim\StatusCodes;
 
 use Mockery as m;
 use WP_Mock;
 use Yard\DigiD\Claim\Status;
 use Yard\DigiD\Claim\StatusCodes\Responder;
-use Yard\Tests\DigiD\TestCase;
+use Tests\Yard\DigiD\TestCase;
 
 class ResponderTest extends TestCase
 {

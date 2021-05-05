@@ -1,12 +1,12 @@
 <?php
 
-namespace Yard\Tests\DigiD\Claim\StatusCodes;
+namespace Tests\Yard\DigiD\Claim\StatusCodes;
 
 use Mockery as m;
+use Tests\Yard\DigiD\TestCase;
 use WP_Mock;
 use Yard\DigiD\Claim\Status;
 use Yard\DigiD\Claim\StatusCodes\AuthnFailed;
-use Yard\Tests\DigiD\TestCase;
 
 class AuthnFailedTest extends TestCase
 {

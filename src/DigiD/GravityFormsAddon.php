@@ -207,7 +207,7 @@ class GravityFormsAddon extends GFAddOn
     {
         $noCertificate = [
             [
-                'label' => esc_html__(__('No certificate selected', config('core.text_domain'))),
+                'label' => esc_html__('No certificate selected', config('core.text_domain')),
                 'value' => 'no-certificate'
             ]
         ];

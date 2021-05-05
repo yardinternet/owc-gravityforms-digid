@@ -1,9 +1,9 @@
 <?php
 
-namespace Yard\Tests\DigiD\Foundation;
+namespace Tests\Yard\DigiD\Foundation;
 
 use Yard\DigiD\Foundation\Config;
-use Yard\Tests\DigiD\TestCase;
+use Tests\Yard\DigiD\TestCase;
 
 class RepositoryTest extends TestCase
 {

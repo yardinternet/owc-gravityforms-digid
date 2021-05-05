@@ -1,10 +1,10 @@
 <?php
 
-namespace Yard\Tests\DigiD\Foundation;
+namespace Tests\Yard\DigiD\Foundation;
 
 use WP_Mock;
 use Yard\DigiD\Foundation\Plugin;
-use Yard\Tests\DigiD\TestCase;
+use Tests\Yard\DigiD\TestCase;
 
 class PluginTest extends TestCase
 {

@@ -119,7 +119,7 @@ abstract class AbstractField
             trim($this->css_prefix),
             trim($this->cssClass)
         ]));
-        return "<span id=\"input_{$this->field->id}_{$this->form["id"]}.{$this->fieldID}.container\" class=\"{$cssClass}\" {$this->style}>";
+        return "<span id=\"input_{$this->field->id}_{$this->field->formId}.{$this->fieldID}.container\" class=\"{$cssClass}\" {$this->style}>";
     }
 
     /**
@@ -130,7 +130,7 @@ abstract class AbstractField
     public function getValue(): ?string
     {
         if (is_array($this->value)) {
-            return esc_attr(\rgget($this->field->id .'.'. $this->field->id, $this->value));
+            return \esc_attr(\rgget($this->field->id .'.'. $this->field->id, $this->value));
         } else {
             return $this->value;
         }

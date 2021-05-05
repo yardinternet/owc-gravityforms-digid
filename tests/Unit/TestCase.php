@@ -1,6 +1,6 @@
 <?php
 
-namespace Yard\Tests\DigiD;
+namespace Tests\Yard\DigiD;
 
 use PHPUnit\Framework\TestCase as PHPUnit;
 
