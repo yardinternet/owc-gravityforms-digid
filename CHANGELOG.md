@@ -1,7 +1,11 @@
 # Changelog
 
 - requires: WordPress 4.9
-- tested: WordPress 5.7.1
+- tested: WordPress 5.7.2
+
+## v1.0.15
+
+- Update npm to remove vulnerabilities for lodash & postcss.
 
 ## v1.0.14
 
