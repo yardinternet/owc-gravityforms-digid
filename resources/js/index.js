@@ -1,3 +1,7 @@
-import { Countdown as defaultExport } from './lib/countdown';
+import Countdown from './lib/countdown';
+import LogoutButton from './lib/logoutButton';
 
-export default defaultExport;
+export default {
+  Countdown,
+  LogoutButton
+};
