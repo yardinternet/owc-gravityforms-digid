@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: './resources/js/index.js',
+  entry: './resources/js/index.js',
 	mode: (process.env.NODE_ENV ? process.env.NODE_ENV : 'development'),
 	output: {
         library: 'Countdown',
