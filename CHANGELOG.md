@@ -5,7 +5,7 @@
 
 ## v1.0.16
 
--   Update position DigiID logout button
+-   Update position DigiD logout button
 
 ## v1.0.15
 

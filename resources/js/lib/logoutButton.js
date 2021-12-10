@@ -1,14 +1,14 @@
 export default class LogoutButton {
-  constructor() {
-    this.logoutBtn = document.querySelector('#logoutLink');
-    this.logoutBtnCopy = document.querySelector('#logoutLink').cloneNode(true);
-    this.gformHeading = document.querySelector('.gform_heading');
+	constructor() {
+		this.logoutBtn = document.querySelector('#logoutLink');
+		this.logoutBtnCopy = document.querySelector('#logoutLink').cloneNode(true);
+		this.gformHeading = document.querySelector('.gform_heading');
 
-    this.repositionLogoutButton();
+		this.repositionLogoutButton();
 	}
 
-  repositionLogoutButton = () => {
-    this.logoutBtn.remove();
-    this.gformHeading.insertAdjacentElement('afterend', this.logoutBtnCopy);
-  }
+	repositionLogoutButton = () => {
+		this.logoutBtn.remove();
+		this.gformHeading.insertAdjacentElement('afterend', this.logoutBtnCopy);
+	}
 }
