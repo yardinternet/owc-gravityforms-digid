@@ -1,7 +1,7 @@
-import Countdown from './lib/countdown';
-import LogoutButton from './lib/logoutButton';
+import { Countdown as exportCountdown } from './lib/countdown';
+import { LogoutButton as exportLogoutButton} from './lib/logoutButton';
 
 export default {
-  Countdown,
-  LogoutButton
+  exportCountdown,
+  exportLogoutButton
 };
