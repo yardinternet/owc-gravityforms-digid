@@ -6,9 +6,7 @@
 	var SessionResumeLifeTime = '{{ SessionResumeLifeTime }}';
 
 	document.addEventListener('DOMContentLoaded', function() {
-		var instance = new Countdown.Countdown(SessionLifeTime, SessionResumeLifeTime);
-		instance.init();
-
-		new LogoutButton.LogoutButton().init();
+		new Countdown.Countdown(SessionLifeTime, SessionResumeLifeTime).init()
+		new Countdown.LogoutButton().init();
 	});
 </script>

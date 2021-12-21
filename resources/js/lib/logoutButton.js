@@ -2,7 +2,7 @@ export default class LogoutButton {
 	constructor() {
 		this.logoutBtn = document.querySelector('#logoutLink');
 		this.logoutBtnCopy = document.querySelector('#logoutLink').cloneNode(true);
-		this.gformHeading = document.querySelector('.gform_heading');
+		this.timer = document.querySelector('#js-countdown');
 	}
 
 	get init() {
@@ -11,6 +11,6 @@ export default class LogoutButton {
 
 	repositionLogoutButton() {
 		this.logoutBtn.remove();
-		this.gformHeading.insertAdjacentElement('afterend', this.logoutBtnCopy);
+		this.timer.insertAdjacentElement('afterend', this.logoutBtnCopy);
 	}
 }

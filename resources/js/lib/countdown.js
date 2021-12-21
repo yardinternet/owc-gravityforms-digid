@@ -190,21 +190,20 @@ export default class Countdown {
 		if (!this.sessionTTL) return;
 
 		const expiration = JSON.parse(this.sessionExpiration);
+		const now = new Date().getTime();
+		const distance = new Date(expiration) - now;
 
-        const now = new Date().getTime();
-        const distance = new Date(expiration) - now;
-
-        // Time calculations for minutes and seconds.
-        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+		// Time calculations for minutes and seconds.
+		let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
 		seconds = Math.round(seconds * 100) / 100;
-        minutes = Math.round(minutes * 100) / 100;
+		minutes = Math.round(minutes * 100) / 100;
 
-        if (!!countdownElem) {
-            countdownElem.textContent = `Resterende tijd: ${(minutes < 10 ? "0" : "") + minutes}:${(seconds < 10 ? "0" : "") + seconds}`;
-        }
-    }
+		if (!!countdownElem) {
+			countdownElem.textContent = `Resterende tijd: ${(minutes < 10 ? "0" : "") + minutes}:${(seconds < 10 ? "0" : "") + seconds}`;
+		}
+	}
 
     /**
      * Stop countdown when timer is finished.
@@ -229,42 +228,41 @@ export default class Countdown {
 	timerStart = () => {
 		const expiration = JSON.parse(this.sessionExpiration);
 
-        if (Date.now() > expiration) {
-            this.openModal();
-        }
+		if (Date.now() > expiration) {
+			this.openModal();
+		}
 
-        return;
-    }
+		return;
+	}
 
-    /**
-     * Stop timer; fires after the session is expired.
-     */
-    stopTimer = () => clearInterval(this.timerInterval);
+	/**
+	 * Stop timer; fires after the session is expired.
+	 */
+	stopTimer = () => clearInterval(this.timerInterval);
 
-    /**
-     * Open modal.
-     */
-    openModal = () => {
-        this.stopTimer();
+	/**
+	 * Open modal.
+	 */
+	openModal = () => {
+		this.stopTimer();
 		this.stopCountdown();
-
 		this.clearSessionTTL();
 
-        const modalWrapper = document.getElementById('modalWrapper');
-        const modalDialog = document.getElementById('modalDialog');
+		const modalWrapper = document.getElementById('modalWrapper');
+		const modalDialog = document.getElementById('modalDialog');
 
-        // change state like in hidden modal.
-        if (modalWrapper !== null) {
-            modalWrapper.classList.add('show');
-            modalWrapper.setAttribute('aria-hidden', 'false');
-            modalWrapper.style.cssText = 'display: block; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-color: #666; opacity: 1; z-index: 1272;';
-        }
+		// change state like in hidden modal.
+		if (modalWrapper !== null) {
+			modalWrapper.classList.add('show');
+			modalWrapper.setAttribute('aria-hidden', 'false');
+			modalWrapper.style.cssText = 'display: block; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-color: #666; opacity: 1; z-index: 1272;';
+		}
 
-        if (modalDialog !== null) {
-            modalDialog.style.cssText = 'max-width: 500px; margin: 5rem auto; background-color: #ffffff; padding: 2rem;';
-        }
+		if (modalDialog !== null) {
+			modalDialog.style.cssText = 'max-width: 500px; margin: 5rem auto; background-color: #ffffff; padding: 2rem;';
+		}
 
-        this.startResumeCheck();
+		this.startResumeCheck();
 	}
 
 	/**
@@ -285,20 +283,20 @@ export default class Countdown {
 		}
 	}
 
-    /**
-     * When modal is visible this function launches a timer.
-     */
-    startResumeCheck() {
+	/**
+	 * When modal is visible this function launches a timer.
+	 */
+	startResumeCheck() {
 		const that = this;
-        const resumeCheck = setInterval(function() {
+		const resumeCheck = setInterval(function() {
 			if (!that.sessionTTL) {
-                that.sessionEnd();
-                clearInterval(resumeCheck);
-            } else {
-                clearInterval(resumeCheck);
-            }
-        }, 10000);
-    }
+				that.sessionEnd();
+				clearInterval(resumeCheck);
+			} else {
+				clearInterval(resumeCheck);
+			}
+		}, 10000);
+	}
 
     /**
      * Add keypress event to modal buttons.
@@ -309,10 +307,9 @@ export default class Countdown {
 		const SPACE_KEY = 32;
 
 		if (e.type !== 'click' || e.type !== 'keypress') return false;
-
-        if (e.type === 'keypress'){
-            const code = e.charCode || e.keyCode;
-            if (code !== SPACE_KEY) return false;
+		if (e.type === 'keypress'){
+			const code = e.charCode || e.keyCode;
+			if (code !== SPACE_KEY) return false;
 		}
 
 		return true;
