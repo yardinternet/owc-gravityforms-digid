@@ -39,7 +39,7 @@ export default class Countdown {
 
 	get moveLogoutButton() {
 		const instance = new LogoutButton();
-		instance.init();
+		return instance.init();
 	}
 
 	/**
