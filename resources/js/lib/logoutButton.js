@@ -6,7 +6,7 @@ export default class LogoutButton {
 	}
 
 	get init() {
-		this.repositionLogoutButton();
+		return this.repositionLogoutButton();
 	}
 
 	repositionLogoutButton() {
