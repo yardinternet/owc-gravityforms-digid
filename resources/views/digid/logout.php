@@ -9,6 +9,7 @@
 		var instance = new Countdown.Countdown(SessionLifeTime, SessionResumeLifeTime);
 		instance.init();
 
-		new LogoutButton();
+		var button = new LogoutButton.LogoutButton();
+		button.init();
 	});
 </script>
