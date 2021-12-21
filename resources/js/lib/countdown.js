@@ -1,3 +1,4 @@
+import LogoutButton from "./logoutButton";
 export default class Countdown {
 	constructor(sessionTTL, resumeSessionTTL) {
 		this.options = { sessionTTL, resumeSessionTTL }
@@ -34,6 +35,14 @@ export default class Countdown {
 	 */
 	set sessionExpiration(duration) {
 		sessionStorage.setItem('sessionExpiration', duration);
+	}
+
+	/**
+	 * Set session expiration time in Session Storage.
+	 */
+	set moveLogoutButton() {
+		const instance = new LogoutButton();
+		instance.init();
 	}
 
 	/**

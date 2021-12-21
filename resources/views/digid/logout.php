@@ -8,5 +8,9 @@
 	document.addEventListener('DOMContentLoaded', function() {
 		var instance = new Countdown.Countdown(SessionLifeTime, SessionResumeLifeTime);
 		instance.init();
+		instance.moveLogoutButton();
+
+		// var button = new LogoutButton.LogoutButton();
+		// button.init();
 	});
 </script>
