@@ -37,10 +37,7 @@ export default class Countdown {
 		sessionStorage.setItem('sessionExpiration', duration);
 	}
 
-	/**
-	 * Set session expiration time in Session Storage.
-	 */
-	set moveLogoutButton() {
+	get moveLogoutButton() {
 		const instance = new LogoutButton();
 		instance.init();
 	}
