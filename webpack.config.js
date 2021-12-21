@@ -4,7 +4,7 @@ module.exports = {
   entry: './resources/js/index.js',
 	mode: (process.env.NODE_ENV ? process.env.NODE_ENV : 'development'),
 	output: {
-    library: 'Countdown',
+    library: 'Countdown, LogoutButton',
     libraryTarget: 'umd',
     globalObject: '(typeof self !== "undefined" ? self : this)',
     libraryExport: 'default',
