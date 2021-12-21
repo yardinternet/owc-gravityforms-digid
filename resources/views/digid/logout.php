@@ -10,7 +10,7 @@
 		instance.init();
 		// instance.moveLogoutButton();
 
-		console.log(LogoutButton)
+		console.log(new LogoutButton());
 		var button = new LogoutButton.LogoutButton();
 		button.init();
 	});
