@@ -2,11 +2,11 @@
 <a id="logoutLink" href="{{ logoutLink }}">Uitloggen</a>
 
 <script>
-    var SessionLifeTime = '{{ SessionLifeTime }}';
+	var SessionLifeTime = '{{ SessionLifeTime }}';
 	var SessionResumeLifeTime = '{{ SessionResumeLifeTime }}';
 
 	document.addEventListener('DOMContentLoaded', function() {
-		var instance = new Countdown(SessionLifeTime, SessionResumeLifeTime);
-		instance.init();
+		new Countdown.Countdown(SessionLifeTime, SessionResumeLifeTime).init()
+		new Countdown.LogoutButton().init();
 	});
 </script>

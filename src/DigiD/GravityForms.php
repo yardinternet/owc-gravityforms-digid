@@ -75,7 +75,11 @@ class GravityForms
      */
     public function addCountDownHTML($form_tag, $form): string
     {
-        $form_tag = str_replace("<form ", "<div id=\"js-countdown\" style=\"text-align:right; min-height: 30px;\"></div><form ", $form_tag);
+        $form_tag = str_replace(
+            "<form ",
+            "<div id=\"js-countdown-wrapper\" class=\"d-flex justify-content-end align-items-baseline\"><div id=\"js-countdown\" style=\"text-align:right; min-height: 30px;\"></div></div><form ",
+            $form_tag
+        );
 
         return $form_tag;
     }

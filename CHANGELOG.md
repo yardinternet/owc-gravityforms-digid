@@ -3,6 +3,14 @@
 -   requires: WordPress 4.9
 -   tested: WordPress 5.7.2
 
+## v1.0.18
+
+-   counter + logout buttion positioning
+
+## v1.0.17
+
+-   fix counter export default class component
+
 ## v1.0.16
 
 -   Update position DigiD logout button
