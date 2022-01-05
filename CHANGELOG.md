@@ -1,19 +1,23 @@
 # Changelog
 
 -   requires: WordPress 4.9
--   tested: WordPress 5.7.2
+-   tested: WordPress 5.8.2
+
+## v1.0.19
+
+-   Instead of getenv() use global $\_ENV.
 
 ## v1.0.18
 
--   counter + logout buttion positioning
+-   counter + logout buttion positioning.
 
 ## v1.0.17
 
--   fix counter export default class component
+-   fix counter export default class component.
 
 ## v1.0.16
 
--   Update position DigiD logout button
+-   Update position DigiD logout button.
 
 ## v1.0.15
 
@@ -34,13 +38,13 @@
 
 ### Fix
 
--   Remove extra quote
+-   Remove extra quote.
 
 ## v1.0.12
 
 ### Change
 
--   Styling and text after login using digiD
+-   Styling and text after login using digiD.
 
 ## v1.0.11
 
@@ -81,7 +85,7 @@
 
 ### Change
 
--   Change CSS in JS
+-   Change CSS in JS.
 
 ## v1.0.5
 
@@ -91,11 +95,11 @@
 
 ### Change
 
--   JS to class instance
+-   JS to class instance.
 
 ### Fix
 
--   Collision with Gravity Forms live validator plugin
+-   Collision with Gravity Forms live validator plugin.
 
 ## v1.0.3
 
@@ -114,7 +118,7 @@
 
 ### Add
 
--   Disabling notifications via .env key `MS_TEAMS_DISABLE_LOGGING=true`
+-   Disabling notifications via .env key `MS_TEAMS_DISABLE_LOGGING=true`.
 
 ### Fix
 

@@ -86,7 +86,7 @@ function value($value)
  */
 function env($key, $default = null)
 {
-    $value = getenv($key);
+    $value = $_ENV[$key] ?? false;
 
     if (false === $value) {
         return value($default);
@@ -133,7 +133,7 @@ function startsWith($haystack, $needles)
 }
 
 
- /**
+/**
  * Determine if a given string ends with a given substring.
  *
  * @param  string  $haystack
