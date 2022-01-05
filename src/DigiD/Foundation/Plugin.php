@@ -66,7 +66,7 @@ class Plugin
     private function __construct($rootPath = '')
     {
         $this->rootPath = $rootPath;
-        require_once __DIR__ .'/Helpers.php';
+        require_once __DIR__ . '/Helpers.php';
         $this->buildContainer();
         load_plugin_textdomain($this->getName(), false, $this->getName() . '/languages/');
     }
@@ -78,7 +78,7 @@ class Plugin
      *
      * @return self
      */
-    public static function getInstance($rootPath = '') : self
+    public static function getInstance($rootPath = ''): self
     {
         if (null === static::$instance) {
             static::$instance = new static($rootPath);
@@ -92,19 +92,19 @@ class Plugin
      */
     protected function buildContainer()
     {
-        $builder         = new \DI\ContainerBuilder();
+        $builder = new \DI\ContainerBuilder();
         $builder->addDefinitions([
-            'app'	     => $this,
-            'config'   => function () {
-                return new \Yard\DigiD\Foundation\Config($this->rootPath.'/config');
+            'app' => $this,
+            'config' => function () {
+                return new \Yard\DigiD\Foundation\Config($this->rootPath . '/config');
             },
-            'loader'   => Loader::getInstance(),
-            'route'    => function () {
-                return	new \Yard\DigiD\Foundation\Routing\Router(\is_multisite() ? \get_blog_details()->path : '');
+            'loader' => Loader::getInstance(),
+            'route' => function () {
+                return new \Yard\DigiD\Foundation\Routing\Router(\is_multisite() ? \get_blog_details()->path : '');
             },
             'session'  => function () {
-                $session_factory         = new \Aura\Session\SessionFactory;
-                $session         = $session_factory->newInstance($_COOKIE);
+                $session_factory = new \Aura\Session\SessionFactory;
+                $session = $session_factory->newInstance($_COOKIE);
                 $session->setCookieParams([
                     'secure'   => true,
                     'httponly' => true
@@ -112,7 +112,7 @@ class Plugin
                 $session->start();
                 return $session;
             },
-            'teams'    => function () {
+            'teams' => function () {
                 if (true === env('MS_TEAMS_DISABLE_LOGGING', true)) {
                     return (new \Monolog\Logger('microsoft-teams-logger'))->pushHandler(new \Monolog\Handler\NullHandler());
                 }
@@ -131,7 +131,7 @@ class Plugin
      *
      * @return \DI\Container
      */
-    public function getContainer() :  \DI\Container
+    public function getContainer(): \DI\Container
     {
         return $this->container;
     }
@@ -191,8 +191,8 @@ class Plugin
      */
     public function resourceUrl(string $file, string $directory = ''): string
     {
-        $directory = !empty($directory) ? $directory .'/' : '';
-        return plugins_url("resources/{$directory}/{$file}", GF_DIGID_PLUGIN_SLUG .'/plugin.php');
+        $directory = !empty($directory) ? $directory . '/' : '';
+        return plugins_url("resources/{$directory}/{$file}", GF_DIGID_PLUGIN_SLUG . '/plugin.php');
     }
 
     /**
