@@ -302,15 +302,15 @@ class Router
     private static function processUriParams(&$path, &$params)
     {
         // if the route path contains parameters like `:key`
-        if (preg_match_all(static::REGEX_PATH_PARAMS, $path, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
+        if (preg_match_all(static::REGEX_PATH_PARAMS, $path, $matches, PREG_SET_ORDER|PREG_OFFSET_CAPTURE)) {
             $previousMatchEnd = 0;
-            $regexParts       = [];
+            $regexParts = [];
 
             // extract all parameter names and create a regex that matches URIs and captures the parameters' values
             foreach ($matches as $match) {
                 // remember the boundaries of the full match (e.g. `:key`) in the subject
                 $matchStart = $match[0][1];
-                $matchEnd   = $matchStart + strlen($match[0][0]);
+                $matchEnd = $matchStart + strlen($match[0][0]);
 
                 // keep the part between this one and the previous match and escape it for regex
                 $regexParts[] = static::regexEscape(substr($path, $previousMatchEnd, $matchStart - $previousMatchEnd));

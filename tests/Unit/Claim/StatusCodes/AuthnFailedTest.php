@@ -15,7 +15,7 @@ class AuthnFailedTest extends TestCase
     public function setUp(): void
     {
         WP_Mock::setUp();
-        $status            = m::mock(Status::class);
+        $status = m::mock(Status::class);
         $this->authnfailed = new AuthnFailed($status);
     }
 

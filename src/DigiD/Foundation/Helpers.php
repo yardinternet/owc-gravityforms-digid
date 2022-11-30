@@ -58,6 +58,13 @@ function view(string $template, array $vars = []): string
 
 function encrypt($string): string
 {
+    if (is_bool($string)) {
+        return (string) $string;
+    }
+
+    if (empty($string)) {
+        return '';
+    }
     return resolve(\Yard\DigiD\Foundation\Cryptor::class)->encrypt($string);
 }
 
@@ -131,7 +138,6 @@ function startsWith($haystack, $needles)
 
     return false;
 }
-
 
 /**
  * Determine if a given string ends with a given substring.

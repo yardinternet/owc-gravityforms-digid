@@ -20,7 +20,7 @@ class Redirect extends BindingAbstract
      * @var string
      */
     protected $metadataBindingLocation = 'SingleSignOnServiceRedirect';
-    protected $metadataSLOLocation     = 'SingleLogoutServiceRedirect';
+    protected $metadataSLOLocation = 'SingleLogoutServiceRedirect';
 
     /**
      * @param string $requestType

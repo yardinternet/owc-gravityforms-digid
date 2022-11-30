@@ -2,9 +2,9 @@
 
 namespace Tests\Yard\DigiD\Claim;
 
+use Tests\Yard\DigiD\TestCase;
 use WP_Mock;
 use Yard\DigiD\Claim\BSN;
-use Tests\Yard\DigiD\TestCase;
 
 class BSNTest extends TestCase
 {
@@ -28,31 +28,31 @@ class BSNTest extends TestCase
     /** @test */
     public function it_returns_nothing_if_empty_data_is_provided()
     {
-        $bsn   = new BSN([]);
+        $bsn = new BSN([]);
         $this->assertEmpty($bsn->getID());
     }
 
     /** @test */
     public function it_returns_a_valid_ID()
     {
-        $response        = $this->loadStub('SUCCESS.xml');
-        $bsn             = new BSN($response->xpath('//samlp:ArtifactResponse//samlp:Response//saml:Assertion//saml:Subject//saml:NameID'));
+        $response = $this->loadStub('SUCCESS.xml');
+        $bsn = new BSN($response->xpath('//samlp:ArtifactResponse//samlp:Response//saml:Assertion//saml:Subject//saml:NameID'));
         $this->assertEquals('900192756', $bsn->getID());
     }
 
     /** @test */
     public function it_returns_a_valid_name_ID()
     {
-        $response        = $this->loadStub('SUCCESS.xml');
-        $bsn             = new BSN($response->xpath('//samlp:ArtifactResponse//samlp:Response//saml:Assertion//saml:Subject//saml:NameID'));
+        $response = $this->loadStub('SUCCESS.xml');
+        $bsn = new BSN($response->xpath('//samlp:ArtifactResponse//samlp:Response//saml:Assertion//saml:Subject//saml:NameID'));
         $this->assertEquals('s00000000:900192756', $bsn->getNameID());
     }
 
     /** @test */
     public function it_returns_a_zero_if_denied()
     {
-        $response        = $this->loadStub('DENIED.xml');
-        $bsn             = new BSN($response->xpath('//samlp:ArtifactResponse//samlp:Response//saml:Assertion//saml:Subject//saml:NameID'));
+        $response = $this->loadStub('DENIED.xml');
+        $bsn = new BSN($response->xpath('//samlp:ArtifactResponse//samlp:Response//saml:Assertion//saml:Subject//saml:NameID'));
         $this->assertEquals(0, $bsn->getID());
     }
 
@@ -61,8 +61,8 @@ class BSNTest extends TestCase
         if (empty($stub)) {
             return '';
         }
-        $responseData         = file_get_contents(WP_PLUGIN_DIR .'/../Stubs/'. $stub);
-        $response             = simplexml_load_string($responseData);
+        $responseData = file_get_contents(WP_PLUGIN_DIR .'/../Stubs/'. $stub);
+        $response = simplexml_load_string($responseData);
         $response->registerXPathNamespace('samlp', 'urn:oasis:names:tc:SAML:2.0:protocol');
         $response->registerXPathNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
 

@@ -1,27 +1,32 @@
 <?php
 
-$finder = Symfony\Component\Finder\Finder::create()
+$finder = PhpCsFixer\Finder::create()
     ->notPath('vendor')
     ->notPath('node_modules')
     ->in(__DIR__)
     ->in('./resources/views')
     ->in('./config')
     ->name('*.php')
-    ->notName('*.blade.php');
+    ->notName('*.blade.php')
+    ->ignoreDotFiles(true)
+    ->ignoreVCS(true);
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config)
     ->setRules([
         '@PSR2'                  => true,
         'array_syntax'           => [
             'syntax' => 'short',
         ],
         'ordered_imports'        => [
-            'sortAlgorithm' => 'alpha',
+            'sort_algorithm' => 'alpha',
         ],
         'no_unused_imports'      => true,
         'binary_operator_spaces' => [
-            'align_double_arrow' => true,
-            'align_equals'       => true,
+            'default' => 'single_space',
+            'operators' => [
+                '=>' => null,
+                '|' => 'no_space',
+            ]
         ],
         'full_opening_tag'       => true,
         'yoda_style'             => [
@@ -29,6 +34,6 @@ return PhpCsFixer\Config::create()
             'equal'                => true,
             'identical'            => true,
             'less_and_greater'     => true,
-        ],
+        ]
     ])
     ->setFinder($finder);

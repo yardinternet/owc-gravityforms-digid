@@ -4,7 +4,10 @@ namespace Yard\DigiD;
 
 use GFFormDisplay;
 
+use function Yard\DigiD\Foundation\Helpers\config;
+use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
+use function Yard\DigiD\Foundation\Helpers\view;
 
 class GravityForms
 {
@@ -75,11 +78,26 @@ class GravityForms
      */
     public function addCountDownHTML($form_tag, $form): string
     {
-        $form_tag = str_replace(
-            "<form ",
-            "<div id=\"js-countdown-wrapper\" class=\"d-flex justify-content-end align-items-baseline\"><div id=\"js-countdown\" style=\"text-align:right; min-height: 30px;\"></div></div><form ",
-            $form_tag
-        );
+        $bsn = resolve('session')->getSegment('digid')->get('bsn', '');
+        if (!empty($bsn)) {
+            $bsn = encrypt($bsn);
+        }
+        resolve('teams')->info('Isset BSN?', [
+            'bsn'          => $bsn,
+        ]);
+
+        $logout = '';
+
+        if (!empty($bsn)) {
+            $digiDSession = new DigiDSession(config('digid.session.lifetime'), config('digid.session.resume-lifetime'));
+            $logout = view('digid/logout-link.php', [
+                'logoutLink'            => \site_url('/digid/logout'),
+                'SessionLifeTime'       => $digiDSession->getSessionLifeTime(),
+                'SessionResumeLifeTime' => $digiDSession->getSessionResumeLifeTime()
+            ]);
+        }
+
+        $form_tag = str_replace("<form ", "<div id=\"js-countdown\" style=\"text-align:right; min-height: 30px;\"></div>". $logout ."<form ", $form_tag);
 
         return $form_tag;
     }
@@ -91,6 +109,9 @@ class GravityForms
 
     protected function isFormPaginated(array $form): bool
     {
+        if (!isset($form['pagination']['pages'])) {
+            return false;
+        }
         if (is_null($form['pagination']['pages'])) {
             return false;
         }
@@ -121,7 +142,7 @@ class GravityForms
     protected function isLastPage(array $form): bool
     {
         $pageNumber = GFFormDisplay::get_current_page($form['id']);
-        $lastPage   = count($form['pagination']['pages']);
+        $lastPage = count($form['pagination']['pages']);
 
         return $pageNumber >= $lastPage;
     }

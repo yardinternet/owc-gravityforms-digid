@@ -8,7 +8,7 @@ class View
     protected $templateDirectory = GF_DIGID_ROOT_PATH . '/resources/views/';
 
     /** @var array */
-    protected $vars         = [];
+    protected $vars = [];
 
     /**
      * @var array Associative array of variables that will be accessible from

@@ -2,11 +2,11 @@
 
 namespace Tests\Yard\DigiD\Foundation;
 
+use Tests\Yard\DigiD\TestCase;
+
 use WP_Mock;
 
 use function Yard\DigiD\Foundation\Helpers\storage_path;
-
-use Tests\Yard\DigiD\TestCase;
 
 class HelpersTest extends TestCase
 {

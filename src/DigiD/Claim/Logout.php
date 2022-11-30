@@ -20,10 +20,10 @@ class Logout implements ClaimInterface
      */
     public function __construct(array $data = [])
     {
-        $this->data   = $data;
+        $this->data = $data;
         if (!empty($this->data)) {
-            $this->fullStatus             = $this->getMeaningfulStatusCode($this->data);
-            $this->status                 = $this->parseStatus($this->fullStatus);
+            $this->fullStatus = $this->getMeaningfulStatusCode($this->data);
+            $this->status = $this->parseStatus($this->fullStatus);
         }
     }
 }

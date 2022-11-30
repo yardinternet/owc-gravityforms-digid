@@ -2,11 +2,11 @@
   "name": "plugin/owc-gravityforms-digid",
   "description": "Add a DigiD login field to GravityForms",
   "authors": [
-      {
-        "name": "Yard | Digital Agency",
-        "email": "info@yard.nl",
-        "homepage": "https://www.yard.nl"
-      }
+    {
+      "name": "Yard | Digital Agency",
+      "email": "info@yard.nl",
+      "homepage": "https://www.yard.nl"
+    }
   ],
   "type": "wordpress-plugin",
   "require": {
@@ -18,10 +18,10 @@
     "symfony/http-foundation": "^5.0"
   },
   "require-dev": {
-    "mockery/mockery": "1.0.*",
-    "phpunit/phpunit": "~8.0",
-    "10up/wp_mock": "dev-master",
-    "friendsofphp/php-cs-fixer": "^2.0",
+    "mockery/mockery": "1.5.*",
+    "phpunit/phpunit": "~9.0",
+    "10up/wp_mock": "0.5.0",
+    "friendsofphp/php-cs-fixer": "^3.0",
     "szepeviktor/phpstan-wordpress": "^0.7.0"
   },
   "autoload": {

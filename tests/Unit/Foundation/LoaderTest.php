@@ -2,9 +2,9 @@
 
 namespace Tests\Yard\DigiD\Foundation;
 
+use Tests\Yard\DigiD\TestCase;
 use WP_Mock;
 use Yard\DigiD\Foundation\Loader;
-use Tests\Yard\DigiD\TestCase;
 
 class LoaderTest extends TestCase
 {

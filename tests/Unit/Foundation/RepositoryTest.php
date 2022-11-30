@@ -2,8 +2,8 @@
 
 namespace Tests\Yard\DigiD\Foundation;
 
-use Yard\DigiD\Foundation\Config;
 use Tests\Yard\DigiD\TestCase;
+use Yard\DigiD\Foundation\Config;
 
 class RepositoryTest extends TestCase
 {

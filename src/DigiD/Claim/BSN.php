@@ -17,7 +17,7 @@ class BSN implements ClaimInterface
      */
     public function __construct(array $data = [])
     {
-        $this->data   = $data;
+        $this->data = $data;
         if (!empty($this->data)) {
             $this->nameID = is_array($this->data) ? $this->getFullNameID($this->data[0]) : $this->getFullNameID($this->data);
         }

@@ -9,8 +9,8 @@ use SimpleXMLElement;
 class Attributes implements ClaimInterface
 {
     const ARTIFACT_STATUSCODE = '//samlp:ArtifactResponse//samlp:Status//samlp:StatusCode';
-    const LOGOUT_STATUSCODE   = '//samlp:LogoutResponse//samlp:Status//samlp:StatusCode';
-    const NAME_ID             = '//samlp:ArtifactResponse//samlp:Response//saml:Assertion//saml:Subject//saml:NameID';
+    const LOGOUT_STATUSCODE = '//samlp:LogoutResponse//samlp:Status//samlp:StatusCode';
+    const NAME_ID = '//samlp:ArtifactResponse//samlp:Response//saml:Assertion//saml:Subject//saml:NameID';
 
     /** @var string */
     protected $response;
@@ -22,7 +22,7 @@ class Attributes implements ClaimInterface
     public function __construct(string $response)
     {
         $this->response = $response;
-        $this->xml      = simplexml_load_string($this->response);
+        $this->xml = simplexml_load_string($this->response);
         if ($this->isInvalidXML()) {
             throw new InvalidArgumentException('Data is invalid');
         }
