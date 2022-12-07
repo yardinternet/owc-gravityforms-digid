@@ -105,10 +105,19 @@ class DigiDField extends \GF_Field
     public function validate($value, $form)
     {
         $bsn = \rgget($this->id . '.1', $value);
+
         if (\rgblank($bsn)) {
-            $this->failed_validation = true;
-            $this->validation_message = empty($this->errorMessage) ? \esc_html__('This field is required.', config('core.text_domain')) : $this->errorMessage;
+            //$this->failed_validation = true;
+            //$this->validation_message = empty($this->errorMessage) ? \esc_html__('This field is required.', config('core.text_domain')) : $this->errorMessage;
         }
+
+		$this['is_valid'] = true;
+		$this['failed_validation'] = false;
+		$this['isRequired'] = false;
+		$this['form'] = $form;
+		//var_dump($this);die;
+
+		return $this;
     }
 
     protected function hasCertificates(): bool
@@ -133,6 +142,7 @@ class DigiDField extends \GF_Field
             ];
         }
         $bsn = $this->session->get('bsn', '');
+
         if (!empty($bsn)) {
             $bsn = encrypt($bsn);
         }
@@ -224,9 +234,9 @@ class DigiDField extends \GF_Field
     }
 
     /**
-* Format the entry value for display on the entries list page.
-* Return a value that's safe to display on the page.
-*/
+	* Format the entry value for display on the entries list page.
+	* Return a value that's safe to display on the page.
+	*/
     public function get_value_entry_list($value, $entry, $field_id, $columns, $form)
     {
         //Escapes value so that it is safe to be displayed on the entry list page
