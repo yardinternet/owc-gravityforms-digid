@@ -90,7 +90,7 @@ class GravityForms
 
         if (!empty($bsn)) {
             $digiDSession = new DigiDSession(config('digid.session.lifetime'), config('digid.session.resume-lifetime'));
-            $logout = view('digid/logout-link.php', [
+            $logout = view('digid/logout.php', [
                 'logoutLink'            => \site_url('/digid/logout'),
                 'SessionLifeTime'       => $digiDSession->getSessionLifeTime(),
                 'SessionResumeLifeTime' => $digiDSession->getSessionResumeLifeTime()

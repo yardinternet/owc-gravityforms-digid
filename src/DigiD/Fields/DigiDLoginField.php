@@ -5,7 +5,6 @@ namespace Yard\DigiD\Fields;
 use Aura\Session\Segment;
 use Yard\DigiD\DigiD;
 use Yard\DigiD\DigiDController;
-use Yard\DigiD\DigiDSession;
 use Yard\DigiD\Foundation\Plugin;
 
 use function Yard\DigiD\Foundation\Helpers\config;
@@ -49,12 +48,7 @@ class DigiDLoginField extends AbstractField
                 ]);
 
                 if (!empty($bsn)) {
-                    $digiDSession          = new DigiDSession(config('digid.session.lifetime'), config('digid.session.resume-lifetime'));
-                    return view('digid/logout.php', [
-                        'logoutLink'            => \site_url('/digid/logout'),
-                        'SessionLifeTime'       => $digiDSession->getSessionLifeTime(),
-                        'SessionResumeLifeTime' => $digiDSession->getSessionResumeLifeTime()
-                    ]);
+                    return view('digid/loggedin.php');
                 }
 
                 $this->session->set('resume_link', $this->getResumeLink());
