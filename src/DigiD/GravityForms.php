@@ -40,19 +40,6 @@ class GravityForms
             return $form;
         }
 
-        if ($this->isFormPaginated($form)) {
-            resolve('session')->clear();
-            resolve('teams')->info('Form is render; session is cleared');
-            return $form;
-        }
-
-        if ($this->isFirstPaginatedView($form)) {
-            resolve('session')->clear();
-            resolve('teams')->info('Form is render; session is cleared');
-
-            return $form;
-        }
-
         return $form;
     }
 
@@ -63,9 +50,6 @@ class GravityForms
         }))) {
             return;
         }
-
-        resolve('session')->clear();
-        resolve('teams')->info('Form is submitted; session is cleared');
     }
 
     /**
