@@ -132,7 +132,7 @@ class DigiDField extends \GF_Field
 	 */
 	protected function getEnvironmentVariable(): string
     {
-        return env('DIGID_FAKE_SESSION');
+        return getenv('DIGID_FAKE_SESSION');
     }
 
     /**
