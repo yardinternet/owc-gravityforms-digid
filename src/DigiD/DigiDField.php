@@ -154,7 +154,7 @@ class DigiDField extends \GF_Field
         $bsn = $this->session->get('bsn', '');
 
 		$fakeSession = $this->getEnvironmentVariable();
-		var_dump($fakeSession);
+
 		if ($fakeSession) {
 			$this->session->set('bsn', encrypt($fakeSession));
 		}

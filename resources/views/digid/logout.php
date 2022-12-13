@@ -1,4 +1,7 @@
-<a id="logoutLink" href="{{ logoutLink }}">Uitloggen</a>
+<div class="owc-gf-digid-toolbar">
+	<div class="owc-gf-digid-toolbar-countdown" id="js-countdown"></div>
+	<a class="owc-gf-digid-toolbar-logout" href="{{ logoutLink }}" id="logoutLink">Uitloggen</a>
+</div>
 
 <script>
 	var SessionLifeTime = '{{ SessionLifeTime }}';

@@ -81,7 +81,7 @@ class GravityForms
             ]);
         }
 
-        $form_tag = str_replace("<form ", "<div id=\"js-countdown\" style=\"text-align:right; min-height: 30px;\"></div>". $logout ."<form ", $form_tag);
+        $form_tag = str_replace("<form ", "". $logout ."<form ", $form_tag);
 
         return $form_tag;
     }
