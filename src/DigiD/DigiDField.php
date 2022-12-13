@@ -132,7 +132,7 @@ class DigiDField extends \GF_Field
 	 */
 	protected function getEnvironmentVariable(): string
     {
-        return getenv('DIGID_FAKE_SESSION') ?? '';
+        return env('DIGID_FAKE_SESSION') ?? '';
     }
 
     /**
@@ -154,7 +154,7 @@ class DigiDField extends \GF_Field
         $bsn = $this->session->get('bsn', '');
 
 		$fakeSession = $this->getEnvironmentVariable();
-
+		var_dump($fakeSession);
 		if ($fakeSession) {
 			$this->session->set('bsn', encrypt($fakeSession));
 		}
