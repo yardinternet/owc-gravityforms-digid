@@ -107,15 +107,9 @@ class DigiDField extends \GF_Field
         $bsn = \rgget($this->id . '.1', $value);
 
         if (\rgblank($bsn)) {
-            //$this->failed_validation = true;
-            //$this->validation_message = empty($this->errorMessage) ? \esc_html__('This field is required.', config('core.text_domain')) : $this->errorMessage;
+            $this->failed_validation = true;
+            $this->validation_message = empty($this->errorMessage) ? \esc_html__('This field is required.', config('core.text_domain')) : $this->errorMessage;
         }
-
-		// $this['is_valid'] = true;
-		// $this['failed_validation'] = false;
-		// $this['isRequired'] = false;
-		// $this['form'] = $form;
-		// var_dump($this);die;
 
 		return $this;
     }
