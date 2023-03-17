@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Yard\DigiD;
 
@@ -111,7 +111,7 @@ class DigiDField extends \GF_Field
             $this->validation_message = empty($this->errorMessage) ? \esc_html__('This field is required.', config('core.text_domain')) : $this->errorMessage;
         }
 
-		return $this;
+        return $this;
     }
 
     protected function hasCertificates(): bool
@@ -119,12 +119,12 @@ class DigiDField extends \GF_Field
         return (file_exists(config('digid.certificate.public')) or (file_exists(config('digid.certificate.private'))));
     }
 
-	/**
-	 * Undocumented function
-	 *
-	 * @return string
-	 */
-	protected function getEnvironmentVariable(): string
+    /**
+     * Use a fake session if it exists.
+     *
+     * @return string
+     */
+    protected function getEnvironmentVariable(): string
     {
         return env('DIGID_FAKE_SESSION') ?? '';
     }
@@ -137,7 +137,10 @@ class DigiDField extends \GF_Field
      */
     protected function getFields(array $value): array
     {
-        if (!$this->hasCertificates()) {
+        $fakeSession = $this->getEnvironmentVariable();
+
+		// display missing certificates message when there are no certificates set and we are not using a fake session.
+        if (!$this->hasCertificates() && empty($fakeSession)) {
             return [
                 (new TextField($this, $value))
                 ->setFieldID(1)
@@ -145,13 +148,13 @@ class DigiDField extends \GF_Field
                 ->setFieldText(\__('DigiD', config('core.text_domain'))),
             ];
         }
+
         $bsn = $this->session->get('bsn', '');
 
-		$fakeSession = $this->getEnvironmentVariable();
 
-		if ($fakeSession) {
-			$this->session->set('bsn', encrypt($fakeSession));
-		}
+        if ($fakeSession) {
+            $this->session->set('bsn', encrypt($fakeSession));
+        }
 
         if (!empty($bsn)) {
             $bsn = encrypt($bsn);
@@ -245,9 +248,9 @@ class DigiDField extends \GF_Field
     }
 
     /**
-	* Format the entry value for display on the entries list page.
-	* Return a value that's safe to display on the page.
-	*/
+    * Format the entry value for display on the entries list page.
+    * Return a value that's safe to display on the page.
+    */
     public function get_value_entry_list($value, $entry, $field_id, $columns, $form)
     {
         //Escapes value so that it is safe to be displayed on the entry list page
