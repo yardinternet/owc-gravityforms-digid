@@ -25,7 +25,6 @@ class DigiDServiceProvider extends ServiceProvider
         $this->plugin->getLoader()->addAction('gform_loaded', $gravityForm, 'registerField', 5);
         $this->registerSettingsAddon();
 
-
         if (\is_admin()) {
             return;
         }
@@ -141,7 +140,7 @@ class DigiDServiceProvider extends ServiceProvider
 
     private function getMetadata()
     {
-        $metadataKey =  sprintf('%s-%s', 'digid::metadata', md5(config('digid.url.idp.metadata')));
+        $metadataKey = sprintf('%s-%s', 'digid::metadata', md5(config('digid.url.idp.metadata')));
         if (false === ($metadata = get_transient($metadataKey))) {
             $metadata = resolve('\GoGentoOSS\SAMLBase\Metadata\ResolveService')->resolve(resolve('\GoGentoOSS\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata'));
             set_transient($metadataKey, $metadata, 12 * HOUR_IN_SECONDS);

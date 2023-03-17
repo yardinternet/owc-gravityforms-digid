@@ -131,7 +131,7 @@ class GravityFormsAddon extends GFAddOn
                     . '<br />' .
                     sprintf(
                         __('E.g., for this site: %s.', config('core.text_domain')),
-                        \sprintf('<code>%s/%s</code>', $this->getRootPathToCertificates(), is_multisite() ? get_current_blog_id() : '')
+                        \sprintf('<code>%s/%s</code>', $this->getRootPathToCertificates(), \is_multisite() ? \get_current_blog_id() : '')
                     ) . '</p>',
                 'fields'      => [
                     [
@@ -246,11 +246,9 @@ class GravityFormsAddon extends GFAddOn
 
     /**
      * Get root path to certificates.
-     *
-     * @return string
      */
     private function getRootPathToCertificates(): string
     {
-        return (!empty(GravityFormsSettings::make()->get('location-root-path-certificates'))) ? GravityFormsSettings::make()->get('location-root-path-certificates') : storage_path('certificates');
+        return GravityFormsSettings::make()->get('location-root-path-certificates') ?: storage_path('certificates');
     }
 }

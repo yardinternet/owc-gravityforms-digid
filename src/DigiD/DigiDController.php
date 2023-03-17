@@ -34,7 +34,7 @@ class DigiDController
         }
 
         try {
-            $attributes   = new Attributes($responseData);
+            $attributes = new Attributes($responseData);
         } catch (InvalidArgumentException $e) {
             $session->setFlash('error', \__('Something went wrong. Please try again.', config('core.text_domain')));
             resolve('teams')->info('InvalidArgumentException', [
@@ -97,8 +97,8 @@ class DigiDController
     {
         $SAMLResponse = (isset($_POST['SAMLResponse'])) ?  esc_attr($_POST['SAMLResponse']) : esc_attr($_GET['SAMLResponse']);
         $responseData = @gzinflate(base64_decode($SAMLResponse));
-        $attributes   = new Attributes($responseData);
-        $session      = resolve('session')->getSegment('digid');
+        $attributes = new Attributes($responseData);
+        $session = resolve('session')->getSegment('digid');
         if ($attributes->logout()->get()->isSuccess()) {
             $session->set('bsn', '');
             $session->set('nameID', '');

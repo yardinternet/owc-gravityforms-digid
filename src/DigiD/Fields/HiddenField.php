@@ -38,7 +38,7 @@ class HiddenField extends AbstractField
         return "<input
                     type='hidden'
                     name='input_{$this->field->id}.{$this->fieldID}'
-                    id='input_{$this->field->id}_{$this->form['id']}_{$this->fieldID}'
+                    id='input_{$this->field->id}_{$this->field->formId}_{$this->fieldID}'
                     value='{$this->getValue()}'
                 />";
     }

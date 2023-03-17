@@ -145,7 +145,7 @@ export default class Countdown {
 		this.clearSessionTTL();
 		this.clearSessionExpiration();
 
-        const logoutLink = document.getElementById('logoutLink').href;
+        const logoutLink = document.getElementById('js-owc-gf-digid-logout').dataset.action;
         return window.location.href = logoutLink;
     }
 
@@ -155,7 +155,7 @@ export default class Countdown {
 	registerEventHandlers() {
 		const resume = document.getElementById('js-resumeSession');
 		const abort = document.getElementById('js-abortSession');
-		const logout = document.getElementById('logoutLink');
+		const logout = document.getElementById('js-owc-gf-digid-logout');
 
 		resume.addEventListener('click', e => this.sessionResumeNew(e));
 		resume.addEventListener('keydown', e => this.a11yClick(e));
@@ -186,7 +186,7 @@ export default class Countdown {
      * Run countdown.
      */
 	countdown = () => {
-		const countdownElem = document.getElementById('js-countdown');
+		const countdownElem = document.getElementById('js-owc-gf-digid-countdown');
 		if (!this.sessionTTL) return;
 
 		const expiration = JSON.parse(this.sessionExpiration);
@@ -209,7 +209,7 @@ export default class Countdown {
      * Stop countdown when timer is finished.
      */
 	stopCountdown = () => {
-		const countdownElem = document.getElementById('js-countdown');
+		const countdownElem = document.getElementById('js-owc-gf-digid-logout');
         clearInterval(this.countDownInterval);
 
         if (!!countdownElem) {

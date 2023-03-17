@@ -2,9 +2,9 @@
 
 namespace Tests\Yard\DigiD\Foundation;
 
+use Tests\Yard\DigiD\TestCase;
 use WP_Mock;
 use Yard\DigiD\Foundation\Plugin;
-use Tests\Yard\DigiD\TestCase;
 
 class PluginTest extends TestCase
 {
@@ -14,7 +14,7 @@ class PluginTest extends TestCase
     public function setUp(): void
     {
         WP_Mock::setUp();
-        $getBlogDetails       = new \StdClass;
+        $getBlogDetails = new \StdClass;
         $getBlogDetails->path = '';
         WP_Mock::userFunction('get_blog_details', [
             'return' => $getBlogDetails

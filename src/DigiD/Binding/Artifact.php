@@ -30,7 +30,7 @@ class Artifact extends BindingArtifact
         $this->getSettings()->setValue('artifact', $artifact);
 
         $soapRequest = $this->buildEnvelope('ArtifactResolve');
-        $response    = $this->getHttpService()->post($this->getTargetUrl(), [
+        $response = $this->getHttpService()->post($this->getTargetUrl(), [
             'cert'    => config('digid.certificate.public'),
             'ssl_key' => config('digid.certificate.private'),
             'body'    => $soapRequest

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Yard\DigiD;
 
@@ -104,16 +104,29 @@ class DigiDField extends \GF_Field
      */
     public function validate($value, $form)
     {
-        $bsn    = \rgget($this->id . '.1', $value);
+        $bsn = \rgget($this->id . '.1', $value);
+
         if (\rgblank($bsn)) {
-            $this->failed_validation  = true;
+            $this->failed_validation = true;
             $this->validation_message = empty($this->errorMessage) ? \esc_html__('This field is required.', config('core.text_domain')) : $this->errorMessage;
         }
+
+        return $this;
     }
 
     protected function hasCertificates(): bool
     {
         return (file_exists(config('digid.certificate.public')) or (file_exists(config('digid.certificate.private'))));
+    }
+
+    /**
+     * Use a fake session if it exists.
+     *
+     * @return string
+     */
+    protected function getEnvironmentVariable(): string
+    {
+        return env('DIGID_FAKE_SESSION') ?? '';
     }
 
     /**
@@ -124,7 +137,10 @@ class DigiDField extends \GF_Field
      */
     protected function getFields(array $value): array
     {
-        if (!$this->hasCertificates()) {
+        $fakeSession = $this->getEnvironmentVariable();
+
+		// display missing certificates message when there are no certificates set and we are not using a fake session.
+        if (!$this->hasCertificates() && empty($fakeSession)) {
             return [
                 (new TextField($this, $value))
                 ->setFieldID(1)
@@ -132,10 +148,18 @@ class DigiDField extends \GF_Field
                 ->setFieldText(\__('DigiD', config('core.text_domain'))),
             ];
         }
-        $bsn   = $this->session->get('bsn', '');
+
+        $bsn = $this->session->get('bsn', '');
+
+
+        if ($fakeSession) {
+            $this->session->set('bsn', encrypt($fakeSession));
+        }
+
         if (!empty($bsn)) {
             $bsn = encrypt($bsn);
         }
+
         return [
             (new DigiDLoginField($this, $value, $this->session))
                 ->setFieldID(2)
@@ -185,11 +209,11 @@ class DigiDField extends \GF_Field
         $field_label = $this->get_field_label($force_frontend_label, $value);
 
         $validation_message_id = 'validation_message_' . $form['id'] . '_' . $this->id;
-        $validation_message    = ($this->failed_validation && ! empty($this->validation_message)) ? sprintf("<div id='%s' class='gfield_description validation_message' aria-live='polite'>%s</div>", $validation_message_id, $this->validation_message) : '';
+        $validation_message = ($this->failed_validation && ! empty($this->validation_message)) ? sprintf("<div id='%s' class='gfield_description validation_message' aria-live='polite'>%s</div>", $validation_message_id, $this->validation_message) : '';
 
-        $is_form_editor  = $this->is_form_editor();
+        $is_form_editor = $this->is_form_editor();
         $is_entry_detail = $this->is_entry_detail();
-        $is_admin        = $is_form_editor || $is_entry_detail;
+        $is_admin = $is_form_editor || $is_entry_detail;
 
         $required_div = $is_admin || $this->isRequired ? sprintf("<span class='gfield_required'>%s</span>", $this->isRequired ? '*' : '') : '';
 
@@ -200,12 +224,12 @@ class DigiDField extends \GF_Field
         $for_attribute = empty($target_input_id) ? '' : "for='{$target_input_id}'";
 
         $description = $this->get_description($this->description, 'gfield_description');
-        $bsn         = $this->session->get('bsn', '');
+        $bsn = $this->session->get('bsn', '');
         if (!empty($bsn)) {
             $description = '';
         }
         if ($this->is_description_above($form)) {
-            $clear         = $is_admin ? "<div class='gf_clear'></div>" : '';
+            $clear = $is_admin ? "<div class='gf_clear'></div>" : '';
             $field_content = sprintf("%s<label class='%s' $for_attribute >%s%s</label>%s{FIELD}%s$clear", $admin_buttons, esc_attr($this->get_field_label_class()), esc_html($field_label), $required_div, $description, $validation_message);
         } else {
             $field_content = sprintf("%s<label class='%s' $for_attribute >%s%s</label>{FIELD}%s%s", $admin_buttons, esc_attr($this->get_field_label_class()), esc_html($field_label), $required_div, $description, $validation_message);
@@ -220,13 +244,13 @@ class DigiDField extends \GF_Field
     */
     public function get_value_save_entry($value, $form, $input_name, $lead_id, $lead)
     {
-        return decrypt($value);
+        return empty($value) ? '' : decrypt($value);
     }
 
     /**
-* Format the entry value for display on the entries list page.
-* Return a value that's safe to display on the page.
-*/
+    * Format the entry value for display on the entries list page.
+    * Return a value that's safe to display on the page.
+    */
     public function get_value_entry_list($value, $entry, $field_id, $columns, $form)
     {
         //Escapes value so that it is safe to be displayed on the entry list page

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 if (!\function_exists('xdebug_set_filter')) {
     return;
 }

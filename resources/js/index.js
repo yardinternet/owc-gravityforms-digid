@@ -1,7 +1,7 @@
 import Countdown from './lib/countdown';
-import LogoutButton from './lib/logoutButton';
+import Logout from './lib/logout';
 
 export default {
   Countdown,
-  LogoutButton
+  Logout
 };

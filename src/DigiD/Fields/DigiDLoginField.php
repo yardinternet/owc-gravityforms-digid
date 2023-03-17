@@ -5,13 +5,12 @@ namespace Yard\DigiD\Fields;
 use Aura\Session\Segment;
 use Yard\DigiD\DigiD;
 use Yard\DigiD\DigiDController;
-use Yard\DigiD\DigiDSession;
-use function Yard\DigiD\Foundation\Helpers\config;
+use Yard\DigiD\Foundation\Plugin;
 
+use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
-use Yard\DigiD\Foundation\Plugin;
 
 class DigiDLoginField extends AbstractField
 {
@@ -49,12 +48,7 @@ class DigiDLoginField extends AbstractField
                 ]);
 
                 if (!empty($bsn)) {
-                    $digiDSession          = new DigiDSession(config('digid.session.lifetime'), config('digid.session.resume-lifetime'));
-                    return view('digid/logout.php', [
-                        'logoutLink'            => \site_url('/digid/logout'),
-                        'SessionLifeTime'       => $digiDSession->getSessionLifeTime(),
-                        'SessionResumeLifeTime' => $digiDSession->getSessionResumeLifeTime()
-                    ]);
+                    return view('digid/loggedin.php');
                 }
 
                 $this->session->set('resume_link', $this->getResumeLink());
@@ -97,7 +91,7 @@ class DigiDLoginField extends AbstractField
             return $submission_json;
         }, 10, 3);
 
-        $resume                  = \GFAPI::submit_form(
+        $resume = \GFAPI::submit_form(
             $this->field->formId,
             [
                 'gf_submitting_' . $this->field->formId => true,
@@ -106,7 +100,7 @@ class DigiDLoginField extends AbstractField
             ]
         );
 
-        $resumeToken             = $resume['resume_token'] ?? null;
+        $resumeToken = $resume['resume_token'] ?? null;
         return sprintf('%s?gf_token=%s', \get_permalink(), $resumeToken);
     }
 

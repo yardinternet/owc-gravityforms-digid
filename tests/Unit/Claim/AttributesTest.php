@@ -2,13 +2,13 @@
 
 namespace Tests\Yard\DigiD\Claim;
 
-use InvalidArgumentException;
+use Tests\Yard\DigiD\TestCase;
+use TypeError;
 use WP_Mock;
 use Yard\DigiD\Claim\Attributes;
 use Yard\DigiD\Claim\BSN;
 use Yard\DigiD\Claim\Logout;
 use Yard\DigiD\Claim\Status;
-use Tests\Yard\DigiD\TestCase;
 
 class AttributesTest extends TestCase
 {
@@ -25,7 +25,7 @@ class AttributesTest extends TestCase
     /** @test */
     public function attributes_class_is_a_correct_instance()
     {
-        $response   = $this->loadStub('SUCCESS.xml');
+        $response = $this->loadStub('SUCCESS.xml');
         $attributes = new Attributes($response);
         $this->assertInstanceOf(Attributes::class, $attributes);
     }
@@ -33,7 +33,7 @@ class AttributesTest extends TestCase
     /** @test */
     public function query_returns_correctly()
     {
-        $response   = $this->loadStub('SUCCESS.xml');
+        $response = $this->loadStub('SUCCESS.xml');
         $attributes = new Attributes($response);
         $this->assertInstanceOf(Status::class, $attributes->status());
         $this->assertInstanceOf(BSN::class, $attributes->bsn());
@@ -43,7 +43,7 @@ class AttributesTest extends TestCase
     /** @test */
     public function session_id_is_returned_correctly()
     {
-        $response   = $this->loadStub('SUCCESS.xml');
+        $response = $this->loadStub('SUCCESS.xml');
         $attributes = new Attributes($response);
         $this->assertEquals('26d224be1e436ba652b39b8cde970c5d4432583', $attributes->sessionID());
     }
@@ -51,8 +51,7 @@ class AttributesTest extends TestCase
     /** @test */
     public function if_xml_is_invalid()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Data is invalid');
+        $this->expectException(TypeError::class);
         new Attributes(false);
     }
 

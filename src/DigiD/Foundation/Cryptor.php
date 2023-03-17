@@ -15,7 +15,7 @@ class Cryptor
      */
     public function __construct($method = false)
     {
-        $key   = \AUTH_KEY ?? php_uname();
+        $key = \AUTH_KEY ?? php_uname();
         if (ctype_print($key)) {
             // convert ASCII keys to binary format
             $this->key = openssl_digest($key, 'SHA256', true);

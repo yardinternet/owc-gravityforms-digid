@@ -4,7 +4,7 @@ namespace Yard\DigiD\Foundation;
 
 class Session
 {
-    const SESSION_STARTED     = true;
+    const SESSION_STARTED = true;
     const SESSION_NOT_STARTED = false;
 
     /**

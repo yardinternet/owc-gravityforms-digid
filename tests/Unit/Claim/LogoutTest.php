@@ -3,9 +3,9 @@
 namespace Tests\Yard\DigiD\Claim;
 
 use Exception;
+use Tests\Yard\DigiD\TestCase;
 use WP_Mock;
 use Yard\DigiD\Claim\Logout;
-use Tests\Yard\DigiD\TestCase;
 
 class LogoutTest extends TestCase
 {
@@ -31,14 +31,14 @@ class LogoutTest extends TestCase
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Empty class name is not allowed');
-        $logout   = new Logout([]);
+        $logout = new Logout([]);
         $this->assertEmpty($logout->getStatus());
     }
 
     /** @test */
     public function it_returns_an_error_if_invalid_data_is_provided()
     {
-        $logout   = new Logout(['asdf']);
+        $logout = new Logout(['asdf']);
         $this->assertEquals('RequestIncorrect', $logout->getStatus());
     }
 
@@ -47,8 +47,8 @@ class LogoutTest extends TestCase
         if (empty($stub)) {
             return '';
         }
-        $responseData         = file_get_contents(WP_PLUGIN_DIR .'/../Stubs/'. $stub);
-        $response             = simplexml_load_string($responseData);
+        $responseData = file_get_contents(WP_PLUGIN_DIR .'/../Stubs/'. $stub);
+        $response = simplexml_load_string($responseData);
         $response->registerXPathNamespace('samlp', 'urn:oasis:names:tc:SAML:2.0:protocol');
         $response->registerXPathNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
 

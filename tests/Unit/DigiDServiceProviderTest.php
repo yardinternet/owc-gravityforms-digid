@@ -15,7 +15,7 @@ class DigiDServiceProviderTest extends TestCase
     {
         WP_Mock::setUp();
 
-        $this->plugin         = m::mock(Plugin::class);
+        $this->plugin = m::mock(Plugin::class);
         $this->plugin->shouldReceive('getLoader')->twice()->andReturn(m::mock(Loader::class));
 
         $this->service = new DigiDServiceProvider($this->plugin);

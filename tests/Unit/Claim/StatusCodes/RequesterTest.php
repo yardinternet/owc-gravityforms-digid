@@ -3,10 +3,10 @@
 namespace Tests\Yard\DigiD\Claim\StatusCodes;
 
 use Mockery as m;
+use Tests\Yard\DigiD\TestCase;
 use WP_Mock;
 use Yard\DigiD\Claim\Status;
 use Yard\DigiD\Claim\StatusCodes\Requester;
-use Tests\Yard\DigiD\TestCase;
 
 class RequesterTest extends TestCase
 {
@@ -15,8 +15,8 @@ class RequesterTest extends TestCase
     public function setUp(): void
     {
         WP_Mock::setUp();
-        $status              = m::mock(Status::class);
-        $this->requester     = new Requester($status);
+        $status = m::mock(Status::class);
+        $this->requester = new Requester($status);
     }
 
     public function tearDown(): void

@@ -1,5 +1,7 @@
-<p class="font-weight-bold">U bent succesvol ingelogd. Klik op de knop 'Volgende'.</p>
-<a id="logoutLink" href="{{ logoutLink }}">Uitloggen</a>
+<div class="owc-gf-digid-toolbar">
+	<div class="owc-gf-digid-toolbar-countdown" id="js-owc-gf-digid-countdown"></div>
+	<button class="owc-gf-digid-toolbar-logout" data-action="{{ logoutLink }}" id="js-owc-gf-digid-logout">Uitloggen</button>
+</div>
 
 <script>
 	var SessionLifeTime = '{{ SessionLifeTime }}';
@@ -7,6 +9,6 @@
 
 	document.addEventListener('DOMContentLoaded', function() {
 		new Countdown.Countdown(SessionLifeTime, SessionResumeLifeTime).init()
-		new Countdown.LogoutButton().init();
+		new Countdown.Logout().init();
 	});
 </script>
