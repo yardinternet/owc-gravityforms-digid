@@ -2,8 +2,8 @@
 
 namespace Tests\Yard\DigiD\Claim;
 
+use InvalidArgumentException;
 use Tests\Yard\DigiD\TestCase;
-use TypeError;
 use WP_Mock;
 use Yard\DigiD\Claim\Attributes;
 use Yard\DigiD\Claim\BSN;
@@ -51,7 +51,8 @@ class AttributesTest extends TestCase
     /** @test */
     public function if_xml_is_invalid()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Data is invalid');
         new Attributes(false);
     }
 
