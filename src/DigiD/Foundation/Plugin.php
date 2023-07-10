@@ -109,7 +109,6 @@ class Plugin
                     'secure'   => true,
                     'httponly' => true
                 ]);
-                $session->start();
                 return $session;
             },
             'teams'    => function () {
