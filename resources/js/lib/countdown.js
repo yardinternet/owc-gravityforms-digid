@@ -54,8 +54,10 @@ export default class Countdown {
 							Uw sessie is mogelijk verlopen. Als u te lang niks hebt gedaan, wordt u uit veiligheidsoverwegingen door DigiD uitgelogd.
 							Kies 'Verlengen' om uw sessie te verlengen, mogelijk moet u opnieuw inloggen met DigiD.
 						</div>
-						<div class='modal-footer | d-flex justify-content-end'>
-						<button type='button' id='js-abortSession' tabindex='0' role='button' class='btn btn-outline-primary mr-2' data-dismiss='modal'>Sluiten</button>
+						<div class='modal-footer | d-flex justify-content-end' >
+							<form action="/digid/logout" method="dialog">
+								<button type='submit' id='js-abortSession' tabindex='0' role='button' class='btn btn-outline-primary mr-2' data-dismiss='modal'>Sluiten</button>
+							</form>
 							<button type='button' id='js-resumeSession' tabindex='0' role='button' class='btn btn-primary'>Verlengen</button>
 						</div>
 					</div>
@@ -144,9 +146,6 @@ export default class Countdown {
 	sessionEnd = () => {
 		this.clearSessionTTL();
 		this.clearSessionExpiration();
-
-        const logoutLink = document.getElementById('js-owc-gf-digid-logout').dataset.action;
-        return window.location.href = logoutLink;
     }
 
 	/**
