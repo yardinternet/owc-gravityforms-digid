@@ -40,8 +40,9 @@ class LoaderTest extends TestCase
 
         $loader->addFilter('test-hook', $this, 'test', 10, 1);
 
-        $this->assertClassHasAttribute('filters', Loader::class);
-        $this->assertCount(1, $loader->getFilters());
+		$this->assertTrue(property_exists(Loader::class, 'filters'));
+		$this->assertCount(1, $loader->getFilters());
+
 
         $loader->addFilter('test-hook-2', $this, 'test', 10, 1);
         $loader->addFilter('test-hook-3', $this, 'test', 10, 1);
