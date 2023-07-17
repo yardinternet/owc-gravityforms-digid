@@ -40,23 +40,24 @@ class DigiDLoginField extends AbstractField
         if ($this->is_admin || !\rgar($this->getInput(), 'isHidden')) {
             if (!\is_admin()) {
                 $bsn = $this->session->get('bsn', '');
+
                 if (!empty($bsn)) {
                     $bsn = encrypt($bsn);
                 }
-                resolve('teams')->info('Isset BSN?', [
-                    'bsn'          => $bsn,
-                ]);
 
                 if (!empty($bsn)) {
                     return view('digid/loggedin.php');
                 }
 
-                $this->session->set('resume_link', $this->getResumeLink());
-                resolve('teams')->info('Set resume_link', [
-                    'user_agent'                        => $_SERVER['HTTP_USER_AGENT'] ?? '',
-                    'resume_link_from_session'          => $this->session->get('resume_link'),
-                    'resume_link'                       => $this->getResumeLink(),
-                ]);
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					$this->session->set('resume_link', $this->getResumeLink());
+
+					resolve('teams')->info('Set resume_link', [
+						'user_agent'                        => $_SERVER['HTTP_USER_AGENT'] ?? '',
+						'resume_link_from_session'          => $this->session->get('resume_link'),
+						'resume_link'                       => $this->getResumeLink(),
+					]);
+				}
             }
 
             return "{$this->getSpanField()}

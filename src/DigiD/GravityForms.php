@@ -63,12 +63,10 @@ class GravityForms
     public function addCountDownHTML($form_tag, $form): string
     {
         $bsn = resolve('session')->getSegment('digid')->get('bsn', '');
+
         if (!empty($bsn)) {
             $bsn = encrypt($bsn);
         }
-        resolve('teams')->info('Isset BSN?', [
-            'bsn'          => $bsn,
-        ]);
 
         $logout = '';
 
