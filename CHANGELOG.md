@@ -3,6 +3,10 @@
 - requires: WordPress 4.9
 - tested: WordPress 5.8.2
 
+## v1.1.2
+
+- Change: clean up logging to MS teams.
+
 ## v1.1.1
 
 - Change: lazy the session.
