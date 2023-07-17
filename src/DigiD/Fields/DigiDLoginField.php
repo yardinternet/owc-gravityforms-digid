@@ -49,9 +49,9 @@ class DigiDLoginField extends AbstractField
                     return view('digid/loggedin.php');
                 }
 
-				if (defined('WP_DEBUG') && WP_DEBUG) {
-					$this->session->set('resume_link', $this->getResumeLink());
+				$this->session->set('resume_link', $this->getResumeLink());
 
+				if (defined('WP_DEBUG') && WP_DEBUG) {
 					resolve('teams')->info('Set resume_link', [
 						'user_agent'                        => $_SERVER['HTTP_USER_AGENT'] ?? '',
 						'resume_link_from_session'          => $this->session->get('resume_link'),
