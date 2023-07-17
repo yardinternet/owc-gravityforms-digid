@@ -49,7 +49,7 @@ class DigiDLoginField extends AbstractField
                     return view('digid/loggedin.php');
                 }
 
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				if (defined('WP_DEBUG') && WP_DEBUG) {
 					$this->session->set('resume_link', $this->getResumeLink());
 
 					resolve('teams')->info('Set resume_link', [
