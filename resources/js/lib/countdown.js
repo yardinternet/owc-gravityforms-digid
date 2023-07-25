@@ -1,6 +1,6 @@
 export default class Countdown {
 	constructor(sessionTTL, resumeSessionTTL) {
-		this.options = { sessionTTL, resumeSessionTTL }
+		this.options = { sessionTTL, resumeSessionTTL };
 
 		this.insertModalHTML();
 
@@ -43,7 +43,9 @@ export default class Countdown {
 		const gfWrapper = document.getElementsByClassName('gform_wrapper');
 
 		if (gfWrapper) {
-			gfWrapper[0].insertAdjacentHTML('beforeend', `
+			gfWrapper[0].insertAdjacentHTML(
+				'beforeend',
+				`
 			<div class='yda-digid-modal fade' id='modalWrapper' tabindex='-1' role='dialog' aria-labelledby='modalWrapper' aria-modal='true' aria-hidden='true'>
 				<div id='modalDialog' class='yda-digid-modal-dialog' role='document'>
 					<div class='yda-digid-modal-content'>
@@ -64,13 +66,14 @@ export default class Countdown {
 						</div>
 					</div>
 				</div>
-			</div>`);
+			</div>`
+			);
 		}
 	}
 
-    /**
-     * Initialize the plugin.
-     */
+	/**
+	 * Initialize the plugin.
+	 */
 	init() {
 		const sessionTTL = this.sessionTTL;
 		const sessionExpiration = this.sessionExpiration;
@@ -90,7 +93,6 @@ export default class Countdown {
 			}
 		}
 
-
 		return this.sessionStart();
 	}
 
@@ -99,7 +101,7 @@ export default class Countdown {
 	 * This is only a visual representation for the real session that goes on in the back-end.
 	 */
 	sessionStart() {
-		const duration = Date.now() + (this.options.sessionTTL * 1000);
+		const duration = Date.now() + this.options.sessionTTL * 1000;
 
 		this.sessionTTL = JSON.stringify(this.options.sessionTTL);
 		this.sessionExpiration = JSON.stringify(duration);
@@ -131,7 +133,7 @@ export default class Countdown {
 	 * i.e. on extending the TTL from the modal.
 	 */
 	sessionResumeNew() {
-		const duration = Date.now() + (this.options.resumeSessionTTL * 1000);
+		const duration = Date.now() + this.options.resumeSessionTTL * 1000;
 
 		this.closeModal();
 
@@ -143,12 +145,12 @@ export default class Countdown {
 	}
 
 	/**
-     * End session and go to logout page.
-     */
+	 * End session and go to logout page.
+	 */
 	sessionEnd = () => {
 		this.clearSessionTTL();
 		this.clearSessionExpiration();
-    }
+	};
 
 	/**
 	 * Register event handlers.
@@ -158,36 +160,42 @@ export default class Countdown {
 		const abort = document.getElementById('js-abortSession');
 		const logout = document.getElementById('js-owc-gf-digid-logout');
 
-		resume.addEventListener('click', e => this.sessionResumeNew(e));
-		resume.addEventListener('keydown', e => this.a11yClick(e));
-		abort.addEventListener('click', e => this.sessionEnd(e));
-		abort.addEventListener('keydown', e => this.a11yClick(e));
+		resume.addEventListener('click', (e) => this.sessionResumeNew(e));
+		resume.addEventListener('keydown', (e) => this.a11yClick(e));
+		abort.addEventListener('click', (e) => this.sessionEnd(e));
+		abort.addEventListener('keydown', (e) => this.a11yClick(e));
 
-		document.addEventListener('keydown', e => {
+		document.addEventListener('keydown', (e) => {
 			const ESCAPE_KEY = 27;
 			const modal = document.getElementById('modalWrapper');
 
-			if (e.keyCode === ESCAPE_KEY && modal.classList.contains('show')) {
+			if (
+				e.keyCode === ESCAPE_KEY &&
+				modal.classList.contains('yda-digid-modal-show')
+			) {
 				this.sessionEnd();
 				this.closeModal();
 			}
 		});
 
 		if (logout) {
-			logout.addEventListener('click', e => this.logout(e));
+			logout.addEventListener('click', (e) => this.logout(e));
 		}
 	}
 
-    /**
-     * Init countdown.
-     */
-    initCountdown = () =>  this.countDownInterval = setInterval(this.countdown, 1000);
+	/**
+	 * Init countdown.
+	 */
+	initCountdown = () =>
+		(this.countDownInterval = setInterval(this.countdown, 1000));
 
-    /**
-     * Run countdown.
-     */
+	/**
+	 * Run countdown.
+	 */
 	countdown = () => {
-		const countdownElem = document.getElementById('js-owc-gf-digid-countdown');
+		const countdownElem = document.getElementById(
+			'js-owc-gf-digid-countdown'
+		);
 		if (!this.sessionTTL) return;
 
 		const expiration = JSON.parse(this.sessionExpiration);
@@ -202,30 +210,32 @@ export default class Countdown {
 		minutes = Math.round(minutes * 100) / 100;
 
 		if (!!countdownElem) {
-			countdownElem.textContent = `Resterende tijd: ${(minutes < 10 ? "0" : "") + minutes}:${(seconds < 10 ? "0" : "") + seconds}`;
+			countdownElem.textContent = `Resterende tijd: ${
+				(minutes < 10 ? '0' : '') + minutes
+			}:${(seconds < 10 ? '0' : '') + seconds}`;
 		}
-	}
+	};
 
-    /**
-     * Stop countdown when timer is finished.
-     */
+	/**
+	 * Stop countdown when timer is finished.
+	 */
 	stopCountdown = () => {
 		const countdownElem = document.getElementById('js-owc-gf-digid-logout');
-        clearInterval(this.countDownInterval);
+		clearInterval(this.countDownInterval);
 
-        if (!!countdownElem) {
-            countdownElem.textContent = 'Verlopen';
-        }
-    }
+		if (!!countdownElem) {
+			countdownElem.textContent = 'Verlopen';
+		}
+	};
 
-    /**
-     * Init timer interval.
-     */
-    timerInit = () => this.timerInterval = setInterval(this.timerStart, 1000);
+	/**
+	 * Init timer interval.
+	 */
+	timerInit = () => (this.timerInterval = setInterval(this.timerStart, 1000));
 
-    /**
-     * Is used for validating the session.
-     */
+	/**
+	 * Is used for validating the session.
+	 */
 	timerStart = () => {
 		const expiration = JSON.parse(this.sessionExpiration);
 
@@ -234,7 +244,7 @@ export default class Countdown {
 		}
 
 		return;
-	}
+	};
 
 	/**
 	 * Stop timer; fires after the session is expired.
@@ -258,26 +268,26 @@ export default class Countdown {
 		}
 
 		this.startResumeCheck();
-	}
+	};
 
 	/**
 	 * Close modal.
 	 */
-	closeModal = e => {
+	closeModal = (e) => {
 		const modalWrapper = document.getElementById('modalWrapper');
 
 		if (modalWrapper !== null) {
 			modalWrapper.classList.remove('yda-digid-modal-show');
 			modalWrapper.setAttribute('aria-hidden', 'true');
 		}
-	}
+	};
 
 	/**
 	 * When modal is visible this function launches a timer.
 	 */
 	startResumeCheck() {
 		const that = this;
-		const resumeCheck = setInterval(function() {
+		const resumeCheck = setInterval(function () {
 			if (!that.sessionTTL) {
 				that.sessionEnd();
 				clearInterval(resumeCheck);
@@ -287,22 +297,22 @@ export default class Countdown {
 		}, 10000);
 	}
 
-    /**
-     * Add keypress event to modal buttons.
-     *
-     * @param {object} e
-     */
-	a11yClick = e => {
+	/**
+	 * Add keypress event to modal buttons.
+	 *
+	 * @param {object} e
+	 */
+	a11yClick = (e) => {
 		const SPACE_KEY = 32;
 
 		if (e.type !== 'click' || e.type !== 'keypress') return false;
-		if (e.type === 'keypress'){
+		if (e.type === 'keypress') {
 			const code = e.charCode || e.keyCode;
 			if (code !== SPACE_KEY) return false;
 		}
 
 		return true;
-	}
+	};
 
 	/**
 	 * Clear session TTL in Session Storage.
@@ -312,7 +322,8 @@ export default class Countdown {
 	/**
 	 * Clear session expiration in Session Storage.
 	 */
-	clearSessionExpiration = () => sessionStorage.removeItem('sessionExpiration');
+	clearSessionExpiration = () =>
+		sessionStorage.removeItem('sessionExpiration');
 
 	/**
 	 * Handle logout.
