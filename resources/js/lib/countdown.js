@@ -44,21 +44,23 @@ export default class Countdown {
 
 		if (gfWrapper) {
 			gfWrapper[0].insertAdjacentHTML('beforeend', `
-			<div class='modal fade' id='modalWrapper' tabindex='-1' role='dialog' aria-labelledby='modalWrapper' aria-modal='true' aria-hidden='true' style='display:none;'>
-				<div id='modalDialog' class='modal-dialog' role='document'>
-					<div class='modal-content'>
-						<div class='modal-header'>
-							<h5 class='modal-title' id='exampleModalLabel'>Uw sessie verloopt.</h5>
+			<div class='yda-digid-modal fade' id='modalWrapper' tabindex='-1' role='dialog' aria-labelledby='modalWrapper' aria-modal='true' aria-hidden='true'>
+				<div id='modalDialog' class='yda-digid-modal-dialog' role='document'>
+					<div class='yda-digid-modal-content'>
+						<div class='yda-digid-modal-header'>
+							<h5 class='yda-digid-modal-title' id='exampleModalLabel'>Uw sessie verloopt.</h5>
 						</div>
-						<div class='modal-body | mb-4'>
+						<div class='yda-digid-modal-body'>
 							Uw sessie is mogelijk verlopen. Als u te lang niks hebt gedaan, wordt u uit veiligheidsoverwegingen door DigiD uitgelogd.
 							Kies 'Verlengen' om uw sessie te verlengen, mogelijk moet u opnieuw inloggen met DigiD.
 						</div>
-						<div class='modal-footer | d-flex justify-content-end' >
+						<div class='yda-digid-modal-footer'>
 							<form action="/digid/logout" method="dialog">
-								<button type='submit' id='js-abortSession' tabindex='0' role='button' class='btn btn-outline-primary mr-2' data-dismiss='modal'>Sluiten</button>
+								<button type='submit' id='js-abortSession' tabindex='0' role='button' class='yda-digid-modal-button' data-dismiss='modal'>Sluiten</button>
 							</form>
-							<button type='button' id='js-resumeSession' tabindex='0' role='button' class='btn btn-primary'>Verlengen</button>
+							<button type='button' id='js-resumeSession' tabindex='0' role='button' class='yda-digid-modal-button'>
+								Verlengen
+							</button>
 						</div>
 					</div>
 				</div>
@@ -248,17 +250,11 @@ export default class Countdown {
 		this.clearSessionTTL();
 
 		const modalWrapper = document.getElementById('modalWrapper');
-		const modalDialog = document.getElementById('modalDialog');
 
 		// change state like in hidden modal.
 		if (modalWrapper !== null) {
-			modalWrapper.classList.add('show');
+			modalWrapper.classList.add('yda-digid-modal-show');
 			modalWrapper.setAttribute('aria-hidden', 'false');
-			modalWrapper.style.cssText = 'display: block; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-color: #666; opacity: 1; z-index: 1272;';
-		}
-
-		if (modalDialog !== null) {
-			modalDialog.style.cssText = 'max-width: 500px; margin: 5rem auto; background-color: #ffffff; padding: 2rem;';
 		}
 
 		this.startResumeCheck();
@@ -268,17 +264,11 @@ export default class Countdown {
 	 * Close modal.
 	 */
 	closeModal = e => {
-		const modal = document.getElementById('modalWrapper');
-		const modalDialog = document.getElementById('modalDialog');
+		const modalWrapper = document.getElementById('modalWrapper');
 
-		if (modal !== null) {
-			modal.classList.remove('show');
-			modal.setAttribute('aria-hidden', 'true');
-			modal.style.cssText = 'display: none;';
-		}
-
-		if (modalDialog !== null) {
-			modalDialog.style.cssText = "";
+		if (modalWrapper !== null) {
+			modalWrapper.classList.remove('yda-digid-modal-show');
+			modalWrapper.setAttribute('aria-hidden', 'true');
 		}
 	}
 

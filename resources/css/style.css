@@ -1,0 +1,22 @@
+.yda-digid-modal {
+	background-color: #666;
+	bottom: 0;
+	display: none;
+	left: 0;
+	opacity: 1;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 1272;
+}
+
+.yda-digid-modal.yda-digid-modal-show {
+	display: block;
+}
+
+.yda-digid-modal-dialog {
+	background-color: #fff;
+	margin: 5rem auto;
+	max-width: 500px;
+	padding: 2rem;
+}

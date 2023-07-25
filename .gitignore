@@ -105,3 +105,6 @@ wp-content/
 
 # php cs
 .php_cs.cache
+
+!.prettierignore
+!.prettierrc.js
