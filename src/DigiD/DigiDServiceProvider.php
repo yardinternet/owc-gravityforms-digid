@@ -12,6 +12,8 @@ use function Yard\DigiD\Foundation\Helpers\resolve;
 use Yard\DigiD\Foundation\Plugin;
 use Yard\DigiD\Foundation\ServiceProvider;
 
+use Yard\DigiD\DigiDSession;
+
 class DigiDServiceProvider extends ServiceProvider
 {
     /**
@@ -25,11 +27,13 @@ class DigiDServiceProvider extends ServiceProvider
         $this->plugin->getLoader()->addAction('gform_loaded', $gravityForm, 'registerField', 5);
         $this->registerSettingsAddon();
 
-        if (\is_admin()) {
+		$this->plugin->getLoader()->addAction('wp_enqueue_scripts', $this, 'loadAssets');
+		$this->plugin->getLoader()->addAction('wp_ajax_digid_session_parameters', $this, 'setParameters');
+		$this->plugin->getLoader()->addAction('wp_ajax_nopriv_digid_session_parameters', $this, 'setParameters');
+
+        if (is_admin()) {
             return;
         }
-
-        $this->plugin->getLoader()->addAction('wp_enqueue_scripts', $this, 'loadAssets');
 
         $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 1);
         $this->plugin->getLoader()->addFilter('gform_form_tag', $gravityForm, 'addCountDownHTML', 10, 2);
@@ -46,14 +50,31 @@ class DigiDServiceProvider extends ServiceProvider
 
     /**
      * Load the public assets.
-     *
-     * @return void
      */
     public function loadAssets(): void
     {
-        wp_register_script('gravityforms_digid', Plugin::getInstance()->resourceUrl('app.js', 'js/dist'), [], Plugin::VERSION);
+		wp_register_script('gravityforms_digid', Plugin::getInstance()->resourceUrl('app.js', 'js/dist'), [], Plugin::VERSION);
         wp_enqueue_script('gravityforms_digid');
+
+		wp_localize_script('gravityforms_digid', 'gf_digid_ajax', ['ajax_url' => admin_url( 'admin-ajax.php' ) ] );
+
     }
+
+	/**
+	 * Set the session parameters with ajax to avoid CSP.
+	 */
+	public function setParameters(): void
+	{
+		$session = new DigiDSession(config('digid.session.lifetime'), config('digid.session.resume-lifetime'));
+
+		$sessionTTL = $session->getSessionLifeTime();
+		$sessionResumeTTL = $session->getSessionResumeLifeTime();
+
+		wp_send_json(compact('sessionTTL', 'sessionResumeTTL'));
+
+		// stop execution.
+		wp_die();
+	}
 
     private function registerSettingsAddon(): void
     {

@@ -4,7 +4,6 @@ namespace Yard\DigiD;
 
 use GFFormDisplay;
 
-use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
@@ -71,11 +70,8 @@ class GravityForms
         $logout = '';
 
         if (!empty($bsn)) {
-            $digiDSession = new DigiDSession(config('digid.session.lifetime'), config('digid.session.resume-lifetime'));
             $logout = view('digid/logout.php', [
-                'logoutLink'            => \site_url('/digid/logout'),
-                'SessionLifeTime'       => $digiDSession->getSessionLifeTime(),
-                'SessionResumeLifeTime' => $digiDSession->getSessionResumeLifeTime()
+                'logoutLink' => site_url('/digid/logout'),
             ]);
         }
 

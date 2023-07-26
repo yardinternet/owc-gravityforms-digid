@@ -1,6 +1,7 @@
 export default class Countdown {
-	constructor(sessionTTL, resumeSessionTTL) {
-		this.options = { sessionTTL, resumeSessionTTL };
+	constructor() {
+		this.sessionTTL = 0;
+		this.sessionResumeTTL = 0;
 
 		this.insertModalHTML();
 
@@ -11,29 +12,29 @@ export default class Countdown {
 	/**
 	 * Get TTL value from Session Storage.
 	 */
-	get sessionTTL() {
-		return sessionStorage.getItem('sessionTTL');
+	get	getSessionTTL() {
+		return JSON.parse(sessionStorage.getItem('sessionTTL'));
 	}
 
 	/**
 	 * Get session expiration time from Session Storage.
 	 */
-	get sessionExpiration() {
-		return sessionStorage.getItem('sessionExpiration');
+	get getSessionExpiration() {
+		return JSON.parse(sessionStorage.getItem('sessionExpiration'));
 	}
 
 	/**
 	 * Set TTL value in Session Storage.
 	 */
-	set sessionTTL(duration) {
-		sessionStorage.setItem('sessionTTL', duration);
+	set setSessionTTL(duration) {
+		sessionStorage.setItem('sessionTTL', JSON.stringify(duration));
 	}
 
 	/**
 	 * Set session expiration time in Session Storage.
 	 */
-	set sessionExpiration(duration) {
-		sessionStorage.setItem('sessionExpiration', duration);
+	set setSessionExpiration(duration) {
+		sessionStorage.setItem('sessionExpiration', JSON.stringify(duration));
 	}
 
 	/**
@@ -75,13 +76,12 @@ export default class Countdown {
 	 * Initialize the plugin.
 	 */
 	init() {
-		const sessionTTL = this.sessionTTL;
-		const sessionExpiration = this.sessionExpiration;
-
 		this.registerEventHandlers();
 
-		if (sessionTTL) {
-			const data = JSON.parse(sessionExpiration);
+		console.log('get', this.getSessionTTL)
+
+		if (this.getSessionTTL) {
+			const data = JSON.parse(this.getSessionExpiration);
 
 			const now = new Date();
 			const expiration = new Date(data);
@@ -93,7 +93,7 @@ export default class Countdown {
 			}
 		}
 
-		return this.sessionStart();
+		this.sessionStart();
 	}
 
 	/**
@@ -101,13 +101,23 @@ export default class Countdown {
 	 * This is only a visual representation for the real session that goes on in the back-end.
 	 */
 	sessionStart() {
-		const duration = Date.now() + this.options.sessionTTL * 1000;
+		console.log(this.setSessionTTL('test'));
+		jQuery.ajax({
+			url: gf_digid_ajax.ajax_url,
+			type: 'POST',
+			data: {
+				action: 'digid_session_parameters'
+			},
+			success: (response) => {
+				this.setSessionTTL(response.sessionTTL || 0);
+				this.setSessionExpiration(Date.now() + this.sessionTTL * 1000);
 
-		this.sessionTTL = JSON.stringify(this.options.sessionTTL);
-		this.sessionExpiration = JSON.stringify(duration);
+				this.timerInit();
+				this.initCountdown();
+			},
+			error: function(error) { console.log(error) }
+		});
 
-		this.timerInit();
-		this.initCountdown();
 	}
 
 	/**
@@ -115,14 +125,14 @@ export default class Countdown {
 	 * i.e. on page reload / tab switch.
 	 */
 	sessionResumeCurrent() {
-		const sessionExpiration = JSON.parse(this.sessionExpiration);
+		const sessionExpiration = JSON.parse(this.getSessionExpiration);
 
 		const now = new Date().getTime();
 		const expiration = new Date(sessionExpiration);
 		const distance = expiration - now;
 		const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-		this.sessionTTL = seconds;
+		this.setSessionTTL = seconds;
 
 		this.timerInit();
 		this.initCountdown();
@@ -133,11 +143,11 @@ export default class Countdown {
 	 * i.e. on extending the TTL from the modal.
 	 */
 	sessionResumeNew() {
-		const duration = Date.now() + this.options.resumeSessionTTL * 1000;
+		const duration = Date.now() + this.sessionResumeTTL * 1000;
 
 		this.closeModal();
 
-		this.sessionTTL = JSON.stringify(this.options.resumeSessionTTL);
+		this.sessionTTL = JSON.stringify(this.sessionResumeTTL);
 		this.sessionExpiration = JSON.stringify(duration);
 
 		this.timerInit();
@@ -196,9 +206,10 @@ export default class Countdown {
 		const countdownElem = document.getElementById(
 			'js-owc-gf-digid-countdown'
 		);
-		if (!this.sessionTTL) return;
+		console.log(this.getSessionTTL)
+		if (!this.getSessionTTL) return;
 
-		const expiration = JSON.parse(this.sessionExpiration);
+		const expiration = JSON.parse(this.getSessionExpiration);
 		const now = new Date().getTime();
 		const distance = new Date(expiration) - now;
 
@@ -237,7 +248,7 @@ export default class Countdown {
 	 * Is used for validating the session.
 	 */
 	timerStart = () => {
-		const expiration = JSON.parse(this.sessionExpiration);
+		const expiration = this.getSessionExpiration;
 
 		if (Date.now() > expiration) {
 			this.openModal();
