@@ -9,7 +9,7 @@ module.exports = {
     globalObject: '(typeof self !== "undefined" ? self : this)',
     libraryExport: 'default',
     path: path.resolve(__dirname, 'resources/js/dist'),
-    filename: 'app.js',
+    filename: 'owc-gf-digid.js',
     publicPath: '/'
   },
   module: {

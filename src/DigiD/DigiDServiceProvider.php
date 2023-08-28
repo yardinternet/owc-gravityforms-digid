@@ -51,10 +51,10 @@ class DigiDServiceProvider extends ServiceProvider
      */
     public function loadAssets(): void
     {
-        \wp_register_script('gravityforms_digid', Plugin::getInstance()->resourceUrl('app.js', 'js/dist'), [], Plugin::VERSION);
+        \wp_register_script('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.js', 'js/dist'), [], Plugin::VERSION);
         \wp_enqueue_script('gravityforms_digid');
 
-		\wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gravityforms-digid.css', 'css'), [], Plugin::VERSION);
+		\wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.css', 'css'), [], Plugin::VERSION);
 		\wp_enqueue_style('gravityforms_digid');
     }
 
