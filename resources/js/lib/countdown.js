@@ -44,7 +44,7 @@ export default class Countdown {
 
 		if (gfWrapper) {
 			gfWrapper[0].insertAdjacentHTML('beforeend', `
-			<div class='modal fade' id='modalWrapper' tabindex='-1' role='dialog' aria-labelledby='modalWrapper' aria-modal='true' aria-hidden='true' style='display:none;'>
+			<div class='modal fade owc-gf-digid-hidden' id='modalWrapper' tabindex='-1' role='dialog' aria-labelledby='modalWrapper' aria-modal='true' aria-hidden='true'>
 				<div id='modalDialog' class='modal-dialog' role='document'>
 					<div class='modal-content'>
 						<div class='modal-header'>
