@@ -3,10 +3,14 @@
 - requires: WordPress 4.9
 - tested: WordPress 5.8.2
 
+## v1.1.4
+
+- Add: CSP policy to custom routes.
+
 ## v1.1.3
 
 - Chore: add better name for app.js and css to identify plugin.
-- Fix: unsafe eval in webpack and csp inline style
+- Fix: unsafe eval in webpack and csp inline style.
 
 ## v1.1.2
 
