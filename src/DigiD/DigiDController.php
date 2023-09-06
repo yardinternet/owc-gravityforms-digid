@@ -11,6 +11,30 @@ use function Yard\DigiD\Foundation\Helpers\resolve;
 
 class DigiDController
 {
+	/**
+     * Add Content Security Policy (CSP) headers to the response.
+	 *
+	 * @since 1.1.4
+     */
+	private function addContentSecurityPolicyHeaders(): void
+    {
+        $cspDirectives = [
+            'default-src' => 'self',
+            'script-src' => 'self',
+            'style-src' => 'self',
+            'img-src' => 'self',
+            'style-src' => 'self',
+        ];
+
+        $cspHeader = 'Content-Security-Policy: ';
+
+        foreach ($cspDirectives as $directive => $value) {
+            $cspHeader .= sprintf("%s '%s'; ", $directive, $value);
+        }
+
+        header($cspHeader);
+    }
+
     /**
      * Handle the request of the ArtifactServiceLocation.
      *
@@ -18,6 +42,8 @@ class DigiDController
      */
     public function acsResolve()
     {
+		$this->addContentSecurityPolicyHeaders();
+
         if (!isset($_GET['SAMLart'])) {
             return $this->redirectTo();
         }

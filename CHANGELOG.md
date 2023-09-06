@@ -3,9 +3,13 @@
 - requires: WordPress 4.9
 - tested: WordPress 5.8.2
 
+## v1.1.5
+
+- Fix: add CSP only to acs routes.
+
 ## v1.1.4
 
-- Add: CSP policy to custom routes.
+- Add: CSP to custom routes.
 
 ## v1.1.3
 
