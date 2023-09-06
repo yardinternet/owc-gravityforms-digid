@@ -38,6 +38,31 @@ class Router
         } else {
             $this->requestMethod = 'get';
         }
+
+		$this->addContentSecurityPolicyHeaders();
+    }
+
+	/**
+     * Add Content Security Policy (CSP) headers to the response.
+	 *
+	 * @since 1.1.4
+     */
+    private function addContentSecurityPolicyHeaders()
+    {
+        $cspDirectives = [
+            'default-src' => "'self'",
+            'script-src' => "'self'",
+            'style-src' => "'self'",
+            'img-src' => "'self'",
+            'style-src' => "'self'",
+        ];
+
+        $cspHeader = 'Content-Security-Policy: ';
+        foreach ($cspDirectives as $directive => $values) {
+            $cspHeader .= $directive . ' ' . $values . '; ';
+        }
+
+        header($cspHeader);
     }
 
     /**
