@@ -58,8 +58,9 @@ class Router
         ];
 
         $cspHeader = 'Content-Security-Policy: ';
-        foreach ($cspDirectives as $directive => $values) {
-            $cspHeader .= $directive . ' ' . $values . '; ';
+
+        foreach ($cspDirectives as $directive => $value) {
+            $cspHeader .= sprintf("%s '%s'; ", $directive, $value);
         }
 
         header($cspHeader);
