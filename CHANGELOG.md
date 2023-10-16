@@ -1,7 +1,12 @@
 # Changelog
 
-- requires: WordPress 4.9
-- tested: WordPress 5.8.2
+- requires: WordPress 6.0.0
+- tested: WordPress 6.3.1
+
+## v1.1.6
+
+- Fix: security warnings on babel/traverse and postcss dependencies
+- Chore: swap teams monologger package
 
 ## v1.1.5
 
