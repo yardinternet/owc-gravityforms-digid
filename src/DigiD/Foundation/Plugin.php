@@ -112,14 +112,16 @@ class Plugin
                 return $session;
             },
             'teams'    => function () {
+				$logger = new \Monolog\Logger('microsoft-teams-logger');
+
                 if (true === env('MS_TEAMS_DISABLE_LOGGING', true)) {
-                    return (new \Monolog\Logger('microsoft-teams-logger'))->pushHandler(new \Monolog\Handler\NullHandler());
+                    return $logger->pushHandler(new \Monolog\Handler\NullHandler());
                 }
-                return (new \Monolog\Logger('microsoft-teams-logger'))->pushHandler(new \Rspeekenbrink\MonologMicrosoftTeams\MicrosoftTeamsHandler(
-                    env('MS_TEAMS_WEBHOOK'),
-                    $this->getName(),
-                    \Monolog\Logger::INFO
-                ));
+
+				return $logger->pushHandler(new \CMDISP\MonologMicrosoftTeams\TeamsLogHandler(
+					env('MS_TEAMS_WEBHOOK'),
+					\Monolog\Logger::INFO
+				));
             }
         ]);
         $this->container = $builder->build();
