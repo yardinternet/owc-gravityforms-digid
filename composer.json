@@ -9,9 +9,15 @@
     }
   ],
   "type": "wordpress-plugin",
+  "repositories": [
+		{
+			"type": "vcs",
+			"url": "git@github.com:yardinternet/SAMLBase.git"
+		}
+  ],
   "require": {
     "php": ">=7.2",
-    "gogentooss/samlbase": "^1.6",
+    "gogentooss/samlbase": "dev-chore/142-update-twig",
     "php-di/php-di": "^6.0",
     "aura/session": "^2.1",
     "symfony/http-foundation": "~5.3",
