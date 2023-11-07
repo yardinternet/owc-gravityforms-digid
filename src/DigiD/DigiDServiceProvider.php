@@ -2,6 +2,7 @@
 
 namespace Yard\DigiD;
 
+use DateTime;
 use GoGentoOSS\SAMLBase\Metadata\ResolveService;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Yard\DigiD\Binding\Artifact;
@@ -29,8 +30,9 @@ class DigiDServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->plugin->getLoader()->addAction('wp_enqueue_scripts', $this, 'loadAssets');
+		$this->checkSession();
 
+        $this->plugin->getLoader()->addAction('wp_enqueue_scripts', $this, 'loadAssets');
         $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 1);
         $this->plugin->getLoader()->addFilter('gform_form_tag', $gravityForm, 'addCountDownHTML', 10, 2);
         $this->plugin->getLoader()->addAction('gform_after_submission', $gravityForm, 'clearFormAfterSubmission', 10, 2);
@@ -42,6 +44,8 @@ class DigiDServiceProvider extends ServiceProvider
         resolve('route')->get('/digid/logged_out', [$controller, 'loggedOut']);
         resolve('route')->get('/digid/logout', [$controller, 'logOut']);
         resolve('route')->get('/digid/metadata', [$controller, 'metadata']);
+		resolve('route')->get('/digid/fake_login', [$controller, 'fakeLogin']);
+		resolve('route')->get('/digid/keep_alive', [$controller, 'keepAlive']);
     }
 
     /**
@@ -150,4 +154,21 @@ class DigiDServiceProvider extends ServiceProvider
         }
         return $metadata;
     }
+
+	private function checkSession()
+	{
+		$session = resolve('session')->getSegment('digid');
+
+		if ($session->get('lastActivity')) {
+			$digiDSession = new DigiDSession(config('digid.session.lifetime'));
+			if (time() - $session->get('lastActivity') > $digiDSession->getSessionLifeTime()) {
+				$session->set('lastActivity', '');
+				header('Location: ' . config('digid.url.logout'));
+
+				exit;
+			}
+
+			$session->set('lastActivity', time());
+		}
+	}
 }

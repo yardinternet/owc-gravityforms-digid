@@ -1,44 +1,21 @@
 export default class Countdown {
-	constructor(sessionTTL, resumeSessionTTL) {
-		this.options = { sessionTTL, resumeSessionTTL }
+	constructor(sessionTTL, lastActivity) {
+		this.second = 1000;
+		this.minute = 60 * this.second;
+
+		const tenSeconds = 10 * this.second;
+
+		sessionTTL = (sessionTTL * this.second) - tenSeconds; // js session should end 10 seconds before php session expires
+		this.modalTTL = this.minute;
+		this.modalShouldOpen = this.sessionTTL - this.modalTTL;
+		this.lastActivity = lastActivity * this.second;
 
 		this.insertModalHTML();
 
+		this.modalTimeout;
 		this.timerInterval;
-		this.countDownInterval;
 	}
 
-	/**
-	 * Get TTL value from Session Storage.
-	 */
-	get sessionTTL() {
-		return sessionStorage.getItem('sessionTTL');
-	}
-
-	/**
-	 * Get session expiration time from Session Storage.
-	 */
-	get sessionExpiration() {
-		return sessionStorage.getItem('sessionExpiration');
-	}
-
-	/**
-	 * Set TTL value in Session Storage.
-	 */
-	set sessionTTL(duration) {
-		sessionStorage.setItem('sessionTTL', duration);
-	}
-
-	/**
-	 * Set session expiration time in Session Storage.
-	 */
-	set sessionExpiration(duration) {
-		sessionStorage.setItem('sessionExpiration', duration);
-	}
-
-	/**
-	 * Insert the session about to expire modal.
-	 */
 	insertModalHTML() {
 		const gfWrapper = document.getElementsByClassName('gform_wrapper');
 
@@ -66,186 +43,72 @@ export default class Countdown {
 		}
 	}
 
-    /**
-     * Initialize the plugin.
-     */
 	init() {
-		const sessionTTL = this.sessionTTL;
-		const sessionExpiration = this.sessionExpiration;
-
 		this.registerEventHandlers();
-
-		if (sessionTTL) {
-			const data = JSON.parse(sessionExpiration);
-
-			const now = new Date();
-			const expiration = new Date(data);
-
-			if (now.getTime() > expiration.getTime()) {
-				return this.sessionEnd();
-			} else {
-				return this.sessionResumeCurrent();
-			}
-		}
-
-
-		return this.sessionStart();
-	}
-
-	/**
-	 * Start the session.
-	 * This is only a visual representation for the real session that goes on in the back-end.
-	 */
-	sessionStart() {
-		const duration = Date.now() + (this.options.sessionTTL * 1000);
-
-		this.sessionTTL = JSON.stringify(this.options.sessionTTL);
-		this.sessionExpiration = JSON.stringify(duration);
-
+		this.sessionHeartbeat();
 		this.timerInit();
-		this.initCountdown();
 	}
 
-	/**
-	 * Resume the current session, calculate the time left.
-	 * i.e. on page reload / tab switch.
-	 */
-	sessionResumeCurrent() {
-		const sessionExpiration = JSON.parse(this.sessionExpiration);
-
-		const now = new Date().getTime();
-		const expiration = new Date(sessionExpiration);
-		const distance = expiration - now;
-		const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-		this.sessionTTL = seconds;
-
-		this.timerInit();
-		this.initCountdown();
-	}
-
-	/**
-	 * Resume new session.
-	 * i.e. on extending the TTL from the modal.
-	 */
-	sessionResumeNew() {
-		const duration = Date.now() + (this.options.resumeSessionTTL * 1000);
-
-		this.closeModal();
-
-		this.sessionTTL = JSON.stringify(this.options.resumeSessionTTL);
-		this.sessionExpiration = JSON.stringify(duration);
-
-		this.timerInit();
-		this.initCountdown();
-	}
-
-	/**
-     * End session and go to logout page.
-     */
-	sessionEnd = () => {
-		this.clearSessionTTL();
-		this.clearSessionExpiration();
-    }
-
-	/**
-	 * Register event handlers.
-	 */
 	registerEventHandlers() {
 		const resume = document.getElementById('js-resumeSession');
 		const abort = document.getElementById('js-abortSession');
-		const logout = document.getElementById('js-owc-gf-digid-logout');
 
-		resume.addEventListener('click', e => this.sessionResumeNew(e));
+		resume.addEventListener('click', e => this.sessionResume(e));
 		resume.addEventListener('keydown', e => this.a11yClick(e));
-		abort.addEventListener('click', e => this.sessionEnd(e));
+		abort.addEventListener('click', e => this.logout(e));
 		abort.addEventListener('keydown', e => this.a11yClick(e));
 
 		document.addEventListener('keydown', e => {
 			const ESCAPE_KEY = 27;
 			const modal = document.getElementById('modalWrapper');
-
 			if (e.keyCode === ESCAPE_KEY && modal.classList.contains('show')) {
-				this.sessionEnd();
-				this.closeModal();
+				this.logout();
 			}
 		});
 
-		if (logout) {
-			logout.addEventListener('click', e => this.logout(e));
-		}
+		document.addEventListener('mousemove', e => this.updateLastActivity(e));
+		document.addEventListener('keydown', e => this.updateLastActivity(e));
 	}
 
-    /**
-     * Init countdown.
-     */
-    initCountdown = () =>  this.countDownInterval = setInterval(this.countdown, 1000);
+	timerInit = () => this.timerInterval = setInterval(this.checkSessionStatus, this.second);
+	sessionHeartbeat = () => setInterval(this.maybeKeepSessionAlive, this.minute);
 
-    /**
-     * Run countdown.
-     */
-	countdown = () => {
-		const countdownElem = document.getElementById('js-owc-gf-digid-countdown');
-		if (!this.sessionTTL) return;
+	modalTimer() {
+		this.modalTimeout = setTimeout(() => {
+			this.logout();
+		}, this.modalTTL);
+	  }
 
-		const expiration = JSON.parse(this.sessionExpiration);
-		const now = new Date().getTime();
-		const distance = new Date(expiration) - now;
-
-		// Time calculations for minutes and seconds.
-		let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-		let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-		seconds = Math.round(seconds * 100) / 100;
-		minutes = Math.round(minutes * 100) / 100;
-
-		if (!!countdownElem) {
-			countdownElem.textContent = `Resterende tijd: ${(minutes < 10 ? "0" : "") + minutes}:${(seconds < 10 ? "0" : "") + seconds}`;
+	stopModalTimer() {
+		if (this.modalTimeout) {
+			clearTimeout(this.modalTimeout);
 		}
-	}
+	  }
 
-    /**
-     * Stop countdown when timer is finished.
-     */
-	stopCountdown = () => {
-		const countdownElem = document.getElementById('js-owc-gf-digid-logout');
-        clearInterval(this.countDownInterval);
-
-        if (!!countdownElem) {
-            countdownElem.textContent = 'Verlopen';
-        }
-    }
-
-    /**
-     * Init timer interval.
-     */
-    timerInit = () => this.timerInterval = setInterval(this.timerStart, 1000);
-
-    /**
-     * Is used for validating the session.
-     */
-	timerStart = () => {
-		const expiration = JSON.parse(this.sessionExpiration);
-
-		if (Date.now() > expiration) {
+	checkSessionStatus = () => {
+		if ((Date.now() - this.lastActivity) > this.modalShouldOpen) {
+			clearInterval(this.timerInterval);
 			this.openModal();
 		}
-
-		return;
 	}
 
-	/**
-	 * Stop timer; fires after the session is expired.
-	 */
-	stopTimer = () => clearInterval(this.timerInterval);
+	maybeKeepSessionAlive = () => {
+		if (this.lastActivityIsUpdated) {
+			this.keepSessionAlive();
+		}
 
-	/**
-	 * Open modal.
-	 */
+		this.lastActivityIsUpdated = false;
+	}
+
+	sessionResume() {
+		this.closeModal();
+		this.updateLastActivity();
+		this.keepSessionAlive();
+		this.timerInit();
+	}
+
 	openModal = () => {
-		this.stopTimer();
-		this.stopCountdown();
-		this.clearSessionTTL();
+		this.modalTimer();
 
 		const modalWrapper = document.getElementById('modalWrapper');
 		const modalDialog = document.getElementById('modalDialog');
@@ -260,14 +123,11 @@ export default class Countdown {
 		if (modalDialog !== null) {
 			modalDialog.style.cssText = 'max-width: 500px; margin: 5rem auto; background-color: #ffffff; padding: 2rem;';
 		}
-
-		this.startResumeCheck();
 	}
 
-	/**
-	 * Close modal.
-	 */
-	closeModal = e => {
+	closeModal = () => {
+		this.stopModalTimer();
+
 		const modal = document.getElementById('modalWrapper');
 		const modalDialog = document.getElementById('modalDialog');
 
@@ -282,53 +142,33 @@ export default class Countdown {
 		}
 	}
 
-	/**
-	 * When modal is visible this function launches a timer.
-	 */
-	startResumeCheck() {
-		const that = this;
-		const resumeCheck = setInterval(function() {
-			if (!that.sessionTTL) {
-				that.sessionEnd();
-				clearInterval(resumeCheck);
-			} else {
-				clearInterval(resumeCheck);
-			}
-		}, 10000);
+	updateLastActivity = () => {
+		this.lastActivity = Date.now();
+		this.lastActivityIsUpdated = true;
 	}
 
-    /**
+	logout = () => {
+		window.location = "/digid/logout";
+	};
+
+	keepSessionAlive = () => {
+		fetch('/digid/keep_alive');
+	}
+
+	/**
      * Add keypress event to modal buttons.
      *
      * @param {object} e
      */
-	a11yClick = e => {
-		const SPACE_KEY = 32;
+		a11yClick = e => {
+			const SPACE_KEY = 32;
 
-		if (e.type !== 'click' || e.type !== 'keypress') return false;
-		if (e.type === 'keypress'){
-			const code = e.charCode || e.keyCode;
-			if (code !== SPACE_KEY) return false;
+			if (e.type !== 'click' || e.type !== 'keypress') return false;
+			if (e.type === 'keypress'){
+				const code = e.charCode || e.keyCode;
+				if (code !== SPACE_KEY) return false;
+			}
+
+			return true;
 		}
-
-		return true;
-	}
-
-	/**
-	 * Clear session TTL in Session Storage.
-	 */
-	clearSessionTTL = () => sessionStorage.removeItem('sessionTTL');
-
-	/**
-	 * Clear session expiration in Session Storage.
-	 */
-	clearSessionExpiration = () => sessionStorage.removeItem('sessionExpiration');
-
-	/**
-	 * Handle logout.
-	 */
-	logout = () => {
-		this.clearSessionTTL();
-		this.clearSessionExpiration();
-	};
 }

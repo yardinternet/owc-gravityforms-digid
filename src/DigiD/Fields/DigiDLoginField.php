@@ -122,10 +122,18 @@ class DigiDLoginField extends AbstractField
      */
     protected function getInputField(): string
     {
+		$fakeSession = env('DIGID_FAKE_SESSION') ?? '';
+
+		if (empty($fakeSession)) {
+			$link = \is_admin() ? '' : DigiDController::getAuthNRequestURL();
+		} else {
+			$link = "/digid/fake_login";
+		}
+
         return view('digid/digidField.php', [
             'error'    => $this->session->getFlash('error'),
             'logo'     => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
-            'link'     => \is_admin() ? '' : DigiDController::getAuthNRequestURL(),
+            'link'     => $link,
             'title'    => $this->getFieldTitle(),
             'subtitle' => $this->getFieldSubTitle()
         ]);

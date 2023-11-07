@@ -11,7 +11,6 @@ return [
     ],
     'session' => [
         'lifetime'        => GravityFormsSettings::make()->get('lifetime'),
-        'resume-lifetime' => GravityFormsSettings::make()->get('resume-lifetime'),
     ],
     'url'    => [
         'idp'         => [
