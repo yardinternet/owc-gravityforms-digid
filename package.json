@@ -32,6 +32,6 @@
   },
   "scripts": {
     "build": "NODE_ENV=production webpack",
-    "watch": "webpack --watch --progress --hide-modules"
+    "watch": "webpack --watch --progress "
   }
 }

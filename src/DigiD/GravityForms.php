@@ -62,7 +62,7 @@ class GravityForms
      */
     public function addCountDownHTML($form_tag, $form): string
     {
-        $bsn = resolve('session')->getSegment('digid')->get('bsn', '');
+		$bsn = resolve('session')->getSegment('digid')->get('bsn', '');
 
         if (!empty($bsn)) {
             $bsn = encrypt($bsn);
@@ -71,17 +71,15 @@ class GravityForms
         $logout = '';
 
         if (!empty($bsn)) {
-            $digiDSession = new DigiDSession(config('digid.session.lifetime'), config('digid.session.resume-lifetime'));
+            $digiDSession = new DigiDSession(config('digid.session.lifetime'));
             $logout = view('digid/logout.php', [
-                'logoutLink'            => \site_url('/digid/logout'),
+                'logoutLink'            => config('digid.url.logout'),
                 'SessionLifeTime'       => $digiDSession->getSessionLifeTime(),
-                'SessionResumeLifeTime' => $digiDSession->getSessionResumeLifeTime()
+				'LastActivity'          => resolve('session')->getSegment('digid')->get('lastActivity'),
             ]);
         }
 
-        $form_tag = str_replace("<form ", "". $logout ."<form ", $form_tag);
-
-        return $form_tag;
+        return $logout . $form_tag;
     }
 
     protected function hasToken(): bool

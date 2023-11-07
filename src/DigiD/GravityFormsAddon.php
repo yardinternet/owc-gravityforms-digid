@@ -161,25 +161,27 @@ class GravityFormsAddon extends GFAddOn
             [
                 // description onder de velden
                 'title'       => esc_html__('Session settings', config('core.text_domain')),
-                'description' => '<p>' . __('When defining the values below please fill in a number that defines the minutes. Example: \'15\' means \'15 minutes\'.', config('core.text_domain'))
-                    . '</br>' .
-                    __('The \'<b>session lifetime</b>\' defines how long the current session is allowed to exist.', config('core.text_domain'))
-                    . '</br>' .
-                    __('And the \'<b>session resume lifetime</b>\' defines the amount of minutes which will be used for extending the existing session.', config('core.text_domain'))
-                    . '</p>',
+                'description' => '<p>' . __('The \'<b>session lifetime</b>\' defines how long the current session is allowed to exist.', config('core.text_domain')) . '</p>',
                 'fields' => [
                     [
                         'label'             => esc_html__('Session lifetime', config('core.text_domain')),
-                        'type'              => 'text',
+                        'type'              => 'select',
                         'class'             => 'medium',
                         'name'              => "{$prefix}lifetime",
-                        'required'          => true
-                    ],
-                    [
-                        'label'             => esc_html__('Resume session lifetime', config('core.text_domain')),
-                        'type'              => 'text',
-                        'class'             => 'medium',
-                        'name'              => "{$prefix}resume-lifetime",
+						'choices'           => [
+							[
+								'label' => '5',
+								'value' => '5'
+							],
+							[
+								'label' => '10',
+								'value' => '10'
+							],
+							[
+								'label' => '15',
+								'value' => '15'
+							],
+						],
                         'required'          => true
                     ]
                 ],

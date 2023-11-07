@@ -3,6 +3,10 @@
 - requires: WordPress 6.0.0
 - tested: WordPress 6.3.1
 
+## v1.1.8
+
+- Add: inactivity timer
+
 ## v1.1.7
 
 - Chore: upgrade samlbase dependency due to twig/twig CVE-2022-39261

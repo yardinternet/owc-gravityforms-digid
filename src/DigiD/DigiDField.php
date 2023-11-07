@@ -120,16 +120,6 @@ class DigiDField extends \GF_Field
     }
 
     /**
-     * Use a fake session if it exists.
-     *
-     * @return string
-     */
-    protected function getEnvironmentVariable(): string
-    {
-        return env('DIGID_FAKE_SESSION') ?? '';
-    }
-
-    /**
      * Return all the fields available.
      *
      * @param array $value
@@ -137,7 +127,7 @@ class DigiDField extends \GF_Field
      */
     protected function getFields(array $value): array
     {
-        $fakeSession = $this->getEnvironmentVariable();
+        $fakeSession = env('DIGID_FAKE_SESSION', '');
 
 		// display missing certificates message when there are no certificates set and we are not using a fake session.
         if (!$this->hasCertificates() && empty($fakeSession)) {
@@ -150,11 +140,6 @@ class DigiDField extends \GF_Field
         }
 
         $bsn = $this->session->get('bsn', '');
-
-
-        if ($fakeSession) {
-            $this->session->set('bsn', encrypt($fakeSession));
-        }
 
         if (!empty($bsn)) {
             $bsn = encrypt($bsn);

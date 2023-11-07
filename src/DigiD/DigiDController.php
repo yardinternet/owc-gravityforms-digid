@@ -78,6 +78,7 @@ class DigiDController
         if ($attributes->status()->get()->isSuccess()) {
             $session->set('bsn', encrypt($attributes->bsn()->getID()));
             $session->set('nameID', encrypt($attributes->bsn()->getNameID()));
+			$session->set('lastActivity', time());
         } else {
             $session->set('bsn', '');
             $session->set('nameID', '');
@@ -147,7 +148,12 @@ class DigiDController
      */
     public function logOut()
     {
-        if (null === ($nameID = decrypt(resolve('session')->getSegment('digid')->get('nameID', null)))) {
+		$segment = resolve('session')->getSegment('digid');
+		$nameID = decrypt($segment->get('nameID', ''));
+
+		// If the nameID is empty, we can't send a logout request to the IDP.
+        if (empty($nameID)) {
+			$segment->set('bsn', ''); // But we can clear bsn from the session.
             return $this->redirectTo();
         }
 
@@ -161,6 +167,29 @@ class DigiDController
         header('Location: ' . $redirectUrl);
         exit;
     }
+
+	public function fakeLogin()
+	{
+		$session = resolve('session')->getSegment('digid');
+		$session->set('bsn', env('DIGID_FAKE_SESSION', ''));
+		$session->set('lastActivity', time());
+
+		return $this->redirectTo();
+	}
+
+
+	/**
+	 * Keep the session alive.
+	 */
+	public function keepAlive()
+	{
+		$session = resolve('session')->getSegment('digid');
+		$session->set('lastActivity', time());
+		header('Content-Type: application/json');
+		$response = ['status' => 'success', 'message' => 'Session refreshed'];
+		echo wp_json_encode($response);
+		exit;
+	}
 
     /**
      * Generate the metadata required.
