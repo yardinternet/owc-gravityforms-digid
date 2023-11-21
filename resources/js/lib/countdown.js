@@ -6,8 +6,9 @@ export default class Countdown {
 		const tenSeconds = 10 * this.second;
 
 		sessionTTL = (sessionTTL * this.second) - tenSeconds; // js session should end 10 seconds before php session expires
+
 		this.modalTTL = this.minute;
-		this.modalShouldOpen = this.sessionTTL - this.modalTTL;
+		this.modalShouldOpen = sessionTTL - this.modalTTL;
 		this.lastActivity = lastActivity * this.second;
 
 		this.insertModalHTML();
