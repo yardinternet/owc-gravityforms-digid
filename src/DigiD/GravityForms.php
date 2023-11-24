@@ -82,6 +82,39 @@ class GravityForms
         return $logout . $form_tag;
     }
 
+	/**
+	 * When two IDPs (Identity Providers) are on the same form, the other one is optional.
+	 *
+	 * @return void
+	 */
+	public function optionalIDPs($result, $value, $form, $field)
+	{
+		// Check if eHerkenning is in the session.
+		$eherkenning_in_session = resolve('session')->getSegment('eherkenning')->get('kvk');
+
+		$field_type_digid = 'digid';
+		$field_type_eherkenning = 'eherkenning';
+
+		// Check if the form contains the eHerkenning field.
+		$contains_field = false;
+		foreach ($form['fields'] as $form_field) {
+			if ($form_field->type == $field_type_eherkenning) {
+				$contains_field = true;
+				break;
+			}
+		}
+
+		// If eHerkenning is in the session and the form contains the field, DigiD is optional.
+		if ($eherkenning_in_session && $contains_field) {
+			if ($field->type == $field_type_digid) {
+				$result['is_valid'] = true;
+				$result['message'] = '';
+			}
+		}
+
+		return $result;
+	}
+
     protected function hasToken(): bool
     {
         return isset($_REQUEST['gf_token']) and (!empty($_REQUEST['gf_token']));
