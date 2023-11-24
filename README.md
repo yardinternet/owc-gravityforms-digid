@@ -1,8 +1,8 @@
 # OWC GravityForms DigiD
 
-![Build status](https://github.com/yardinternet/owc-gravityforms-digid/workflows/CI/badge.svg "build status")
+![Tests passing](https://github.com/yardinternet/owc-gravityforms-digid/actions/workflows/run-tests.yml/badge.svg "Tests passing")
 
-This plugin provides a GravityForm field allowing to retrieve a BSN (social security number) from DigiD.
+This plugin provides a GravityForms field to retrieve a KvK number from eHerkenning.
 
 ## Local development
 
