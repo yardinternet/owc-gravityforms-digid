@@ -5,7 +5,8 @@
 
 ## v1.2.0
 
-- Fix: sessionTTL
+- Add: improve validation when two IDPs are on the same form and a session is active
+- Chore: update readme and fix badge
 
 ## v1.1.9
 
