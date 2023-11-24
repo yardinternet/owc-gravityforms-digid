@@ -3,6 +3,10 @@
 - requires: WordPress 6.0.0
 - tested: WordPress 6.3.1
 
+## v1.2.0
+
+- Fix: sessionTTL
+
 ## v1.1.9
 
 - Fix: sessionTTL
