@@ -13,12 +13,6 @@ class Requester extends AbstractStatusCode implements StatusCodeInterface
 
     public function message(): string
     {
-        return sprintf(
-            __(
-                'An error has occurred in the communication with DigiD. Please try again later. If this error persists, please check the website %s for the latest information.',
-                config('core.text_domain')
-            ),
-            '<a href="https://www.digid.nl" target="_blank">https://www.digid.nl</a>'
-        );
+        return __("Logging in to this organization failed. Please try again later. If you're still unable to log in, sign in to My DigiD. This will allow you to verify if your DigiD is working properly. There might be an issue with the organization where you are trying to log in.", config('core.text_domain'));
     }
 }
