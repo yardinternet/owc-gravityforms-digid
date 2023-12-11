@@ -171,7 +171,7 @@ class DigiDController
 	public function fakeLogin()
 	{
 		$session = resolve('session')->getSegment('digid');
-		$session->set('bsn', env('DIGID_FAKE_SESSION', ''));
+        $session->set('bsn', encrypt(env('DIGID_FAKE_SESSION', '')));
 		$session->set('lastActivity', time());
 
 		return $this->redirectTo();

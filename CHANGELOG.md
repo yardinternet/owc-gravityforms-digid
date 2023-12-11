@@ -3,6 +3,10 @@
 - requires: WordPress 6.0.0
 - tested: WordPress 6.3.1
 
+## v1.2.1
+
+- Fix: encrypt fake session id
+
 ## v1.2.0
 
 - Add: improve validation when two IDPs are on the same form and a session is active
