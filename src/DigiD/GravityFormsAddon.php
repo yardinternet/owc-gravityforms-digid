@@ -196,7 +196,16 @@ class GravityFormsAddon extends GFAddOn
      */
     private function getPublicCertificates(): array
     {
-        return $this->formatListOfCertificates(glob($this->getCertificateLocation() . '/*.{cer}', GLOB_BRACE));
+		$globFunction = 'glob';
+		$flag = 'default';
+
+		if ( ! defined( 'GLOB_BRACE' ) ) {
+			$globFunction = 'Yard\DigiD\Foundation\Helpers\globBrace';
+		} else {
+			$flag = GLOB_BRACE;
+		}
+
+		return $this->formatListOfCertificates($globFunction($this->getCertificateLocation() . '/*.{cer}', $flag));
     }
 
     /**
@@ -230,7 +239,16 @@ class GravityFormsAddon extends GFAddOn
      */
     private function getPrivateCertificates(): array
     {
-        return $this->formatListOfCertificates(glob($this->getCertificateLocation() . '/*.{key}', GLOB_BRACE));
+		$globFunction = 'glob';
+		$flag = 'default';
+
+		if ( ! defined( 'GLOB_BRACE' ) ) {
+			$globFunction = 'Yard\DigiD\Foundation\Helpers\globBrace';
+		} else {
+			$flag = GLOB_BRACE;
+		}
+
+		return $this->formatListOfCertificates($globFunction($this->getCertificateLocation() . '/*.{key}', $flag));
     }
 
     /**

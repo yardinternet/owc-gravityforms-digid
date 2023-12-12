@@ -156,3 +156,95 @@ function endsWith($haystack, $needles)
 
     return false;
 }
+
+/**
+ * Simulate a `glob()` with the `GLOB_BRACE` flag set. For systems that lack it, e.g. Alpine Linux / Docker.
+ * Copied and adapted from Zend Framework's `Glob::fallbackGlob()` and Glob::nextBraceSub()`.
+ *
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ *
+ * @param string $pattern Filename pattern.
+ * @param void $dummy_flags Not used.
+ *
+ * @return array Array of paths.
+ */
+function globBrace($pattern, $dummyFlags = null) {
+    static $nextBraceSub;
+
+    if (!$nextBraceSub) {
+        // Find the end of the subpattern in a brace expression.
+        $nextBraceSub = function ($pattern, $current) {
+            $length = strlen($pattern);
+            $depth = 0;
+
+            while ($current < $length) {
+                if ('\\' === $pattern[$current]) {
+                    if (++$current === $length) {
+                        break;
+                    }
+                    $current++;
+                } else {
+                    if (('}' === $pattern[$current] && $depth-- === 0) || (',' === $pattern[$current] && 0 === $depth)) {
+                        break;
+                    } elseif ('{' === $pattern[$current++]) {
+                        $depth++;
+                    }
+                }
+            }
+
+            return $current < $length ? $current : null;
+        };
+    }
+
+    $length = strlen($pattern);
+
+    // Find first opening brace.
+    for ($begin = 0; $begin < $length; $begin++) {
+        if ('\\' === $pattern[$begin]) {
+            $begin++;
+        } elseif ('{' === $pattern[$begin]) {
+            break;
+        }
+    }
+
+    // Find comma or matching closing brace.
+    if (null === ($next = $nextBraceSub($pattern, $begin + 1))) {
+        return glob($pattern);
+    }
+
+    $rest = $next;
+
+    // Point `$rest` to matching closing brace.
+    while ('}' !== $pattern[$rest]) {
+        if (null === ($rest = $nextBraceSub($pattern, $rest + 1))) {
+            return glob($pattern);
+        }
+    }
+
+    $paths = array();
+    $p = $begin + 1;
+
+    // For each comma-separated subpattern.
+    do {
+        $subpattern = substr($pattern, 0, $begin)
+            . substr($pattern, $p, $next - $p)
+            . substr($pattern, $rest + 1);
+
+        if (($result = globBrace($subpattern))) {
+            $paths = array_merge($paths, $result);
+        }
+
+        if ('}' === $pattern[$next]) {
+            break;
+        }
+
+        $p = $next + 1;
+        $next = $nextBraceSub($pattern, $p);
+    } while (null !== $next);
+
+    return array_values(array_unique($paths));
+}
