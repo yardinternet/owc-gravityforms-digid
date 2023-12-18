@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Yard\DigiD;
 
@@ -7,7 +9,6 @@ use Yard\DigiD\Fields\DigiDLoginField;
 use Yard\DigiD\Fields\HiddenField;
 use Yard\DigiD\Fields\TextField;
 use function Yard\DigiD\Foundation\Helpers\config;
-use function Yard\DigiD\Foundation\Helpers\decrypt;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
@@ -18,7 +19,7 @@ if (! class_exists('\GFForms')) {
 class DigiDField extends \GF_Field
 {
     /**
-     * @var string $type The field type.
+     * @var string The field type.
      */
     public $type = 'digid';
 
@@ -123,25 +124,26 @@ class DigiDField extends \GF_Field
      * Return all the fields available.
      *
      * @param array $value
+     *
      * @return array
      */
     protected function getFields(array $value): array
     {
         $fakeSession = env('DIGID_FAKE_SESSION', '');
 
-		// display missing certificates message when there are no certificates set and we are not using a fake session.
-        if (!$this->hasCertificates() && empty($fakeSession)) {
+        // display missing certificates message when there are no certificates set and we are not using a fake session.
+        if (! $this->hasCertificates() && empty($fakeSession)) {
             return [
                 (new TextField($this, $value))
-                ->setFieldID(1)
-                ->setFieldName('digid')
-                ->setFieldText(\__('DigiD', config('core.text_domain'))),
+                    ->setFieldID(1)
+                    ->setFieldName('digid')
+                    ->setFieldText(\__('DigiD', config('core.text_domain'))),
             ];
         }
 
         $bsn = $this->session->get('bsn', '');
 
-        if (!empty($bsn)) {
+        if (! empty($bsn)) {
             $bsn = encrypt($bsn);
         }
 
@@ -153,7 +155,7 @@ class DigiDField extends \GF_Field
             (new HiddenField($this, $value))
                 ->setFieldID(1)
                 ->setFieldName('bsn')
-                ->setValue($bsn)
+                ->setValue($bsn),
         ];
     }
 
@@ -210,9 +212,11 @@ class DigiDField extends \GF_Field
 
         $description = $this->get_description($this->description, 'gfield_description');
         $bsn = $this->session->get('bsn', '');
-        if (!empty($bsn)) {
+
+        if (! empty($bsn)) {
             $description = '';
         }
+
         if ($this->is_description_above($form)) {
             $clear = $is_admin ? "<div class='gf_clear'></div>" : '';
             $field_content = sprintf("%s<label class='%s' $for_attribute >%s%s</label>%s{FIELD}%s$clear", $admin_buttons, esc_attr($this->get_field_label_class()), esc_html($field_label), $required_div, $description, $validation_message);
@@ -224,22 +228,22 @@ class DigiDField extends \GF_Field
     }
 
     /**
-    * Format the entry value for display on the entries list page.
-    * Return a value that's safe to display on the page.
-    */
+     * Format the entry value for display on the entries list page.
+     * Return a value that's safe to display on the page.
+     */
     public function get_value_save_entry($value, $form, $input_name, $lead_id, $lead)
     {
-        return empty($value) ? '' : decrypt($value);
+        return empty($value) ? '' : $value;
     }
 
     /**
-    * Format the entry value for display on the entries list page.
-    * Return a value that's safe to display on the page.
-    */
+     * Format the entry value for display on the entries list page.
+     * Return a value that's safe to display on the page.
+     */
     public function get_value_entry_list($value, $entry, $field_id, $columns, $form)
     {
-        //Escapes value so that it is safe to be displayed on the entry list page
-        return esc_html(decrypt($value));
+        // Escapes value so that it is safe to be displayed on the entry list page
+        return esc_html($value);
     }
 
     /**
@@ -276,7 +280,7 @@ class DigiDField extends \GF_Field
     public function get_value_entry_detail($value, $currency = '', $use_text = false, $format = 'html', $media = 'screen')
     {
         if (is_array($value)) {
-            $return = decrypt(trim(rgget($this->id . '.1', $value)));
+            $return = trim(rgget($this->id . '.1', $value));
         } else {
             $return = '';
         }
@@ -289,11 +293,11 @@ class DigiDField extends \GF_Field
     }
 
     /**
-    * Format the entry value before it is used in entry exports and by framework add-ons using GFAddOn::get_field_value().
-    */
+     * Format the entry value before it is used in entry exports and by framework add-ons using GFAddOn::get_field_value().
+     */
     public function get_value_export($entry, $input_id = '', $use_text = false, $is_csv = false)
     {
         //Export doesn’t require encoding, but field data may require some manipulation or formatting before it is exported
-        return decrypt(\rgar($entry, $input_id));
+        return \rgar($entry, $input_id);
     }
 }

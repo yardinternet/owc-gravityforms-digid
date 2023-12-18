@@ -3,6 +3,10 @@
 -   requires: WordPress 6.0.0
 -   tested: WordPress 6.3.1
 
+## v1.3
+
+-   Refactor: display encrypted value of DigiDField on entry list instead of decrypted
+
 ## v1.2.2
 
 -   Fix: error messages text
