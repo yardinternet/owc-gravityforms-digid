@@ -5,12 +5,11 @@ namespace Yard\DigiD\Fields;
 use Aura\Session\Segment;
 use Yard\DigiD\DigiD;
 use Yard\DigiD\DigiDController;
-use Yard\DigiD\Foundation\Plugin;
-
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
+use Yard\DigiD\Foundation\Plugin;
 
 class DigiDLoginField extends AbstractField
 {
@@ -37,27 +36,27 @@ class DigiDLoginField extends AbstractField
      */
     public function render(): string
     {
-        if ($this->is_admin || !\rgar($this->getInput(), 'isHidden')) {
-            if (!\is_admin()) {
+        if ($this->is_admin || ! \rgar($this->getInput(), 'isHidden')) {
+            if (! \is_admin()) {
                 $bsn = $this->session->get('bsn', '');
 
-                if (!empty($bsn)) {
+                if (! empty($bsn)) {
                     $bsn = encrypt($bsn);
                 }
 
-                if (!empty($bsn)) {
+                if (! empty($bsn)) {
                     return view('digid/loggedin.php');
                 }
 
-				$this->session->set('resume_link', $this->getResumeLink());
+                $this->session->set('resume_link', $this->getResumeLink());
 
-				if (defined('WP_DEBUG') && WP_DEBUG) {
-					resolve('teams')->info('Set resume_link', [
-						'user_agent'                        => $_SERVER['HTTP_USER_AGENT'] ?? '',
-						'resume_link_from_session'          => $this->session->get('resume_link'),
-						'resume_link'                       => $this->getResumeLink(),
-					]);
-				}
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    resolve('teams')->info('Set resume_link', [
+                        'user_agent'                        => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                        'resume_link_from_session'          => $this->session->get('resume_link'),
+                        'resume_link'                       => $this->getResumeLink(),
+                    ]);
+                }
             }
 
             return "{$this->getSpanField()}
@@ -89,6 +88,7 @@ class DigiDLoginField extends AbstractField
             $submissionData = \json_decode($submission_json);
             $submissionData->page_number = \GFFormDisplay::get_current_page($this->field->formId);
             $submission_json = \json_encode($submissionData);
+
             return $submission_json;
         }, 10, 3);
 
@@ -102,6 +102,7 @@ class DigiDLoginField extends AbstractField
         );
 
         $resumeToken = $resume['resume_token'] ?? null;
+
         return sprintf('%s?gf_token=%s', \get_permalink(), $resumeToken);
     }
 
@@ -122,20 +123,20 @@ class DigiDLoginField extends AbstractField
      */
     protected function getInputField(): string
     {
-		$fakeSession = env('DIGID_FAKE_SESSION') ?? '';
+        $fakeSession = env('DIGID_FAKE_SESSION') ?? '';
 
-		if (empty($fakeSession)) {
-			$link = \is_admin() ? '' : DigiDController::getAuthNRequestURL();
-		} else {
-			$link = "/digid/fake_login";
-		}
+        if (empty($fakeSession)) {
+            $link = \is_admin() ? '' : DigiDController::getAuthNRequestURL();
+        } else {
+            $link = "/digid/fake_login";
+        }
 
         return view('digid/digidField.php', [
             'error'    => $this->session->getFlash('error'),
             'logo'     => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
             'link'     => $link,
             'title'    => $this->getFieldTitle(),
-            'subtitle' => $this->getFieldSubTitle()
+            'subtitle' => $this->getFieldSubTitle(),
         ]);
     }
 

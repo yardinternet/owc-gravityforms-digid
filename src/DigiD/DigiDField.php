@@ -9,6 +9,7 @@ use Yard\DigiD\Fields\DigiDLoginField;
 use Yard\DigiD\Fields\HiddenField;
 use Yard\DigiD\Fields\TextField;
 use function Yard\DigiD\Foundation\Helpers\config;
+use function Yard\DigiD\Foundation\Helpers\decrypt;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
@@ -29,6 +30,9 @@ class DigiDField extends \GF_Field
     /** @var Segment */
     protected $session;
 
+    /** @var bool display decrypted BSN value on GF administration pages? */
+    protected $shouldDecrypt;
+
     /**
      * @param array $data
      */
@@ -36,6 +40,7 @@ class DigiDField extends \GF_Field
     {
         parent::__construct($data);
         $this->session = resolve('session')->getSegment('digid');
+        $this->shouldDecrypt = apply_filters('owc_gravityforms_digid_use_value_bsn_decrypted', false);
     }
 
     /**
@@ -233,7 +238,13 @@ class DigiDField extends \GF_Field
      */
     public function get_value_save_entry($value, $form, $input_name, $lead_id, $lead)
     {
-        return empty($value) ? '' : $value;
+        $value = empty($value) ? '' : $value;
+
+        if (! empty($value) && $this->shouldDecrypt) {
+            $value = decrypt($value);
+        }
+
+        return $value;
     }
 
     /**
@@ -243,7 +254,7 @@ class DigiDField extends \GF_Field
     public function get_value_entry_list($value, $entry, $field_id, $columns, $form)
     {
         // Escapes value so that it is safe to be displayed on the entry list page
-        return esc_html($value);
+        return $this->shouldDecrypt ? decrypt(esc_html($value)) : esc_html($value);
     }
 
     /**
@@ -281,6 +292,10 @@ class DigiDField extends \GF_Field
     {
         if (is_array($value)) {
             $return = trim(rgget($this->id . '.1', $value));
+
+            if ($this->shouldDecrypt) {
+                $return = decrypt($return);
+            }
         } else {
             $return = '';
         }
