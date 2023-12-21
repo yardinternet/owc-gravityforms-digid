@@ -3,6 +3,10 @@
 -   requires: WordPress 6.0.0
 -   tested: WordPress 6.3.1
 
+## v1.3.2
+
+-   Fix: decrypt encapsulated esc_html, should be the other way around
+
 ## v1.3.1
 
 -   Refactor: display decrypted value of DigiDField on entry list if hook 'owc_gravityforms_digid_use_value_bsn_decrypted' is used

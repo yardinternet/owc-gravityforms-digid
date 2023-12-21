@@ -254,7 +254,7 @@ class DigiDField extends \GF_Field
     public function get_value_entry_list($value, $entry, $field_id, $columns, $form)
     {
         // Escapes value so that it is safe to be displayed on the entry list page
-        return $this->shouldDecrypt ? decrypt(esc_html($value)) : esc_html($value);
+        return $this->shouldDecrypt ? esc_html(decrypt($value)) : esc_html($value);
     }
 
     /**
