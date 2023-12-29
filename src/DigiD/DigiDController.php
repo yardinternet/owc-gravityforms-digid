@@ -185,10 +185,10 @@ class DigiDController
 	{
 		$session = resolve('session')->getSegment('digid');
 		$session->set('lastActivity', time());
-		header('Content-Type: application/json');
-		$response = ['status' => 'success', 'message' => 'Session refreshed'];
-		echo wp_json_encode($response);
-		exit;
+		\wp_send_json([
+			'status' => 'success',
+			'message' => 'Session refreshed'
+		]);
 	}
 
     /**
