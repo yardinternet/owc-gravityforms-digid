@@ -3,6 +3,10 @@
 - requires: WordPress 6.0.0
 - tested: WordPress 6.3.1
 
+## v1.4.2
+
+- Add: Use GFFormsModel::get_current_page_url to determine resume_link
+
 ## v1.4.1
 
 - Feat: supplement BSN on entry list and entry detail when required is not met
