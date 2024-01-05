@@ -3,6 +3,10 @@
 -   requires: WordPress 6.0.0
 -   tested: WordPress 6.3.1
 
+## v1.4
+
+-   Feat: use shared Aura session via a filter hook provided by the Yard Shared Aura Session Instance Plugin
+
 ## v1.3.2
 
 -   Fix: decrypt encapsulated esc_html, should be the other way around

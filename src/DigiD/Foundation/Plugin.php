@@ -78,7 +78,7 @@ class Plugin
      *
      * @return self
      */
-    public static function getInstance($rootPath = '') : self
+    public static function getInstance($rootPath = ''): self
     {
         if (null === static::$instance) {
             static::$instance = new static($rootPath);
@@ -103,26 +103,33 @@ class Plugin
                 return	new \Yard\DigiD\Foundation\Routing\Router(\is_multisite() ? \get_blog_details()->path : '');
             },
             'session'  => function () {
+                $sharedAuraInstance = apply_filters('yard_aura_session_instance', null);
+
+                if ($sharedAuraInstance instanceof \Aura\Session\Session) {
+                    return $sharedAuraInstance;
+                }
+
                 $session_factory = new \Aura\Session\SessionFactory;
                 $session = $session_factory->newInstance($_COOKIE);
                 $session->setCookieParams([
                     'secure'   => true,
-                    'httponly' => true
+                    'httponly' => true,
                 ]);
+
                 return $session;
             },
             'teams'    => function () {
-				$logger = new \Monolog\Logger('microsoft-teams-logger');
+                $logger = new \Monolog\Logger('microsoft-teams-logger');
 
                 if (true === env('MS_TEAMS_DISABLE_LOGGING', true)) {
                     return $logger->pushHandler(new \Monolog\Handler\NullHandler());
                 }
 
-				return $logger->pushHandler(new \CMDISP\MonologMicrosoftTeams\TeamsLogHandler(
-					env('MS_TEAMS_WEBHOOK'),
-					\Monolog\Logger::INFO
-				));
-            }
+                return $logger->pushHandler(new \CMDISP\MonologMicrosoftTeams\TeamsLogHandler(
+                    env('MS_TEAMS_WEBHOOK'),
+                    \Monolog\Logger::INFO
+                ));
+            },
         ]);
         $this->container = $builder->build();
     }
@@ -132,7 +139,7 @@ class Plugin
      *
      * @return \DI\Container
      */
-    public function getContainer() :  \DI\Container
+    public function getContainer(): \DI\Container
     {
         return $this->container;
     }
@@ -185,14 +192,15 @@ class Plugin
     /**
      * Get the path to a particular resource.
      *
-     * @var string $file
-     * @var string $directory
+     * @var string
+     * @var string
      *
      * @return string
      */
     public function resourceUrl(string $file, string $directory = ''): string
     {
-        $directory = !empty($directory) ? $directory .'/' : '';
+        $directory = ! empty($directory) ? $directory .'/' : '';
+
         return plugins_url("resources/{$directory}/{$file}", GF_DIGID_PLUGIN_SLUG .'/plugin.php');
     }
 
@@ -213,7 +221,7 @@ class Plugin
 
             $service = new $service($this);
 
-            if (!$service instanceof ServiceProvider) {
+            if (! $service instanceof ServiceProvider) {
                 throw new \Exception('Provider must extend ServiceProvider.');
             }
 
