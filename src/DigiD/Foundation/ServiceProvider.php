@@ -4,13 +4,10 @@ namespace Yard\DigiD\Foundation;
 
 abstract class ServiceProvider
 {
-
     /**
      * Instance of the plugin.
-     *
-     * @var \Yard\DigiD\Foundation\Plugin
      */
-    protected $plugin;
+    protected Plugin $plugin;
 
     public function __construct(Plugin $plugin)
     {
@@ -19,18 +16,14 @@ abstract class ServiceProvider
 
     /**
      * Return Foundation plugin.
-     *
-     * @return \Yard\DigiD\Foundation\Plugin
      */
-    public function plugin(): \Yard\DigiD\Foundation\Plugin
+    public function plugin(): Plugin
     {
         return $this->plugin;
     }
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     abstract public function register(): void;
 }

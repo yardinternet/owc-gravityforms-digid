@@ -4,11 +4,8 @@ namespace Yard\DigiD\Foundation;
 
 abstract class SettingsManager
 {
-    /** @var string */
-    protected $key = '';
-
-    /** @var string */
-    protected $settings;
+    protected string $key = '';
+    protected string $settings;
 
     public function __construct(string $key = '')
     {
@@ -19,24 +16,17 @@ abstract class SettingsManager
 
     /**
      * Static constructor for quick setup.
-     *
-     * @var string $key
-     *
-     * @return self
      */
     public static function make(string $key = ''): self
     {
         $class = get_called_class();
+
         return new $class($key);
     }
 
     /**
      * Save the data to the database.
-    *
-    * @param array $data
-    *
-    * @return boolean
-    */
+     */
     public function save(array $data): bool
     {
         return \update_option($this->key, $data);
@@ -47,7 +37,7 @@ abstract class SettingsManager
      *
      * @param array $default
      *
-     * @return array[]
+     * @return mixed
      */
     public function all($default = [])
     {
@@ -73,7 +63,7 @@ abstract class SettingsManager
      * @param string $key
      * @param array $default
      *
-     * @return string|array
+     * @return mixed
      */
     public function find($key, $default = [])
     {
