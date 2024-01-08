@@ -10,6 +10,6 @@
 	var LastActivity = '{{ LastActivity }}';
 
 	document.addEventListener('DOMContentLoaded', function() {
-		new Countdown.Countdown(SessionLifeTime, LastActivity).init();
+		new CountdownDigiD.CountdownDigiD(SessionLifeTime, LastActivity).init();
 	});
 </script>
