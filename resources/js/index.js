@@ -1,5 +1,5 @@
-import Countdown from './lib/countdown';
+import CountdownDigiD from './lib/countdown';
 
 export default {
-  Countdown
+	CountdownDigiD,
 };

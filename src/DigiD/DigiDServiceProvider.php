@@ -2,7 +2,6 @@
 
 namespace Yard\DigiD;
 
-use DateTime;
 use GoGentoOSS\SAMLBase\Metadata\ResolveService;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Yard\DigiD\Binding\Artifact;
@@ -30,12 +29,12 @@ class DigiDServiceProvider extends ServiceProvider
             return;
         }
 
-		$this->checkSession();
+        $this->checkSession();
 
         $this->plugin->getLoader()->addAction('wp_enqueue_scripts', $this, 'loadAssets');
         $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 1);
         $this->plugin->getLoader()->addFilter('gform_form_tag', $gravityForm, 'addCountDownHTML', 10, 2);
-		$this->plugin->getLoader()->addFilter('gform_field_validation', $gravityForm, 'optionalIDPs', 10, 4);
+        $this->plugin->getLoader()->addFilter('gform_field_validation', $gravityForm, 'optionalIDPs', 10, 4);
         $this->plugin->getLoader()->addAction('gform_after_submission', $gravityForm, 'clearFormAfterSubmission', 10, 2);
 
         $this->loadResolvers();
@@ -45,8 +44,8 @@ class DigiDServiceProvider extends ServiceProvider
         resolve('route')->get('/digid/logged_out', [$controller, 'loggedOut']);
         resolve('route')->get('/digid/logout', [$controller, 'logOut']);
         resolve('route')->get('/digid/metadata', [$controller, 'metadata']);
-		resolve('route')->get('/digid/fake_login', [$controller, 'fakeLogin']);
-		resolve('route')->get('/digid/keep_alive', [$controller, 'keepAlive']);
+        resolve('route')->get('/digid/fake_login', [$controller, 'fakeLogin']);
+        resolve('route')->get('/digid/keep_alive', [$controller, 'keepAlive']);
     }
 
     /**
@@ -59,13 +58,13 @@ class DigiDServiceProvider extends ServiceProvider
         \wp_register_script('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.js', 'js/dist'), [], Plugin::VERSION);
         \wp_enqueue_script('gravityforms_digid');
 
-		\wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.css', 'css'), [], Plugin::VERSION);
-		\wp_enqueue_style('gravityforms_digid');
+        \wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.css', 'css'), [], Plugin::VERSION);
+        \wp_enqueue_style('gravityforms_digid');
     }
 
     private function registerSettingsAddon(): void
     {
-        if (!method_exists('\GFForms', 'include_addon_framework')) {
+        if (! method_exists('\GFForms', 'include_addon_framework')) {
             return;
         }
 
@@ -92,6 +91,7 @@ class DigiDServiceProvider extends ServiceProvider
             $certificate = new \GoGentoOSS\SAMLBase\Certificate();
             $certificate->setPublicKey(config('digid.certificate.public'), true);
             $certificate->setPrivateKey(config('digid.certificate.private'), true);
+
             return $certificate;
         });
 
@@ -99,6 +99,7 @@ class DigiDServiceProvider extends ServiceProvider
             $signature = new \GoGentoOSS\SAMLBase\Security\Signature();
             $signature->setSigningAlgorithm(XMLSecurityDSig::SHA1);
             $signature->setCertificate(resolve('yard::digid:signing-certificate'));
+
             return $signature;
         });
 
@@ -108,6 +109,7 @@ class DigiDServiceProvider extends ServiceProvider
 
         make('yard::digid::idp-settings', function () {
             $metaData = $this->getMetadata();
+
             return (new \GoGentoOSS\SAMLBase\Configuration\Settings())
                 ->setValues([
                     'NameID'                 => config('digid.issuer'),
@@ -119,7 +121,7 @@ class DigiDServiceProvider extends ServiceProvider
                     'NameIDFormat'           => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
                     'ComparisonLevel'        => 'minimum',
                     'Destination'            => $metaData['SingleSignOnServiceRedirect']['Location'],
-                    'ArtifactResolve'        => $metaData['ArtifactResolutionService']['Location']
+                    'ArtifactResolve'        => $metaData['ArtifactResolutionService']['Location'],
                 ]);
         });
 
@@ -131,6 +133,7 @@ class DigiDServiceProvider extends ServiceProvider
             $redirect->setSignatureService(resolve('yard::digid::signature'));
             $redirect->setSettings(resolve('yard::digid::idp-settings'));
             $redirect->setHttpService(resolve('yard::guzzle-http'));
+
             return $redirect;
         });
 
@@ -142,6 +145,7 @@ class DigiDServiceProvider extends ServiceProvider
             $artifact->setSignatureService(resolve('yard::digid::signature'));
             $artifact->setSettings(resolve('yard::digid::idp-settings'));
             $artifact->setHttpService(resolve('yard::guzzle-http'));
+
             return $artifact;
         });
     }
@@ -153,23 +157,24 @@ class DigiDServiceProvider extends ServiceProvider
             $metadata = resolve('\GoGentoOSS\SAMLBase\Metadata\ResolveService')->resolve(resolve('\GoGentoOSS\SAMLBase\Metadata\IDPMetadata'), config('digid.url.idp.metadata'));
             set_transient($metadataKey, $metadata, 12 * HOUR_IN_SECONDS);
         }
+
         return $metadata;
     }
 
-	private function checkSession()
-	{
-		$session = resolve('session')->getSegment('digid');
+    private function checkSession()
+    {
+        $session = resolve('session')->getSegment('digid');
 
-		if ($session->get('lastActivity')) {
-			$digiDSession = new DigiDSession(config('digid.session.lifetime'));
-			if (time() - $session->get('lastActivity') > $digiDSession->getSessionLifeTime()) {
-				$session->set('lastActivity', '');
-				header('Location: ' . config('digid.url.logout'));
+        if ($session->get('lastActivity')) {
+            $digiDSession = new DigiDSession(config('digid.session.lifetime'));
+            if (time() - $session->get('lastActivity') > $digiDSession->getSessionLifeTime()) {
+                $session->set('lastActivity', '');
+                header('Location: ' . config('digid.url.logout'));
 
-				exit;
-			}
+                exit;
+            }
 
-			$session->set('lastActivity', time());
-		}
-	}
+            $session->set('lastActivity', time());
+        }
+    }
 }
