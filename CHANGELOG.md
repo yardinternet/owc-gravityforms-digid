@@ -6,6 +6,8 @@
 ## v1.4
 
 -   Feat: use shared Aura session via a filter hook provided by the Yard Shared Aura Session Instance Plugin
+-   Refactor: rename CountDown JS class because of conflicts
+-   Refactor: remove unnecessary typehinting and return types
 
 ## v1.3.2
 
