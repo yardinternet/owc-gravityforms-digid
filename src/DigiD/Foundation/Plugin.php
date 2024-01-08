@@ -23,31 +23,10 @@ class Plugin
      */
     public const VERSION = GF_DIGID_VERSION;
 
-    /**
-     * Path to the root of the plugin.
-     *
-     * @var string
-     */
-    protected $rootPath;
-
-    /**
-     * Instance of the configuration repository.
-     *
-     * @var \Yard\DigiD\Foundation\Config
-     */
-    protected $config;
-
-    /**
-     * Instance of the hook loader.
-     *
-     * @var \Yard\DigiD\Foundation\Loader
-     */
-    protected $loader;
-
-    /**
-     * @var \DI\Container
-     */
-    protected $container;
+    protected string $rootPath;
+    protected Config $config;
+    protected Loader $loader;
+    protected \DI\Container $container;
 
     /**
      * @var Plugin
@@ -60,10 +39,8 @@ class Plugin
      * Create startup hooks and tear down hooks.
      * Boot up admin and frontend functionality.
      * Register the actions and filters from the loader.
-     *
-     * @param string $rootPath
      */
-    private function __construct($rootPath = '')
+    private function __construct(string $rootPath = '')
     {
         $this->rootPath = $rootPath;
         require_once __DIR__ .'/Helpers.php';
@@ -73,12 +50,8 @@ class Plugin
 
     /**
      * Return the Plugin instance
-     *
-     * @param string $rootPath
-     *
-     * @return self
      */
-    public static function getInstance($rootPath = ''): self
+    public static function getInstance(string $rootPath = ''): self
     {
         if (null === static::$instance) {
             static::$instance = new static($rootPath);
@@ -87,22 +60,19 @@ class Plugin
         return static::$instance;
     }
 
-    /**
-     * @return \DI\Container
-     */
-    protected function buildContainer()
+    protected function buildContainer(): void
     {
         $builder = new \DI\ContainerBuilder();
         $builder->addDefinitions([
-            'app'	     => $this,
-            'config'   => function () {
+            'app' => $this,
+            'config' => function () {
                 return new \Yard\DigiD\Foundation\Config($this->rootPath.'/config');
             },
-            'loader'   => Loader::getInstance(),
-            'route'    => function () {
+            'loader' => Loader::getInstance(),
+            'route' => function () {
                 return	new \Yard\DigiD\Foundation\Routing\Router(\is_multisite() ? \get_blog_details()->path : '');
             },
-            'session'  => function () {
+            'session' => function () {
                 $sharedAuraInstance = apply_filters('yard_aura_session_instance', null);
 
                 if ($sharedAuraInstance instanceof \Aura\Session\Session) {
@@ -118,7 +88,7 @@ class Plugin
 
                 return $session;
             },
-            'teams'    => function () {
+            'teams' => function () {
                 $logger = new \Monolog\Logger('microsoft-teams-logger');
 
                 if (true === env('MS_TEAMS_DISABLE_LOGGING', true)) {
@@ -131,13 +101,12 @@ class Plugin
                 ));
             },
         ]);
+
         $this->container = $builder->build();
     }
 
     /**
      * Return container
-     *
-     * @return \DI\Container
      */
     public function getContainer(): \DI\Container
     {
@@ -146,8 +115,6 @@ class Plugin
 
     /**
      * Boot the plugin.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -161,8 +128,6 @@ class Plugin
 
     /**
      * Get the name of the plugin.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -171,8 +136,6 @@ class Plugin
 
     /**
      * Get the version of the plugin.
-     *
-     * @return string
      */
     public function getVersion(): string
     {
@@ -181,8 +144,6 @@ class Plugin
 
     /**
      * Get the root path of the plugin.
-     *
-     * @return string
      */
     public function getRootPath(): string
     {
@@ -191,11 +152,6 @@ class Plugin
 
     /**
      * Get the path to a particular resource.
-     *
-     * @var string
-     * @var string
-     *
-     * @return string
      */
     public function resourceUrl(string $file, string $directory = ''): string
     {
@@ -206,8 +162,6 @@ class Plugin
 
     /**
      * Boot service providers.
-     *
-     * @return void
      */
     protected function bootServiceProviders(): void
     {
@@ -230,21 +184,17 @@ class Plugin
     }
 
     /**
-     * Get instance of the hook loader.
-     *
-     * @return  \Yard\eHerkenning\Foundation\Loader
+     * Get instance of the hook loader
      */
-    public function getLoader()
+    public function getLoader(): Loader
     {
         return $this->loader;
     }
 
     /**
      * Get instance of the configuration repository.
-     *
-     * @return  \Yard\eHerkenning\Foundation\Config
      */
-    public function getConfig()
+    public function getConfig(): Config
     {
         return $this->config;
     }

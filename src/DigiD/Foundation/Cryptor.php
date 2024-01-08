@@ -4,14 +4,11 @@ namespace Yard\DigiD\Foundation;
 
 class Cryptor
 {
-    /** @var string */
-    protected $method = 'aes-128-ctr'; // default cipher method if none supplied
-
-    /** @var string */
-    private $key;
+    protected string $method = 'aes-128-ctr'; // default cipher method if none supplied
+    private string $key;
 
     /**
-     * @param boolean $method
+     * @param bool $method
      */
     public function __construct($method = false)
     {
@@ -23,7 +20,7 @@ class Cryptor
             $this->key = $key;
         }
         if ($method) {
-            if (!in_array(strtolower($method), openssl_get_cipher_methods())) {
+            if (! in_array(strtolower($method), openssl_get_cipher_methods())) {
                 throw new \Exception(__METHOD__ . ": unrecognised cipher method: {$method}");
             }
             $this->method = $method;
@@ -38,6 +35,7 @@ class Cryptor
     public function encrypt($data)
     {
         $iv = openssl_random_pseudo_bytes($this->ivBytes());
+
         return bin2hex($iv) . openssl_encrypt($data, $this->method, $this->key, 0, $iv);
     }
 
@@ -51,6 +49,7 @@ class Cryptor
                 return openssl_decrypt($crypted_string, $this->method, $this->key, 0, hex2bin($iv));
             }
         }
+
         return false; // failed to decrypt
     }
 }

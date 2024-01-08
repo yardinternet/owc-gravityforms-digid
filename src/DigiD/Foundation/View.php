@@ -4,17 +4,9 @@ namespace Yard\DigiD\Foundation;
 
 class View
 {
-    /** @var string */
-    protected $templateDirectory = GF_DIGID_ROOT_PATH . '/resources/views/';
-
-    /** @var array */
-    protected $vars = [];
-
-    /**
-     * @var array Associative array of variables that will be accessible from
-     * the template.
-     */
-    protected $bindings = [];
+    protected string $templateDirectory = GF_DIGID_ROOT_PATH . '/resources/views/';
+    protected array $vars = [];
+    protected array $bindings = []; // Associative array of variables that will be accessible from the template.
 
     public function __construct(string $templateDirectory = null)
     {
@@ -26,10 +18,6 @@ class View
 
     /**
      * Render the view
-     *
-     * @param string $templateFile
-     *
-     * @return string
      */
     public function render(string $templateFile = '', array $vars = []): string
     {
@@ -37,17 +25,13 @@ class View
         ob_start();
         include($this->templateDirectory . $templateFile);
         $data = trim(ob_get_clean());
+
         return $this->parseTemplate($data, $this->bindings);
     }
 
     /**
      * Search and replace of variables.
      * Searching for {{VARIABLE}}.
-     *
-     * @param string $templateFile
-     * @param array $bindings
-     *
-     * @return string
      */
     protected function parseTemplate(string $template, array $bindings = []): string
     {
@@ -55,6 +39,7 @@ class View
             '#{{\s?(.*?)\s?}}#',
             function ($match) use ($bindings) {
                 $match[1] = trim($match[1], '');
+
                 return $bindings[$match[1]] ?? '';
             },
             $template
@@ -63,11 +48,8 @@ class View
 
     /**
      * Bind a single variable that will be accessible when the view is rendered.
-     *
-     * @param string $parameter
-     * @param mixed $value
      */
-    public function bind($parameter, $value)
+    public function bind(string $parameter, $value): void
     {
         $this->bindings[$parameter] = $value;
     }
@@ -76,9 +58,8 @@ class View
      * Bind multiple parameters at once.
      *
      * @see View:bind()
-     * @param array $bindings
      */
-    public function bindAll(array $bindings)
+    public function bindAll(array $bindings): void
     {
         foreach ($bindings as $parameter=>$value) {
             $this->bind($parameter, $value);
