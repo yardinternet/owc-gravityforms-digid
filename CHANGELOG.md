@@ -3,6 +3,12 @@
 - requires: WordPress 6.0.0
 - tested: WordPress 6.3.1
 
+## v1.4.1
+
+- Feat: supplement BSN on entry list and entry detail when required is not met
+- Feat: the decrypt helper function might return a boolean value, deviating from the expected return type of the function
+- Feat: validate values after decrypting, when decrypting fails use the initial value
+
 ## v1.4
 
 - Feat: use shared Aura session via a filter hook provided by the Yard Shared Aura Session Instance Plugin

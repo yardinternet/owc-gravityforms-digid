@@ -241,7 +241,8 @@ class DigiDField extends \GF_Field
         $value = empty($value) ? '' : $value;
 
         if (! empty($value) && $this->shouldDecrypt) {
-            $value = decrypt($value);
+            $decrypted = decrypt($value);
+            $value = $decrypted ? $decrypted : $value;
         }
 
         return $value;
@@ -253,8 +254,13 @@ class DigiDField extends \GF_Field
      */
     public function get_value_entry_list($value, $entry, $field_id, $columns, $form)
     {
+        if ($this->shouldDecrypt) {
+            $decrypted = decrypt($value);
+            $value = $decrypted ? zeroise((int) $decrypted, 9) : $value;
+        }
+
         // Escapes value so that it is safe to be displayed on the entry list page
-        return $this->shouldDecrypt ? esc_html(decrypt($value)) : esc_html($value);
+        return esc_html($value);
     }
 
     /**
@@ -294,7 +300,8 @@ class DigiDField extends \GF_Field
             $return = trim(rgget($this->id . '.1', $value));
 
             if ($this->shouldDecrypt) {
-                $return = decrypt($return);
+                $decrypted = decrypt($return);
+                $return = $decrypted ? zeroise((int) $decrypted, 9) : $return;
             }
         } else {
             $return = '';
