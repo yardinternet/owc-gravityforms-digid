@@ -39,6 +39,7 @@ function config(string $setting, string $default = ''): ?string
  * Dump the passed variables and end the script.
  *
  * @param  array|string|int  ...$args
+ *
  * @return void
  */
 function dd(...$args): void
@@ -65,18 +66,20 @@ function encrypt($string): string
     if (empty($string)) {
         return '';
     }
+
     return resolve(\Yard\DigiD\Foundation\Cryptor::class)->encrypt($string);
 }
 
-function decrypt($string): string
+function decrypt($string): ?string
 {
-    return resolve(\Yard\DigiD\Foundation\Cryptor::class)->decrypt($string);
+    return resolve(\Yard\DigiD\Foundation\Cryptor::class)->decrypt($string) ?: null;
 }
 
 /**
  * Return the default value of the given value.
  *
  * @param  mixed  $value
+ *
  * @return mixed
  */
 function value($value)
@@ -89,6 +92,7 @@ function value($value)
  *
  * @param  string  $key
  * @param  mixed   $default
+ *
  * @return mixed
  */
 function env($key, $default = null)
@@ -126,6 +130,7 @@ function env($key, $default = null)
  *
  * @param  string  $haystack
  * @param  string|array  $needles
+ *
  * @return bool
  */
 function startsWith($haystack, $needles)
@@ -144,6 +149,7 @@ function startsWith($haystack, $needles)
  *
  * @param  string  $haystack
  * @param  string|array  $needles
+ *
  * @return bool
  */
 function endsWith($haystack, $needles)
