@@ -103,7 +103,7 @@ class DigiDLoginField extends AbstractField
 
         $resumeToken = $resume['resume_token'] ?? null;
 
-        return \add_query_arg('gf_token', $resumeToken, \GFFormsModel::get_current_page_url());
+        return \add_query_arg('gf_token', $resumeToken, \GFFormsModel::get_current_page_url(true));
     }
 
     /**
