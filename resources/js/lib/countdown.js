@@ -1,5 +1,5 @@
 export default class CountdownDigiD {
-	constructor( sessionTTL, lastActivity ) {
+	constructor( sessionTTL, lastActivity, logoutLink ) {
 		this.second = 1000;
 		this.minute = 60 * this.second;
 
@@ -11,40 +11,9 @@ export default class CountdownDigiD {
 		this.modalShouldOpen = sessionTTL - this.modalTTL;
 		this.lastActivity = lastActivity * this.second;
 
-		this.insertModalHTML();
-
 		this.modalTimeout = undefined;
 		this.timerInterval = undefined;
-	}
-
-	insertModalHTML() {
-		const gfWrapper = document.getElementsByClassName( 'gform_wrapper' );
-
-		if ( gfWrapper ) {
-			gfWrapper[ 0 ].insertAdjacentHTML(
-				'beforeend',
-				`
-			<div class='modal fade owc-gf-digid-hidden' id='modalWrapperDigiD' tabindex='-1' role='dialog' aria-labelledby='modalWrapperDigiD' aria-modal='true' aria-hidden='true'>
-				<div id='modalDialogDigiD' class='modal-dialog' role='document'>
-					<div class='modal-content'>
-						<div class='modal-header'>
-							<h5 class='modal-title' id='exampleModalLabel'>Uw sessie verloopt.</h5>
-						</div>
-						<div class='modal-body | mb-4'>
-							Uw sessie is mogelijk verlopen. Als u te lang niks hebt gedaan, wordt u uit veiligheidsoverwegingen door DigiD uitgelogd.
-							Kies 'Verlengen' om uw sessie te verlengen, mogelijk moet u opnieuw inloggen met DigiD.
-						</div>
-						<div class='modal-footer | d-flex justify-content-end' >
-							<form action="/digid/logout" method="dialog">
-								<button type='submit' id='js-abortSession-DigiD' tabindex='0' role='button' class='btn btn-outline-primary mr-2' data-dismiss='modal'>Sluiten</button>
-							</form>
-							<button type='button' id='js-resumeSession-DigiD' tabindex='0' role='button' class='btn btn-primary'>Verlengen</button>
-						</div>
-					</div>
-				</div>
-			</div>`
-			);
-		}
+		this.logoutLink = logoutLink;
 	}
 
 	init() {
@@ -167,7 +136,7 @@ export default class CountdownDigiD {
 	};
 
 	logout = () => {
-		window.location = '/digid/logout';
+		window.location = this.logoutLink;
 	};
 
 	keepSessionAlive = () => {

@@ -9,6 +9,7 @@ use Yard\DigiD\Binding\Redirect;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\make;
 use function Yard\DigiD\Foundation\Helpers\resolve;
+use function Yard\DigiD\Foundation\Helpers\view;
 use Yard\DigiD\Foundation\Plugin;
 use Yard\DigiD\Foundation\ServiceProvider;
 
@@ -32,6 +33,7 @@ class DigiDServiceProvider extends ServiceProvider
         $this->checkSession();
 
         $this->plugin->getLoader()->addAction('wp_enqueue_scripts', $this, 'loadAssets');
+		$this->plugin->getLoader()->addAction( 'wp_body_open', $this, 'addModalHTML');
         $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 1);
         $this->plugin->getLoader()->addFilter('gform_form_tag', $gravityForm, 'addCountDownHTML', 10, 2);
         $this->plugin->getLoader()->addFilter('gform_field_validation', $gravityForm, 'optionalIDPs', 10, 4);
@@ -50,17 +52,37 @@ class DigiDServiceProvider extends ServiceProvider
 
     /**
      * Load the public assets.
-     *
-     * @return void
      */
     public function loadAssets(): void
     {
         \wp_register_script('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.js', 'js/dist'), [], Plugin::VERSION);
+
+		$session = resolve('session')->getSegment('digid');
+
+        if ($session->get('lastActivity')) {
+            $digiDSession = new DigiDSession(config('digid.session.lifetime'));
+			\wp_add_inline_script(
+				'gravityforms_digid',
+				sprintf(
+					"document.addEventListener('DOMContentLoaded', function() {
+						new CountdownDigiD.CountdownDigiD(%d, %d, '%s').init();
+					});",
+					$digiDSession->getSessionLifeTime(),
+					$session->get('lastActivity'),
+					config('digid.url.logout')
+				)
+			);
+		}
+
         \wp_enqueue_script('gravityforms_digid');
 
         \wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.css', 'css'), [], Plugin::VERSION);
         \wp_enqueue_style('gravityforms_digid');
     }
+
+	public function addModalHTML(): void {
+		echo view('digid/modal.php',[ 'logoutLink' => config('digid.url.logout')]);
+	}
 
     private function registerSettingsAddon(): void
     {

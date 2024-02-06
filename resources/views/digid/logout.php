@@ -4,12 +4,3 @@
 		<button class="owc-gf-digid-toolbar-logout" id="js-owc-gf-digid-logout">Uitloggen</button>
 	</a>
 </div>
-
-<script>
-	var SessionLifeTime = '{{ SessionLifeTime }}';
-	var LastActivity = '{{ LastActivity }}';
-
-	document.addEventListener('DOMContentLoaded', function() {
-		new CountdownDigiD.CountdownDigiD(SessionLifeTime, LastActivity).init();
-	});
-</script>
