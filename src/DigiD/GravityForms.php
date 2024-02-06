@@ -13,8 +13,6 @@ class GravityForms
 {
     /**
      * Register Field
-     *
-     * @return void
      */
     public function registerField(): void
     {
@@ -23,10 +21,6 @@ class GravityForms
 
     /**
      * Clears session on first render.
-     *
-     * @param array $form
-     *
-     * @return array
      */
     public function clearFormOnFirstRender(array $form): array
     {
@@ -54,13 +48,8 @@ class GravityForms
 
     /**
      * Prepend custom div element for countdown
-     *
-     * @param string $form_tag
-     * @param array $form
-     *
-     * @return string
      */
-    public function addCountDownHTML($form_tag, $form): string
+    public function addCountDownHTML(string $form_tag, array $form): string
     {
 		$bsn = resolve('session')->getSegment('digid')->get('bsn', '');
 
@@ -71,11 +60,8 @@ class GravityForms
         $logout = '';
 
         if (!empty($bsn)) {
-            $digiDSession = new DigiDSession(config('digid.session.lifetime'));
             $logout = view('digid/logout.php', [
-                'logoutLink'            => config('digid.url.logout'),
-                'SessionLifeTime'       => $digiDSession->getSessionLifeTime(),
-				'LastActivity'          => resolve('session')->getSegment('digid')->get('lastActivity'),
+                'logoutLink' => config('digid.url.logout'),
             ]);
         }
 
@@ -84,10 +70,8 @@ class GravityForms
 
 	/**
 	 * When two IDPs (Identity Providers) are on the same form, the other one is optional.
-	 *
-	 * @return void
 	 */
-	public function optionalIDPs($result, $value, $form, $field)
+	public function optionalIDPs(array $result, $value, array $form, \GF_Field $field): array
 	{
 		// Check if eHerkenning is in the session.
 		$eherkenning_in_session = resolve('session')->getSegment('eherkenning')->get('kvk');
