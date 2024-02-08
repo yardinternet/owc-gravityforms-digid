@@ -151,6 +151,10 @@ class DigiDController
 		$segment = resolve('session')->getSegment('digid');
 		$nameID = decrypt($segment->get('nameID', ''));
 
+		if (config('digid.session.logout_wp_user') && \is_user_logged_in()) {
+			\wp_logout();
+		}
+
 		// If the nameID is empty, we can't send a logout request to the IDP.
         if (empty($nameID)) {
 			$segment->set('bsn', ''); // But we can clear bsn from the session.
