@@ -168,22 +168,28 @@ class GravityFormsAddon extends GFAddOn
                         'type'              => 'select',
                         'class'             => 'medium',
                         'name'              => "{$prefix}lifetime",
-						'choices'           => [
-							[
-								'label' => '5',
-								'value' => '5'
-							],
-							[
-								'label' => '10',
-								'value' => '10'
-							],
-							[
-								'label' => '15',
-								'value' => '15'
-							],
-						],
+                        'choices'           => [
+                            [
+                                'label' => '5',
+                                'value' => '5'
+                            ],
+                            [
+                                'label' => '10',
+                                'value' => '10'
+                            ],
+                            [
+                                'label' => '15',
+                                'value' => '15'
+                            ],
+                        ],
                         'required'          => true
-                    ]
+                    ],
+                    [
+                        'label'   => esc_html__('Log out WP User', config('core.text_domain')),
+                        'type'    => 'toggle',
+                        'name'    => "{$prefix}logout-wp-user",
+                        'description' => esc_html__('Automatically log out WP User when session ends.', config('core.text_domain')),
+                    ],
                 ],
             ]
         ];

@@ -11,6 +11,7 @@ return [
     ],
     'session' => [
         'lifetime'        => GravityFormsSettings::make()->get('lifetime'),
+        'logout_wp_user'  => GravityFormsSettings::make()->get('logout-wp-user'),
     ],
     'url'    => [
         'idp'         => [
