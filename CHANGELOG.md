@@ -3,6 +3,11 @@
 - requires: WordPress 6.0.0
 - tested: WordPress 6.3.1
 
+## v1.4.3
+
+- Feat: automatic logout on pages without Gravity Forms
+- Feat: option to enable automatic logout of WP user when session ends
+
 ## v1.4.2
 
 - Add: Use GFFormsModel::get_current_page_url to determine resume_link
