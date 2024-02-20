@@ -2,22 +2,27 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OWC GravityForms DigiD\n"
-"POT-Creation-Date: 2020-05-06 12:32+0200\n"
+"POT-Creation-Date: 2024-02-20 13:22+0100\n"
+"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: Yard Internet <info@yard.nl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
-"Language-Team: Yard Internet <info@yard.nl>\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-KeywordsList: __;_x;_e;_ex;_n;_nx;esc_attr__;esc_attr_e;esc_attr_x;esc_html__;esc_html_e;esc_html_x;_n_noop;_nx_noop\n"
 "X-Poedit-Basepath: ..\n"
-"Last-Translator: \n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: tests\n"
 "X-Poedit-SearchPathExcluded-1: docs\n"
 "X-Poedit-SearchPathExcluded-2: vendor\n"
 "X-Poedit-SearchPathExcluded-3: languages\n"
 "X-Poedit-SearchPathExcluded-4: node_modules\n"
+
+#: resources/views/digid/no-certificates.php:2
+#: src/DigiD/GravityFormsAddon.php:218
+msgid "No certificate selected"
+msgstr ""
 
 #: src/DigiD/Claim/StatusCodes/AuthnFailed.php:17
 msgid "Login cancelled"
@@ -26,20 +31,24 @@ msgstr ""
 #: src/DigiD/Claim/StatusCodes/RequestDenied.php:16
 #: src/DigiD/Claim/StatusCodes/Requester.php:16
 #: src/DigiD/Claim/StatusCodes/Responder.php:16
-#, php-format
 msgid "Logging in to this organization failed. Please try again later. If you're still unable to log in, sign in to My DigiD. This will allow you to verify if your DigiD is working properly. There might be an issue with the organization where you are trying to log in."
 msgstr ""
 
-#: src/DigiD/DigiDController.php:32
+#: src/DigiD/DigiDController.php:58 src/DigiD/DigiDController.php:65
 msgid "Something went wrong. Please try again."
 msgstr ""
 
-#: src/DigiD/DigiDField.php:48 src/DigiD/DigiDField.php:131
+#: src/DigiD/DigiDField.php:53 src/DigiD/DigiDField.php:145
+#: src/DigiD/DigiDField.php:159
 msgid "DigiD"
 msgstr ""
 
-#: src/DigiD/DigiDField.php:111
+#: src/DigiD/DigiDField.php:117
 msgid "This field is required."
+msgstr ""
+
+#: src/DigiD/Fields/DigiDLoginField.php:150
+msgid "Login to"
 msgstr ""
 
 #: src/DigiD/GravityFormsAddon.php:91
@@ -100,25 +109,17 @@ msgid "Session settings"
 msgstr ""
 
 #: src/DigiD/GravityFormsAddon.php:164
-msgid "When defining the values below please fill in a number that defines the minutes. Example: '15' means '15 minutes'."
-msgstr ""
-
-#: src/DigiD/GravityFormsAddon.php:166
 msgid "The '<b>session lifetime</b>' defines how long the current session is allowed to exist."
 msgstr ""
 
-#: src/DigiD/GravityFormsAddon.php:168
-msgid "And the '<b>session resume lifetime</b>' defines the amount of minutes which will be used for extending the existing session."
-msgstr ""
-
-#: src/DigiD/GravityFormsAddon.php:172
+#: src/DigiD/GravityFormsAddon.php:167
 msgid "Session lifetime"
 msgstr ""
 
-#: src/DigiD/GravityFormsAddon.php:179
-msgid "Resume session lifetime"
+#: src/DigiD/GravityFormsAddon.php:188
+msgid "Log out WP User"
 msgstr ""
 
-#: src/DigiD/GravityFormsAddon.php:210
-msgid "No certificate selected"
+#: src/DigiD/GravityFormsAddon.php:191
+msgid "Automatically log out WP User when session ends."
 msgstr ""
