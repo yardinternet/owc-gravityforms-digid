@@ -26,6 +26,8 @@ export default class CountdownDigiD {
 		const resume = document.getElementById( 'js-resumeSession-DigiD' );
 		const abort = document.getElementById( 'js-abortSession-DigiD' );
 
+		if( !resume || !abort ) return;
+
 		resume.addEventListener( 'click', ( e ) => this.sessionResume( e ) );
 		resume.addEventListener( 'keydown', ( e ) => this.a11yClick( e ) );
 		abort.addEventListener( 'click', ( e ) => this.logout( e ) );
