@@ -69,27 +69,29 @@ class GravityForms
     }
 
 	/**
-	 * When two IDPs (Identity Providers) are on the same form, the other one is optional.
+	 * When multiple IDPs (Identity Providers) are on the same form, the other one is optional.
 	 */
 	public function optionalIDPs(array $result, $value, array $form, \GF_Field $field): array
 	{
-		// Check if eHerkenning is in the session.
+		// Check if there are other IDPs in the session.
 		$eherkenning_in_session = resolve('session')->getSegment('eherkenning')->get('kvk');
+		$eidas_in_session = resolve('session')->getSegment('eidas')->get('bsn');
 
 		$field_type_digid = 'digid';
 		$field_type_eherkenning = 'eherkenning';
+		$field_type_eidas = 'eidas';
 
-		// Check if the form contains the eHerkenning field.
+		// Check if the form contains the eHerkenning or eIDAS fields.
 		$contains_field = false;
 		foreach ($form['fields'] as $form_field) {
-			if ($form_field->type == $field_type_eherkenning) {
+			if ($form_field->type == $field_type_eherkenning || $field_type_eidas) {
 				$contains_field = true;
 				break;
 			}
 		}
 
-		// If eHerkenning is in the session and the form contains the field, DigiD is optional.
-		if ($eherkenning_in_session && $contains_field) {
+		// If eHerkenning or eIDAS are in the session and the form contains the field, DigiD is optional.
+		if (($eherkenning_in_session || $eidas_in_session) && $contains_field) {
 			if ($field->type == $field_type_digid) {
 				$result['is_valid'] = true;
 				$result['message'] = '';
