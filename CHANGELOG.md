@@ -1,7 +1,11 @@
 # Changelog
 
 - requires: WordPress 6.0.0
-- tested: WordPress 6.3.1
+- tested: WordPress 6.4.3
+
+## v1.5.0
+
+- Feat: add conditional logic for sessions from different IdP's
 
 ## v1.4.4
 
