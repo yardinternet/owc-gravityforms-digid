@@ -124,6 +124,9 @@ class DigiDController
     {
         $SAMLResponse = (isset($_POST['SAMLResponse'])) ?  esc_attr($_POST['SAMLResponse']) : esc_attr($_GET['SAMLResponse']);
         $responseData = @gzinflate(base64_decode($SAMLResponse));
+		if (empty ($responseData)) {
+			return $this->redirectTo();
+		}
         $attributes = new Attributes($responseData);
         $session = resolve('session')->getSegment('digid');
         if ($attributes->logout()->get()->isSuccess()) {
@@ -189,6 +192,7 @@ class DigiDController
 	{
 		$session = resolve('session')->getSegment('digid');
 		$session->set('lastActivity', time());
+		$this->addContentSecurityPolicyHeaders();
 		\wp_send_json([
 			'status' => 'success',
 			'message' => 'Session refreshed'
