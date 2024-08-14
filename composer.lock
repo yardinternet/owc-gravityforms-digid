@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "143439cdd60bf34d9eeba9b189502134",
+    "content-hash": "52adc29f8fc72a9e9a5f85a99826ed2b",
     "packages": [
         {
             "name": "aura/session",
@@ -115,16 +115,16 @@
         },
         {
             "name": "gogentooss/samlbase",
-            "version": "1.6.3",
+            "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/GoGentoOSS/SAMLBase.git",
-                "reference": "e21c6e7f835de54b1ed58815f38811db83bd84ed"
+                "url": "git@github.com:yardinternet/samlbase.git",
+                "reference": "727a83202d0a437de5249cb6367fd51621fbe30d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoGentoOSS/SAMLBase/zipball/e21c6e7f835de54b1ed58815f38811db83bd84ed",
-                "reference": "e21c6e7f835de54b1ed58815f38811db83bd84ed",
+                "url": "https://api.github.com/repos/yardinternet/samlbase/zipball/727a83202d0a437de5249cb6367fd51621fbe30d",
+                "reference": "727a83202d0a437de5249cb6367fd51621fbe30d",
                 "shasum": ""
             },
             "require": {
@@ -133,13 +133,13 @@
                 "symfony/dependency-injection": "^5.4",
                 "twig/twig": "^3.4"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
                     "GoGentoOSS\\SAMLBase": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0"
             ],
@@ -154,16 +154,17 @@
             "description": "Library for SAML2 Service Providers in PHP",
             "homepage": "https://github.com/GoGentoOSS/SAMLBase",
             "keywords": [
+                "PHP",
                 "SAML2",
                 "SAMLBase",
                 "SSO",
-                "php"
+                "saml2"
             ],
             "support": {
-                "issues": "https://github.com/GoGentoOSS/SAMLBase/issues",
-                "source": "https://github.com/GoGentoOSS/SAMLBase/tree/1.6.3"
+                "source": "https://github.com/yardinternet/samlbase/tree/main",
+                "issues": "https://github.com/yardinternet/samlbase/issues"
             },
-            "time": "2023-04-18T06:58:50+00:00"
+            "time": "2024-08-14T08:27:34+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -5488,7 +5489,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "gogentooss/samlbase": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
