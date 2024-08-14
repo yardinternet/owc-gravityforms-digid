@@ -37,6 +37,8 @@ jobs:
           php-version: ${{ matrix.php }}
           tools: composer:v2, phpstan, phpunit
           coverage: pcov
+        env:
+          COMPOSER_TOKEN: ${{ secrets.YARD_BOT_PAT }}
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction
