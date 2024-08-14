@@ -3,6 +3,10 @@
 - requires: WordPress 6.0.0
 - tested: WordPress 6.4.3
 
+## v1.5.2
+
+- Fix: use own copy of SAMLBase
+
 ## v1.5.1
 
 - Fix: add CSP header to keep-alive url
