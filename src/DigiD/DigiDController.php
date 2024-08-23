@@ -122,6 +122,7 @@ class DigiDController
      */
     public function loggedOut()
     {
+		$this->addContentSecurityPolicyHeaders();
         $SAMLResponse = (isset($_POST['SAMLResponse'])) ?  esc_attr($_POST['SAMLResponse']) : esc_attr($_GET['SAMLResponse']);
         $responseData = @gzinflate(base64_decode($SAMLResponse));
 		if (empty ($responseData)) {
@@ -151,6 +152,7 @@ class DigiDController
      */
     public function logOut()
     {
+		$this->addContentSecurityPolicyHeaders();
 		$segment = resolve('session')->getSegment('digid');
 		$nameID = decrypt($segment->get('nameID', ''));
 
