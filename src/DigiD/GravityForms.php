@@ -51,26 +51,26 @@ class GravityForms
      */
     public function handleSubmitIfLoginOnlyForm(string $button, array $form): string
     {
-        $specific_field_label = 'digid';
-        $is_specific_field_present = false;
+		$specificFieldType = 'digid';
+		$isSpecificFieldPresent = false;
 
-        // Count the number of visible fields in the form
-        $visible_fields_count = 0;
+		// Count the number of visible fields in the form
+		$visibleFieldsCount = 0;
 
-        foreach ($form['fields'] as $field) {
-            // Count only visible fields
-            if (! $field->isHidden) {
-                $visible_fields_count++;
-            }
+		foreach ($form['fields'] as $field) {
+			// Count only visible fields
+			if (! $field->isHidden) {
+				$visibleFieldsCount++;
+			}
 
-            // Check if the current field's label matches the specific field label
-            if ($field->type == $specific_field_label && ! $field->isHidden) {
-                $is_specific_field_present = true;
-            }
-        }
+			// Check if the current field's label matches the specific field label
+			if ($field->type == $specificFieldType && ! $field->isHidden) {
+				$isSpecificFieldPresent = true;
+			}
+		}
 
-        // If the specific field is present, and it's the only visible field, hide the submit button
-        if ($is_specific_field_present && 1 == $visible_fields_count) {
+		// If the specific field is present, and it's the only visible field, hide the submit button
+		if ($isSpecificFieldPresent && 1 == $visibleFieldsCount) {
 			$bsn = resolve('session')->getSegment('digid')->get('bsn', '');
 
 			if (!empty($bsn)) {
@@ -78,10 +78,10 @@ class GravityForms
 			}
 
 			return '';
-        }
+		}
 
-        // Otherwise, return the original submit button
-        return $button;
+		// Otherwise, return the original submit button
+		return $button;
     }
 
 	/**
