@@ -35,10 +35,10 @@ class DigiDServiceProvider extends ServiceProvider
         $this->plugin->getLoader()->addAction('plugins_loaded', $this, 'registerRoutes');
         $this->plugin->getLoader()->addAction('wp_enqueue_scripts', $this, 'loadAssets');
         $this->plugin->getLoader()->addAction('wp_body_open', $this, 'addModalHTML');
-        $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 1);
+        $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender');
         $this->plugin->getLoader()->addFilter('gform_form_tag', $gravityForm, 'addCountDownHTML', 10, 2);
         $this->plugin->getLoader()->addFilter('gform_field_validation', $gravityForm, 'optionalIDPs', 10, 4);
-        $this->plugin->getLoader()->addFilter('gform_submit_button', $gravityForm, 'removeSubmitButton', 10, 2);
+        $this->plugin->getLoader()->addFilter('gform_submit_button', $gravityForm, 'handleSubmitIfLoginOnlyForm', 10, 2);
         $this->plugin->getLoader()->addAction('gform_after_submission', $gravityForm, 'clearFormAfterSubmission', 10, 2);
 
         $this->loadResolvers();
