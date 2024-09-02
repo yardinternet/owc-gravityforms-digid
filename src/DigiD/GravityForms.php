@@ -47,9 +47,9 @@ class GravityForms
     }
 
     /**
-     * Remove the submit button on a form if DigiD is the only field in it.
+     * Remove the submit button and auto submit the form when the form only consists of a single DigiD field.
      */
-    public function removeSubmitButton(string $button, array $form): string
+    public function handleSubmitIfLoginOnlyForm(string $button, array $form): string
     {
         $specific_field_label = 'digid';
         $is_specific_field_present = false;
@@ -71,14 +71,20 @@ class GravityForms
 
         // If the specific field is present, and it's the only visible field, hide the submit button
         if ($is_specific_field_present && 1 == $visible_fields_count) {
-            return '';
+			$bsn = resolve('session')->getSegment('digid')->get('bsn', '');
+
+			if (!empty($bsn)) {
+				\GFAPI::submit_form($field->formId, array());
+			}
+
+			return '';
         }
 
         // Otherwise, return the original submit button
         return $button;
     }
 
-    /**
+	/**
      * Prepend custom div element for countdown
      */
     public function addCountDownHTML(string $form_tag, array $form): string
