@@ -11,17 +11,16 @@ use function Yard\DigiD\Foundation\Helpers\resolve;
 
 class DigiDController
 {
-	/**
+    /**
      * Add Content Security Policy (CSP) headers to the response.
-	 *
-	 * @since 1.1.4
+     *
+     * @since 1.1.4
      */
-	private function addContentSecurityPolicyHeaders(): void
+    private function addContentSecurityPolicyHeaders(): void
     {
         $cspDirectives = [
             'default-src' => 'self',
             'script-src' => 'self',
-            'style-src' => 'self',
             'img-src' => 'self',
             'style-src' => 'self',
         ];
@@ -42,7 +41,7 @@ class DigiDController
      */
     public function acsResolve()
     {
-		$this->addContentSecurityPolicyHeaders();
+        $this->addContentSecurityPolicyHeaders();
 
         if (!isset($_GET['SAMLart'])) {
             return $this->redirectTo();
@@ -78,7 +77,7 @@ class DigiDController
         if ($attributes->status()->get()->isSuccess()) {
             $session->set('bsn', encrypt($attributes->bsn()->getID()));
             $session->set('nameID', encrypt($attributes->bsn()->getNameID()));
-			$session->set('lastActivity', time());
+            $session->set('lastActivity', time());
         } else {
             $session->set('bsn', '');
             $session->set('nameID', '');
@@ -122,12 +121,12 @@ class DigiDController
      */
     public function loggedOut()
     {
-		$this->addContentSecurityPolicyHeaders();
+        $this->addContentSecurityPolicyHeaders();
         $SAMLResponse = (isset($_POST['SAMLResponse'])) ?  esc_attr($_POST['SAMLResponse']) : esc_attr($_GET['SAMLResponse']);
         $responseData = @gzinflate(base64_decode($SAMLResponse));
-		if (empty ($responseData)) {
-			return $this->redirectTo();
-		}
+        if (empty($responseData)) {
+            return $this->redirectTo();
+        }
         $attributes = new Attributes($responseData);
         $session = resolve('session')->getSegment('digid');
         if ($attributes->logout()->get()->isSuccess()) {
@@ -152,17 +151,17 @@ class DigiDController
      */
     public function logOut()
     {
-		$this->addContentSecurityPolicyHeaders();
-		$segment = resolve('session')->getSegment('digid');
-		$nameID = decrypt($segment->get('nameID', ''));
+        $this->addContentSecurityPolicyHeaders();
+        $segment = resolve('session')->getSegment('digid');
+        $nameID = decrypt($segment->get('nameID', ''));
 
-		if (config('digid.session.logout_wp_user') && \is_user_logged_in()) {
-			\wp_logout();
-		}
+        if (config('digid.session.logout_wp_user') && \is_user_logged_in()) {
+            \wp_logout();
+        }
 
-		// If the nameID is empty, we can't send a logout request to the IDP.
+        // If the nameID is empty, we can't send a logout request to the IDP.
         if (empty($nameID)) {
-			$segment->set('bsn', ''); // But we can clear bsn from the session.
+            $segment->set('bsn', ''); // But we can clear bsn from the session.
             return $this->redirectTo();
         }
 
@@ -177,29 +176,29 @@ class DigiDController
         exit;
     }
 
-	public function fakeLogin()
-	{
-		$session = resolve('session')->getSegment('digid');
+    public function fakeLogin()
+    {
+        $session = resolve('session')->getSegment('digid');
         $session->set('bsn', encrypt(env('DIGID_FAKE_SESSION', '')));
-		$session->set('lastActivity', time());
+        $session->set('lastActivity', time());
 
-		return $this->redirectTo();
-	}
+        return $this->redirectTo();
+    }
 
 
-	/**
-	 * Keep the session alive.
-	 */
-	public function keepAlive()
-	{
-		$session = resolve('session')->getSegment('digid');
-		$session->set('lastActivity', time());
-		$this->addContentSecurityPolicyHeaders();
-		\wp_send_json([
-			'status' => 'success',
-			'message' => 'Session refreshed'
-		]);
-	}
+    /**
+     * Keep the session alive.
+     */
+    public function keepAlive()
+    {
+        $session = resolve('session')->getSegment('digid');
+        $session->set('lastActivity', time());
+        $this->addContentSecurityPolicyHeaders();
+        \wp_send_json([
+            'status' => 'success',
+            'message' => 'Session refreshed'
+        ]);
+    }
 
     /**
      * Generate the metadata required.
