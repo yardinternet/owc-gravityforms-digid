@@ -32,19 +32,20 @@ class DigiDServiceProvider extends ServiceProvider
 
         $this->checkSession();
 
-		$this->plugin->getLoader()->addAction('plugins_loaded', $this, 'registerRoutes');
+        $this->plugin->getLoader()->addAction('plugins_loaded', $this, 'registerRoutes');
         $this->plugin->getLoader()->addAction('wp_enqueue_scripts', $this, 'loadAssets');
-		$this->plugin->getLoader()->addAction('wp_body_open', $this, 'addModalHTML');
+        $this->plugin->getLoader()->addAction('wp_body_open', $this, 'addModalHTML');
         $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender', 10, 1);
         $this->plugin->getLoader()->addFilter('gform_form_tag', $gravityForm, 'addCountDownHTML', 10, 2);
         $this->plugin->getLoader()->addFilter('gform_field_validation', $gravityForm, 'optionalIDPs', 10, 4);
+        $this->plugin->getLoader()->addFilter('gform_submit_button', $gravityForm, 'removeSubmitButton', 10, 2);
         $this->plugin->getLoader()->addAction('gform_after_submission', $gravityForm, 'clearFormAfterSubmission', 10, 2);
 
         $this->loadResolvers();
-	}
+    }
 
-	public function registerRoutes()
-	{
+    public function registerRoutes()
+    {
         $controller = resolve(\Yard\DigiD\DigiDController::class);
         resolve('route')->get('/digid/acs', [$controller, 'acsResolve']);
         resolve('route')->get('/digid/logged_out', [$controller, 'loggedOut']);
@@ -61,22 +62,22 @@ class DigiDServiceProvider extends ServiceProvider
     {
         \wp_register_script('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.js', 'js/dist'), [], Plugin::VERSION);
 
-		$session = resolve('session')->getSegment('digid');
+        $session = resolve('session')->getSegment('digid');
 
         if ($session->get('lastActivity')) {
             $digiDSession = new DigiDSession(config('digid.session.lifetime'));
-			\wp_add_inline_script(
-				'gravityforms_digid',
-				sprintf(
-					"document.addEventListener('DOMContentLoaded', function() {
+            \wp_add_inline_script(
+                'gravityforms_digid',
+                sprintf(
+                    "document.addEventListener('DOMContentLoaded', function() {
 						new CountdownDigiD.CountdownDigiD(%d, %d, '%s').init();
 					});",
-					$digiDSession->getSessionLifeTime(),
-					$session->get('lastActivity'),
-					config('digid.url.logout')
-				)
-			);
-		}
+                    $digiDSession->getSessionLifeTime(),
+                    $session->get('lastActivity'),
+                    config('digid.url.logout')
+                )
+            );
+        }
 
         \wp_enqueue_script('gravityforms_digid');
 
@@ -84,9 +85,10 @@ class DigiDServiceProvider extends ServiceProvider
         \wp_enqueue_style('gravityforms_digid');
     }
 
-	public function addModalHTML(): void {
-		echo view('digid/modal.php',[ 'logoutLink' => config('digid.url.logout')]);
-	}
+    public function addModalHTML(): void
+    {
+        echo view('digid/modal.php', [ 'logoutLink' => config('digid.url.logout')]);
+    }
 
     private function registerSettingsAddon(): void
     {
