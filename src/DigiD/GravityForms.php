@@ -74,14 +74,14 @@ class GravityForms
             $bsn = resolve('session')->getSegment('digid')->get('bsn', '');
 
             if (!empty($bsn)) {
-                $input_values = [];
-                $input_values['input_1_1'] = $bsn;
+                $inputValues = [];
+                $inputValues['input_1_1'] = $bsn;
 
-                $result = \GFAPI::submit_form($field->formId, $input_values);
+                $result = \GFAPI::submit_form($field->formId, $inputValues);
 
                 if (isset($result['confirmation_redirect'])) {
-                    $redirect_url = $result['confirmation_redirect'];
-                    wp_safe_redirect($redirect_url);
+                    $redirectUrl = $result['confirmation_redirect'];
+                    wp_safe_redirect($redirectUrl);
                 }
             }
 
