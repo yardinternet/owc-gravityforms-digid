@@ -51,40 +51,48 @@ class GravityForms
      */
     public function handleSubmitIfLoginOnlyForm(string $button, array $form): string
     {
-		$specificFieldType = 'digid';
-		$isSpecificFieldPresent = false;
+        $specificFieldType = 'digid';
+        $isSpecificFieldPresent = false;
 
-		// Count the number of visible fields in the form
-		$visibleFieldsCount = 0;
+        // Count the number of visible fields in the form
+        $visibleFieldsCount = 0;
 
-		foreach ($form['fields'] as $field) {
-			// Count only visible fields
-			if (! $field->isHidden) {
-				$visibleFieldsCount++;
-			}
+        foreach ($form['fields'] as $field) {
+            // Count only visible fields
+            if (! $field->isHidden) {
+                $visibleFieldsCount++;
+            }
 
-			// Check if the current field's label matches the specific field label
-			if ($field->type == $specificFieldType && ! $field->isHidden) {
-				$isSpecificFieldPresent = true;
-			}
-		}
+            // Check if the current field's label matches the specific field label
+            if ($field->type == $specificFieldType && ! $field->isHidden) {
+                $isSpecificFieldPresent = true;
+            }
+        }
 
-		// If the specific field is present, and it's the only visible field, hide the submit button
-		if ($isSpecificFieldPresent && 1 == $visibleFieldsCount) {
-			$bsn = resolve('session')->getSegment('digid')->get('bsn', '');
+        // If the specific field is present, and it's the only visible field, hide the submit button
+        if ($isSpecificFieldPresent && 1 == $visibleFieldsCount) {
+            $bsn = resolve('session')->getSegment('digid')->get('bsn', '');
 
-			if (!empty($bsn)) {
-				\GFAPI::submit_form($field->formId, array());
-			}
+            if (!empty($bsn)) {
+                $input_values = [];
+                $input_values['input_1_1'] = $bsn;
 
-			return '';
-		}
+                $result = \GFAPI::submit_form($field->formId, $input_values);
 
-		// Otherwise, return the original submit button
-		return $button;
+                if (isset($result['confirmation_redirect'])) {
+                    $redirect_url = $result['confirmation_redirect'];
+                    wp_safe_redirect($redirect_url);
+                }
+            }
+
+            return '';
+        }
+
+        // Otherwise, return the original submit button
+        return $button;
     }
 
-	/**
+    /**
      * Prepend custom div element for countdown
      */
     public function addCountDownHTML(string $form_tag, array $form): string
