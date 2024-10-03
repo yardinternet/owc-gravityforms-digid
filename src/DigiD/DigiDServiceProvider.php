@@ -3,6 +3,8 @@
 namespace Yard\DigiD;
 
 use GoGentoOSS\SAMLBase\Metadata\ResolveService;
+use OWC\IdpUserData\DigiDUserDataInterface;
+use OWC\IdpUserData\UserDataInterface;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Yard\DigiD\Binding\Artifact;
 use Yard\DigiD\Binding\Redirect;
@@ -12,6 +14,7 @@ use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
 use Yard\DigiD\Foundation\Plugin;
 use Yard\DigiD\Foundation\ServiceProvider;
+use Yard\DigiD\UserData\DigiDUserData;
 
 class DigiDServiceProvider extends ServiceProvider
 {
@@ -40,6 +43,8 @@ class DigiDServiceProvider extends ServiceProvider
         $this->plugin->getLoader()->addFilter('gform_field_validation', $gravityForm, 'optionalIDPs', 10, 4);
         $this->plugin->getLoader()->addFilter('gform_submit_button', $gravityForm, 'handleSubmitIfLoginOnlyForm', 10, 2);
         $this->plugin->getLoader()->addAction('gform_after_submission', $gravityForm, 'clearFormAfterSubmission', 10, 2);
+		$this->plugin->getLoader()->addFilter('owc_digid_is_logged_in', $this, 'setIsLoggedIn', 10, 0);
+		$this->plugin->getLoader()->addFilter('owc_digid_user_data', $this, 'setUserData', 10, 0);
 
         $this->loadResolvers();
     }
@@ -54,6 +59,21 @@ class DigiDServiceProvider extends ServiceProvider
         resolve('route')->get('/digid/fake_login', [$controller, 'fakeLogin']);
         resolve('route')->get('/digid/keep_alive', [$controller, 'keepAlive']);
     }
+
+	public function setIsLoggedIn(): bool {
+
+		$bsn = resolve('session')->getSegment('digid')->get('bsn', '');
+		return !empty($bsn);
+	}
+
+	public function setUserData(): ?DigiDUserDataInterface {
+		$bsn = resolve('session')->getSegment('digid')->get('bsn', '');
+		if (empty($bsn)) {
+			return null;
+		}
+
+		return new DigiDUserData($bsn);
+	}
 
     /**
      * Load the public assets.
