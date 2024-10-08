@@ -4,11 +4,11 @@ namespace Yard\DigiD;
 
 use GoGentoOSS\SAMLBase\Metadata\ResolveService;
 use OWC\IdpUserData\DigiDUserDataInterface;
-use OWC\IdpUserData\UserDataInterface;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Yard\DigiD\Binding\Artifact;
 use Yard\DigiD\Binding\Redirect;
 use function Yard\DigiD\Foundation\Helpers\config;
+use function Yard\DigiD\Foundation\Helpers\decrypt;
 use function Yard\DigiD\Foundation\Helpers\make;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
@@ -72,7 +72,7 @@ class DigiDServiceProvider extends ServiceProvider
 			return null;
 		}
 
-		return new DigiDUserData($bsn);
+		return new DigiDUserData(decrypt($bsn));
 	}
 
     /**
