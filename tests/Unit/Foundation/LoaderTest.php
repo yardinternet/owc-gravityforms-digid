@@ -23,14 +23,14 @@ class LoaderTest extends TestCase
     {
         $loader = Loader::getInstance();
 
-		$loader->addAction('test-hook', $this, 'test', 10, 1);
+        $loader->addAction('test-hook', $this, 'test', 10, 1);
 
-		$this->assertTrue(property_exists(Loader::class, 'actions'));
-		$this->assertCount(1, $loader->getActions());
+        $this->assertTrue(property_exists(Loader::class, 'actions'));
+        $this->assertCount(1, $loader->getActions());
 
-		$loader->addAction('test-hook-2', $this, 'test', 10, 1);
-		$loader->addAction('test-hook-3', $this, 'test', 10, 1);
-		$this->assertCount(3, $loader->getActions());
+        $loader->addAction('test-hook-2', $this, 'test', 10, 1);
+        $loader->addAction('test-hook-3', $this, 'test', 10, 1);
+        $this->assertCount(3, $loader->getActions());
     }
 
     /** @test */
@@ -40,8 +40,8 @@ class LoaderTest extends TestCase
 
         $loader->addFilter('test-hook', $this, 'test', 10, 1);
 
-		$this->assertTrue(property_exists(Loader::class, 'filters'));
-		$this->assertCount(1, $loader->getFilters());
+        $this->assertTrue(property_exists(Loader::class, 'filters'));
+        $this->assertCount(1, $loader->getFilters());
 
 
         $loader->addFilter('test-hook-2', $this, 'test', 10, 1);
