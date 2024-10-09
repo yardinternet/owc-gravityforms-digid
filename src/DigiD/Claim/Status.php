@@ -9,7 +9,7 @@ class Status implements ClaimInterface
     /**
      * Status Codes
      */
-	const STATUS_SUCCESS = 'urn:oasis:names:tc:SAML:2.0:status:Success';
+    const STATUS_SUCCESS = 'urn:oasis:names:tc:SAML:2.0:status:Success';
     const STATUS_REQUESTER = 'urn:oasis:names:tc:SAML:2.0:status:Requester';
     const STATUS_RESPONDER = 'urn:oasis:names:tc:SAML:2.0:status:Responder';
     const STATUS_VERSION_MISMATCH = 'urn:oasis:names:tc:SAML:2.0:status:VersionMismatch';
