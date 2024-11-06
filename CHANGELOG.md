@@ -3,6 +3,9 @@
 - requires: WordPress 6.0.0
 - tested: WordPress 6.4.3
 
+## v1.6.0
+- Feat: add IDP userdata
+
 ## v1.5.3
 
 - Fix: add CSP header to logout url
