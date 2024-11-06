@@ -6,7 +6,6 @@ use OWC\IdpUserData\DigiDUserDataInterface;
 
 class DigiDUserData implements DigiDUserDataInterface
 {
-
     protected string $bsn;
 
     public function __construct(string $bsn)
