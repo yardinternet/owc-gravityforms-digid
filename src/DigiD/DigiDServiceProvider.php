@@ -64,6 +64,7 @@ class DigiDServiceProvider extends ServiceProvider
     {
 
         $bsn = resolve('session')->getSegment('digid')->get('bsn', '');
+
         return !empty($bsn);
     }
 
