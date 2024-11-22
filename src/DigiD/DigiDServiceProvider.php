@@ -43,8 +43,8 @@ class DigiDServiceProvider extends ServiceProvider
         $this->plugin->getLoader()->addFilter('gform_field_validation', $gravityForm, 'optionalIDPs', 10, 4);
         $this->plugin->getLoader()->addFilter('gform_submit_button', $gravityForm, 'handleSubmitIfLoginOnlyForm', 10, 2);
         $this->plugin->getLoader()->addAction('gform_after_submission', $gravityForm, 'clearFormAfterSubmission', 10, 2);
-        $this->plugin->getLoader()->addFilter('owc_digid_is_logged_in', $this, 'setIsLoggedIn', 10, 0);
-        $this->plugin->getLoader()->addFilter('owc_digid_user_data', $this, 'setUserData', 10, 0);
+        $this->plugin->getLoader()->addFilter('owc_digid_is_logged_in', $this, 'setIsLoggedIn', 10, 1);
+        $this->plugin->getLoader()->addFilter('owc_digid_user_data', $this, 'setUserData', 10, 1);
 
         $this->loadResolvers();
     }
@@ -60,22 +60,24 @@ class DigiDServiceProvider extends ServiceProvider
         resolve('route')->get('/digid/keep_alive', [$controller, 'keepAlive']);
     }
 
-    public function setIsLoggedIn(): bool
+    public function setIsLoggedIn(bool $isLoggedIn): bool
     {
+		if (!empty(resolve('session')->getSegment('digid')->get('bsn', ''))) {
+			$isLoggedIn = true;
+		}
 
-        $bsn = resolve('session')->getSegment('digid')->get('bsn', '');
-
-        return !empty($bsn);
+		return $isLoggedIn;
     }
 
-    public function setUserData(): ?DigiDUserDataInterface
-    {
-        $bsn = resolve('session')->getSegment('digid')->get('bsn', '');
-        if (empty($bsn)) {
-            return null;
-        }
+    public function setUserData(?DigiDUserDataInterface $userData): ?DigiDUserDataInterface
+	{
 
-        return new DigiDUserData(decrypt($bsn));
+		$bsn = resolve('session')->getSegment('digid')->get('bsn', '');
+		if (!empty($bsn)) {
+			$userData = new DigiDUserData(decrypt($bsn));
+		}
+
+        return $userData;
     }
 
     /**

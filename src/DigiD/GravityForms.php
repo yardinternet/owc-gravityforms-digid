@@ -3,6 +3,8 @@
 namespace Yard\DigiD;
 
 use GFFormDisplay;
+use OWC\IdpUserData\eHerkenningSession;
+use OWC\IdpUserData\eIDASSession;
 
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
@@ -120,8 +122,8 @@ class GravityForms
     public function optionalIDPs(array $result, $value, array $form, \GF_Field $field): array
     {
         // Check if there are other IDPs in the session.
-        $eherkenning_in_session = resolve('session')->getSegment('eherkenning')->get('kvk');
-        $eidas_in_session = resolve('session')->getSegment('eidas')->get('bsn');
+		$eherkenning_in_session = eHerkenningSession::isLoggedIn();
+        $eidas_in_session = eIDASSession::isLoggedIn();
 
         $field_type_digid = 'digid';
         $field_type_eherkenning = 'eherkenning';
