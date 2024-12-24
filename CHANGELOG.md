@@ -3,7 +3,12 @@
 - requires: WordPress 6.0.0
 - tested: WordPress 6.4.3
 
+## v1.6.1
+
+- Fix: string could be set as a boolean
+
 ## v1.6.0
+
 - Feat: add IDP userdata
 
 ## v1.5.3
