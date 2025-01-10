@@ -666,16 +666,16 @@
         },
         {
             "name": "owc/idp-userdata",
-            "version": "v1.0.1",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:OpenWebconcept/idp-userdata.git",
-                "reference": "ad046c97bf2eb1d575da78c981f7f4ff685a659e"
+                "url": "https://github.com/OpenWebconcept/idp-userdata.git",
+                "reference": "a95986c390ab59356922fd12b995c26dc9e88bf9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenWebconcept/idp-userdata/zipball/ad046c97bf2eb1d575da78c981f7f4ff685a659e",
-                "reference": "ad046c97bf2eb1d575da78c981f7f4ff685a659e",
+                "url": "https://api.github.com/repos/OpenWebconcept/idp-userdata/zipball/a95986c390ab59356922fd12b995c26dc9e88bf9",
+                "reference": "a95986c390ab59356922fd12b995c26dc9e88bf9",
                 "shasum": ""
             },
             "require": {
@@ -684,7 +684,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "OWC\\IdpUserdata\\": "src/"
+                    "OWC\\IdpUserData\\": "src/"
                 }
             },
             "authors": [
@@ -695,10 +695,10 @@
             ],
             "description": "Common interfaces for IDP userdata (DigiD, eHerkenning)",
             "support": {
-                "source": "https://github.com/OpenWebconcept/idp-userdata/tree/v1.0.1",
+                "source": "https://github.com/OpenWebconcept/idp-userdata/tree/v1.1.0",
                 "issues": "https://github.com/OpenWebconcept/idp-userdata/issues"
             },
-            "time": "2024-10-04T08:37:21+00:00"
+            "time": "2024-11-06T10:20:58+00:00"
         },
         {
             "name": "php-di/invoker",
