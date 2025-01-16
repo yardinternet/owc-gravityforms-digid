@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4921b7fd0b0464422294227642d4cd01",
+    "content-hash": "0ce551eba4eed2332c5ca1f97f8cdd29",
     "packages": [
         {
             "name": "aura/session",
@@ -2165,22 +2165,23 @@
         },
         {
             "name": "yard/samlbase",
-            "version": "1.6.3",
+            "version": "dev-feat/php8",
             "source": {
                 "type": "git",
                 "url": "git@github.com:yardinternet/samlbase.git",
-                "reference": "673d90bd1e7cc411d16f1e85a62a8068892fac5b"
+                "reference": "2b73a3107504179142d8486a3057efaa09570b74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yardinternet/samlbase/zipball/673d90bd1e7cc411d16f1e85a62a8068892fac5b",
-                "reference": "673d90bd1e7cc411d16f1e85a62a8068892fac5b",
+                "url": "https://api.github.com/repos/yardinternet/samlbase/zipball/2b73a3107504179142d8486a3057efaa09570b74",
+                "reference": "2b73a3107504179142d8486a3057efaa09570b74",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^7.5",
+                "php": "^7.4 || ^8.0",
                 "robrichards/xmlseclibs": "~3.1.0",
-                "symfony/dependency-injection": "^5.4",
+                "symfony/dependency-injection": "^5.4 || ^6.4",
                 "twig/twig": "^3.4"
             },
             "type": "library",
@@ -2210,10 +2211,10 @@
                 "saml2"
             ],
             "support": {
-                "source": "https://github.com/yardinternet/samlbase/tree/v1.6.3",
+                "source": "https://github.com/yardinternet/samlbase/tree/feat/php8",
                 "issues": "https://github.com/yardinternet/samlbase/issues"
             },
-            "time": "2024-08-14T14:31:20+00:00"
+            "time": "2025-01-16T07:52:44+00:00"
         }
     ],
     "packages-dev": [
@@ -6309,7 +6310,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "yard/samlbase": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
