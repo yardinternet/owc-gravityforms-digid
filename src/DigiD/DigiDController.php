@@ -105,7 +105,7 @@ class DigiDController
     {
         $session = resolve('session')->getSegment('digid');
         if (empty($session->get('resume_link'))) {
-            $url = \site_url('/');
+            $url = \home_url('/');
         } else {
             $url = $session->get('resume_link');
         }

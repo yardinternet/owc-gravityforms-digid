@@ -17,9 +17,9 @@ return [
         'idp'         => [
             'metadata' => GravityFormsSettings::make()->get('ipd-metadata-url')
         ],
-        'acs'         => \site_url('/digid/acs'),
-        'logged_out'  => \site_url('/digid/logged_out'),
-        'logout'      => \site_url('/digid/logout'),
+        'acs'         => \home_url('/digid/acs'),
+        'logged_out'  => \home_url('/digid/logged_out'),
+        'logout'      => \home_url('/digid/logout'),
     ],
     'certificate' => [
         'public'  => GravityFormsSettings::make()->get('public-certificate'),
