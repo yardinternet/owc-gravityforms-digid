@@ -59,7 +59,7 @@ class GravityForms
 
         foreach ($form['fields'] as $field) {
             // Count only visible fields
-            if (! $field->isHidden) {
+            if (! $field->isHidden && 'honeypot' !== $field->type) {
                 $visibleFieldsCount++;
             }
 
