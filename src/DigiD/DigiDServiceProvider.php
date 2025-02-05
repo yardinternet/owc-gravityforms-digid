@@ -44,7 +44,7 @@ class DigiDServiceProvider extends ServiceProvider
         $this->plugin->getLoader()->addFilter('gform_submit_button', $gravityForm, 'handleSubmitIfLoginOnlyForm', 10, 2);
         $this->plugin->getLoader()->addAction('gform_after_submission', $gravityForm, 'clearFormAfterSubmission', 10, 2);
         $this->plugin->getLoader()->addFilter('owc_digid_is_logged_in', $this, 'setIsLoggedIn', 10, 1);
-        $this->plugin->getLoader()->addFilter('owc_digid_user_data', $this, 'setUserData', 10, 1);
+        $this->plugin->getLoader()->addFilter('owc_digid_userdata', $this, 'setUserData', 10, 1);
 
         $this->loadResolvers();
     }
@@ -71,7 +71,6 @@ class DigiDServiceProvider extends ServiceProvider
 
     public function setUserData(?DigiDUserDataInterface $userData): ?DigiDUserDataInterface
 	{
-
 		$bsn = resolve('session')->getSegment('digid')->get('bsn', '');
 		if (!empty($bsn)) {
 			$userData = new DigiDUserData(decrypt($bsn));
