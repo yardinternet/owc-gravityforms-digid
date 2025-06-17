@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yard\DigiD;
 
+use GF_Fields;
 use GFFormDisplay;
 use OWC\IdpUserData\eHerkenningSession;
 use OWC\IdpUserData\eIDASSession;
@@ -18,15 +21,19 @@ class GravityForms
      */
     public function registerField(): void
     {
-        \GF_Fields::register(new DigiDField);
+        GF_Fields::register(new DigiDField);
     }
 
     /**
      * Clears session on first render.
      */
-    public function clearFormOnFirstRender(array $form): array
+    public function clearFormOnFirstRender(mixed $form): mixed
     {
-        if (!count(array_filter($form['fields'], function ($item) {
+        if (! is_array($form)) {
+            return $form;
+        }
+
+        if (! count(array_filter($form['fields'], function ($item) {
             return is_a($item, DigiDField::class);
         }))) {
             return $form;
@@ -41,7 +48,7 @@ class GravityForms
 
     public function clearFormAfterSubmission(array $entry, array $form): void
     {
-        if (!count(array_filter($form['fields'], function ($item) {
+        if (! count(array_filter($form['fields'], function ($item) {
             return is_a($item, DigiDField::class);
         }))) {
             return;
@@ -75,7 +82,7 @@ class GravityForms
         if ($isSpecificFieldPresent && 1 == $visibleFieldsCount) {
             $bsn = resolve('session')->getSegment('digid')->get('bsn', '');
 
-            if (!empty($bsn)) {
+            if (! empty($bsn)) {
                 $inputValues = [];
                 $inputValues['input_1_1'] = $bsn;
 
@@ -101,13 +108,13 @@ class GravityForms
     {
         $bsn = resolve('session')->getSegment('digid')->get('bsn', '');
 
-        if (!empty($bsn)) {
+        if (! empty($bsn)) {
             $bsn = encrypt($bsn);
         }
 
         $logout = '';
 
-        if (!empty($bsn)) {
+        if (! empty($bsn)) {
             $logout = view('digid/logout.php', [
                 'logoutLink' => config('digid.url.logout'),
             ]);
@@ -122,7 +129,7 @@ class GravityForms
     public function optionalIDPs(array $result, $value, array $form, \GF_Field $field): array
     {
         // Check if there are other IDPs in the session.
-		$eherkenning_in_session = eHerkenningSession::isLoggedIn();
+        $eherkenning_in_session = eHerkenningSession::isLoggedIn();
         $eidas_in_session = eIDASSession::isLoggedIn();
 
         $field_type_digid = 'digid';
@@ -134,6 +141,7 @@ class GravityForms
         foreach ($form['fields'] as $form_field) {
             if ($form_field->type == $field_type_eherkenning || $field_type_eidas) {
                 $contains_field = true;
+
                 break;
             }
         }
@@ -151,24 +159,25 @@ class GravityForms
 
     protected function hasToken(): bool
     {
-        return isset($_REQUEST['gf_token']) and (!empty($_REQUEST['gf_token']));
+        return isset($_REQUEST['gf_token']) && (! empty($_REQUEST['gf_token']));
     }
 
     protected function isFormPaginated(array $form): bool
     {
-        if (!isset($form['pagination']['pages'])) {
+        if (! isset($form['pagination']['pages'])) {
             return false;
         }
         if (is_null($form['pagination']['pages'])) {
             return false;
         }
+
         return (1 >= count($form['pagination']['pages']));
     }
 
     protected function isFirstPaginatedView(array $form): bool
     {
         return (($this->getCurrentPage($form) === $this->getSourcePage($form))
-            and $this->isFirstPage($form));
+            && $this->isFirstPage($form));
     }
 
     protected function getSourcePage(array $form): int

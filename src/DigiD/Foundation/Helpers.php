@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yard\DigiD\Foundation\Helpers;
 
 use Yard\DigiD\Foundation\Plugin;
@@ -33,6 +35,11 @@ function make($name, $container)
 function config(string $setting, string $default = ''): ?string
 {
     return resolve('config')->get($setting, $default);
+}
+
+function session_lifetime_in_seconds(): int
+{
+    return (int) config('digid.session.lifetime', GF_DIGID_DEFAULT_SESSION_LIFETIME_SECONDS);
 }
 
 /**

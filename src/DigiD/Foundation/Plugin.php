@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Yard\DigiD\Foundation;
 
-use function Yard\DigiD\Foundation\Helpers\env;
+use function DI\create;
+use Exception;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
 class Plugin
@@ -25,7 +26,6 @@ class Plugin
 
     protected string $rootPath;
     protected Config $config;
-    protected Loader $loader;
     protected \DI\Container $container;
 
     /**
@@ -45,7 +45,6 @@ class Plugin
         $this->rootPath = $rootPath;
         require_once __DIR__ .'/Helpers.php';
         $this->buildContainer();
-        load_plugin_textdomain($this->getName(), false, $this->getName() . '/languages/');
     }
 
     /**
@@ -65,10 +64,7 @@ class Plugin
         $builder = new \DI\ContainerBuilder();
         $builder->addDefinitions([
             'app' => $this,
-            'config' => function () {
-                return new \Yard\DigiD\Foundation\Config($this->rootPath.'/config');
-            },
-            'loader' => Loader::getInstance(),
+            'config' => create(Config::class)->constructor($this->rootPath . '/config'),
             'route' => function () {
                 return	new \Yard\DigiD\Foundation\Routing\Router(\is_multisite() ? \get_blog_details()->path : '');
             },
@@ -82,23 +78,26 @@ class Plugin
                 $session_factory = new \Aura\Session\SessionFactory;
                 $session = $session_factory->newInstance($_COOKIE);
                 $session->setCookieParams([
-                    'secure'   => true,
+                    'secure' => true,
                     'httponly' => true,
                 ]);
 
                 return $session;
             },
-            'teams' => function () {
-                $logger = new \Monolog\Logger('microsoft-teams-logger');
+            'logger' => function () {
+                $logger = new \Monolog\Logger('gfdigid_log');
+                $maxFiles = apply_filters('owc_gravityforms_digid_rotating_filer_handler_max_files', GF_DIGID_LOGGER_DEFAULT_MAX_FILES);
 
-                if (true === env('MS_TEAMS_DISABLE_LOGGING', true)) {
-                    return $logger->pushHandler(new \Monolog\Handler\NullHandler());
-                }
+                $handler = (new \Monolog\Handler\RotatingFileHandler(
+                    filename:  sprintf('%s/gfdigid-log.json', wp_get_upload_dir()['basedir']),
+                    maxFiles: is_int($maxFiles) && 0 < $maxFiles ? $maxFiles : GF_DIGID_LOGGER_DEFAULT_MAX_FILES,
+                    level: \Monolog\Level::Debug
+                ))->setFormatter(new \Monolog\Formatter\JsonFormatter());
 
-                return $logger->pushHandler(new \CMDISP\MonologMicrosoftTeams\TeamsLogHandler(
-                    env('MS_TEAMS_WEBHOOK'),
-                    \Monolog\Logger::INFO
-                ));
+                $logger->pushHandler($handler);
+                $logger->pushProcessor(new \Monolog\Processor\IntrospectionProcessor());
+
+                return $logger;
             },
         ]);
 
@@ -119,11 +118,14 @@ class Plugin
     public function boot(): void
     {
         $this->config = resolve('config');
-        $this->loader = resolve('loader');
 
+        $this->loadTextDomain();
         $this->bootServiceProviders();
+    }
 
-        $this->loader->register();
+    private function loadTextDomain(): void
+    {
+        load_plugin_textdomain($this->getName(), false, $this->getName() . '/languages/');
     }
 
     /**
@@ -176,19 +178,11 @@ class Plugin
             $service = new $service($this);
 
             if (! $service instanceof ServiceProvider) {
-                throw new \Exception('Provider must extend ServiceProvider.');
+                throw new Exception('Provider must extend ServiceProvider.', 500);
             }
 
             $service->register();
         }
-    }
-
-    /**
-     * Get instance of the hook loader
-     */
-    public function getLoader(): Loader
-    {
-        return $this->loader;
     }
 
     /**

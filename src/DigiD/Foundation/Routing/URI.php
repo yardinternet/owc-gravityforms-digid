@@ -23,7 +23,7 @@ class URI
      */
     public function removeQuery()
     {
-		$this->str = strtok($this->str, '?') ?: '';
+        $this->str = strtok($this->str, '?') ?: '';
 
         return $this;
     }

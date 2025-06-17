@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yard\DigiD\Foundation\Routing;
 
 class Router
@@ -46,6 +48,7 @@ class Router
      * @param string $route the route to match, e.g. `/users/jane`
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     public function get($route, $callback = null, $injectArgs = null)
@@ -59,6 +62,7 @@ class Router
      * @param string $route the route to match, e.g. `/users/jane`
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     public function post($route, $callback = null, $injectArgs = null)
@@ -72,6 +76,7 @@ class Router
      * @param string $route the route to match, e.g. `/users/jane`
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     public function put($route, $callback = null, $injectArgs = null)
@@ -85,6 +90,7 @@ class Router
      * @param string $route the route to match, e.g. `/users/jane`
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     public function patch($route, $callback = null, $injectArgs = null)
@@ -98,6 +104,7 @@ class Router
      * @param string $route the route to match, e.g. `/users/jane`
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     public function delete($route, $callback = null, $injectArgs = null)
@@ -111,6 +118,7 @@ class Router
      * @param string $route the route to match, e.g. `/users/jane`
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     public function head($route, $callback = null, $injectArgs = null)
@@ -124,6 +132,7 @@ class Router
      * @param string $route the route to match, e.g. `/users/jane`
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     public function trace($route, $callback = null, $injectArgs = null)
@@ -137,6 +146,7 @@ class Router
      * @param string $route the route to match, e.g. `/users/jane`
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     public function options($route, $callback = null, $injectArgs = null)
@@ -150,6 +160,7 @@ class Router
      * @param string $route the route to match, e.g. `/users/jane`
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     public function connect($route, $callback = null, $injectArgs = null)
@@ -164,6 +175,7 @@ class Router
      * @param string $route the route to match, e.g. `/users/jane`
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     public function any(array $requestMethods, $route, $callback = null, $injectArgs = null)
@@ -205,6 +217,7 @@ class Router
      * Attempts to match the route of the current request against the specified route
      *
      * @param string $expectedRoute the route to match against
+     *
      * @return array|null the list of matched parameters or `null` if the route didn't match
      */
     private function matchRoute($expectedRoute)
@@ -239,6 +252,7 @@ class Router
      * @param string $expectedRoute the route that must be found in order to have a match
      * @param callable|null $callback (optional) the callback to execute, e.g. an anonymous function
      * @param array|null $injectArgs (optional) any arguments that should be prepended to those matched in the route
+     *
      * @return bool whether the route matched the current request
      */
     private function addRoute(array $expectedRequestMethods, $expectedRoute, $callback = null, $injectArgs = null)
@@ -264,7 +278,7 @@ class Router
                     }
                     // if the callback is invalid
                     else {
-                        throw new \InvalidArgumentException('Invalid callback for methods `'.implode('|', $expectedRequestMethods).'` at route `'.$expectedRoute.'`');
+                        throw new \InvalidArgumentException('Invalid callback for methods `'.implode('|', $expectedRequestMethods).'` at route `'.$expectedRoute.'`', 500);
                     }
                 }
 
@@ -282,6 +296,7 @@ class Router
      *
      * @param string $expectedRoute the route to create a regular expression for
      * @param array $params the array that should receive the matched parameters
+     *
      * @return string the composed regular expression
      */
     private function createRouteRegex($expectedRoute, &$params)
@@ -342,6 +357,7 @@ class Router
      * Escapes the supplied string for use in a regular expression
      *
      * @param string $str the string to escape
+     *
      * @return string the escaped string
      */
     private static function regexEscape($str)

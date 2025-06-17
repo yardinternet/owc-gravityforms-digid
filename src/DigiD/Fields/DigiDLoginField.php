@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yard\DigiD\Fields;
 
 use Aura\Session\Segment;
@@ -7,12 +9,14 @@ use Yard\DigiD\DigiD;
 use Yard\DigiD\DigiDController;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
-use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
 use Yard\DigiD\Foundation\Plugin;
+use Yard\DigiD\Traits\Logger;
 
 class DigiDLoginField extends AbstractField
 {
+    use Logger;
+
     /** @var DigiD */
     protected $digid;
 
@@ -51,10 +55,10 @@ class DigiDLoginField extends AbstractField
                 $this->session->set('resume_link', $this->getResumeLink());
 
                 if (defined('WP_DEBUG') && WP_DEBUG) {
-                    resolve('teams')->info('Set resume_link', [
-                        'user_agent'                        => $_SERVER['HTTP_USER_AGENT'] ?? '',
-                        'resume_link_from_session'          => $this->session->get('resume_link'),
-                        'resume_link'                       => $this->getResumeLink(),
+                    $this->logInfo(message: 'Set resume_link', context: [
+                        'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                        'resume_link_from_session' => $this->session->get('resume_link'),
+                        'resume_link' => $this->getResumeLink(),
                     ]);
                 }
             }
@@ -96,8 +100,8 @@ class DigiDLoginField extends AbstractField
             $this->field->formId,
             [
                 'gf_submitting_' . $this->field->formId => true,
-                'saved_for_later'                       => true,
-                'gform_save'                            => true,
+                'saved_for_later' => true,
+                'gform_save' => true,
             ]
         );
 
@@ -113,7 +117,7 @@ class DigiDLoginField extends AbstractField
      */
     protected function getLabelField(): string
     {
-        return "";
+        return '';
     }
 
     /**
@@ -128,14 +132,14 @@ class DigiDLoginField extends AbstractField
         if (empty($fakeSession)) {
             $link = \is_admin() ? '' : DigiDController::getAuthNRequestURL();
         } else {
-            $link = "/digid/fake_login";
+            $link = '/digid/fake_login';
         }
 
         return view('digid/digidField.php', [
-            'error'    => $this->session->getFlash('error'),
-            'logo'     => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
-            'link'     => $link,
-            'title'    => $this->getFieldTitle(),
+            'error' => $this->session->getFlash('error'),
+            'logo' => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
+            'link' => $link,
+            'title' => $this->getFieldTitle(),
             'subtitle' => $this->getFieldSubTitle(),
         ]);
     }
