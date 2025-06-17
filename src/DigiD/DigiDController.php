@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yard\DigiD;
 
 use InvalidArgumentException;
@@ -8,9 +10,12 @@ use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\decrypt;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
+use Yard\DigiD\Traits\Logger;
 
 class DigiDController
 {
+    use Logger;
+
     /**
      * Add Content Security Policy (CSP) headers to the response.
      *
@@ -43,7 +48,7 @@ class DigiDController
     {
         $this->addContentSecurityPolicyHeaders();
 
-        if (!isset($_GET['SAMLart'])) {
+        if (! isset($_GET['SAMLart'])) {
             return $this->redirectTo();
         }
 
@@ -52,28 +57,31 @@ class DigiDController
 
         try {
             $responseData = resolve('yard::digid:artifact-binding')
-                ->resolveArtifact(\esc_attr($_REQUEST['SAMLart']));
+                ->resolveArtifact(esc_attr($_REQUEST['SAMLart']));
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            $session->setFlash('error', \__('Something went wrong. Please try again.', config('core.text_domain')));
+            $session->setFlash('error', __('Something went wrong. Please try again.', config('core.text_domain')));
+
             return $this->redirectTo();
         }
 
         try {
             $attributes = new Attributes($responseData);
         } catch (InvalidArgumentException $e) {
-            $session->setFlash('error', \__('Something went wrong. Please try again.', config('core.text_domain')));
-            resolve('teams')->info('InvalidArgumentException', [
-                'repsonseData' => $responseData,
-                'attributes'   => $attributes,
-                'resume_link'  => $session->get('resume_link'),
-                'message'      => $session->get('message'),
-                'exception'    => $e->getMessage()
+            $session->setFlash('error', __('Something went wrong. Please try again.', config('core.text_domain')));
+
+            $this->logException(exception: $e, context: [
+                'responseData' => $responseData,
+                'resume_link' => $session->get('resume_link'),
+                'message' => $session->get('message'),
+                'exception' => $e->getMessage(),
             ]);
+
             return $this->redirectTo();
         }
 
         $session->set('session_id', $attributes->sessionID());
         $session->set('status_code', $attributes->status()->get()->getStatusCode());
+
         if ($attributes->status()->get()->isSuccess()) {
             $session->set('bsn', encrypt($attributes->bsn()->getID()));
             $session->set('nameID', encrypt($attributes->bsn()->getNameID()));
@@ -84,13 +92,13 @@ class DigiDController
             $session->setFlash('error', $attributes->status()->get()->message());
         }
 
-        resolve('teams')->info('Attributes are filled', [
-            'session_id'   => $attributes->sessionID(),
-            'status_code'  => $attributes->status()->get()->getStatusCode(),
-            'bsn'          => encrypt($attributes->bsn()->getID()),
-            'nameID'       => encrypt($attributes->bsn()->getNameID()),
-            'resume_link'  => $session->get('resume_link'),
-            'message'      => $session->get('message')
+        $this->logInfo(message: 'Attributes are filled', context: [
+            'session_id' => $attributes->sessionID(),
+            'status_code' => $attributes->status()->get()->getStatusCode(),
+            'bsn' => encrypt($attributes->bsn()->getID()),
+            'nameID' => encrypt($attributes->bsn()->getNameID()),
+            'resume_link' => $session->get('resume_link'),
+            'message' => $session->get('message'),
         ]);
 
         return $this->redirectTo();
@@ -104,8 +112,9 @@ class DigiDController
     protected function redirectTo(): void
     {
         $session = resolve('session')->getSegment('digid');
+
         if (empty($session->get('resume_link'))) {
-            $url = \home_url('/');
+            $url = home_url('/');
         } else {
             $url = $session->get('resume_link');
         }
@@ -124,20 +133,35 @@ class DigiDController
         $this->addContentSecurityPolicyHeaders();
         $SAMLResponse = (isset($_POST['SAMLResponse'])) ?  esc_attr($_POST['SAMLResponse']) : esc_attr($_GET['SAMLResponse']);
         $responseData = @gzinflate(base64_decode($SAMLResponse));
+
         if (empty($responseData)) {
             return $this->redirectTo();
         }
-        $attributes = new Attributes($responseData);
+
+        /** @var \Aura\Session\Segment $session */
         $session = resolve('session')->getSegment('digid');
-        if ($attributes->logout()->get()->isSuccess()) {
+
+        try {
+            $attributes = new Attributes($responseData);
+        } catch (InvalidArgumentException $e) {
+            $this->logException(exception: $e, context: [
+                'responseData' => $responseData,
+                'resume_link' => $session->get('resume_link'),
+                'message' => $session->get('message'),
+                'exception' => $e->getMessage(),
+            ]);
+        }
+
+        if ($attributes instanceof Attributes && $attributes->logout()->get()->isSuccess()) {
             $session->set('bsn', '');
             $session->set('nameID', '');
-            resolve('teams')->info('Customer is logged out', [
-                'session_id'   => $attributes->sessionID(),
-                'status_code'  => $attributes->logout()->get()->getStatusCode(),
-                'bsn'          => $attributes->bsn()->getID(),
-                'nameID'       => $attributes->bsn()->getNameID(),
-                'resume_link'  => $session->get('resume_link')
+
+            $this->logInfo(message: 'Customer is logged out', context: [
+                'session_id' => $attributes->sessionID(),
+                'status_code' => $attributes->logout()->get()->getStatusCode(),
+                'bsn' => $attributes->bsn()->getID(),
+                'nameID' => $attributes->bsn()->getNameID(),
+                'resume_link' => $session->get('resume_link'),
             ]);
         }
 
@@ -155,13 +179,14 @@ class DigiDController
         $segment = resolve('session')->getSegment('digid');
         $nameID = decrypt($segment->get('nameID', ''));
 
-        if (config('digid.session.logout_wp_user') && \is_user_logged_in()) {
-            \wp_logout();
+        if (config('digid.session.logout_wp_user') && is_user_logged_in()) {
+            wp_logout();
         }
 
         // If the nameID is empty, we can't send a logout request to the IDP.
         if (empty($nameID)) {
             $segment->set('bsn', ''); // But we can clear bsn from the session.
+
             return $this->redirectTo();
         }
 
@@ -185,7 +210,6 @@ class DigiDController
         return $this->redirectTo();
     }
 
-
     /**
      * Keep the session alive.
      */
@@ -194,9 +218,9 @@ class DigiDController
         $session = resolve('session')->getSegment('digid');
         $session->set('lastActivity', time());
         $this->addContentSecurityPolicyHeaders();
-        \wp_send_json([
+        wp_send_json([
             'status' => 'success',
-            'message' => 'Session refreshed'
+            'message' => 'Session refreshed',
         ]);
     }
 
@@ -221,6 +245,7 @@ class DigiDController
     {
         $httpResponse = new \Symfony\Component\HttpFoundation\RedirectResponse(resolve('yard::digid::redirect-binding')
             ->getURL());
+
         return $httpResponse->getTargetUrl();
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yard\DigiD\Claim;
 
 use Exception;
@@ -9,16 +11,17 @@ use Yard\DigiD\Claim\StatusCodes\StatusCodeInterface;
 trait StatusTrait
 {
     /**
-    * Get StatusCode class of response.
-    *
-    * @throws Exception
-    * @return StatusCodeInterface
-    */
+     * Get StatusCode class of response.
+     *
+     * @throws Exception
+     *
+     * @return StatusCodeInterface
+     */
     public function get(): StatusCodeInterface
     {
         $class = __NAMESPACE__ .'\\StatusCodes\\'. ucfirst($this->getStatus());
-        if (!class_exists($class)) {
-            throw new Exception($class .' does not exist');
+        if (! class_exists($class)) {
+            throw new Exception($class .' does not exist', 500);
         }
 
         return new $class($this);
@@ -32,8 +35,9 @@ trait StatusTrait
     public function getStatus(): string
     {
         if (empty($this->status)) {
-            throw new Exception('Empty class name is not allowed');
+            throw new Exception('Empty class name is not allowed', 400);
         }
+
         return $this->status;
     }
 
@@ -59,6 +63,7 @@ trait StatusTrait
     private function parseStatus(string $status): string
     {
         $status = explode(':', $status);
+
         return end($status);
     }
 
@@ -66,6 +71,7 @@ trait StatusTrait
      * Returns the last and most meaningful statuscode.
      *
      * @param SimpleXMLElement[] $statusCodes
+     *
      * @return string
      */
     protected function getMeaningfulStatusCode(array $statusCodes): string
@@ -74,6 +80,7 @@ trait StatusTrait
             if (! is_a($item, SimpleXMLElement::class)) {
                 return;
             }
+
             return $this->getFullStatus($item);
         }, $statusCodes);
 

@@ -34,7 +34,6 @@
 .*
 
 !.babelrc
-.php_cs
 .php-cs-fixer.cache
 
 # track this file .gitignore (i.e. do NOT ignore it)
@@ -70,6 +69,7 @@ Thumbs.db
 *.log
 *.sql
 *.sqlite
+gfdigid-log-*.json
 
 # ignore compiled files
 *.com

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yard\DigiD\Claim;
 
 use GoGentoOSS\SAMLBase\Configuration\SessionID;
@@ -18,13 +20,13 @@ class Attributes implements ClaimInterface
     /** @var SimpleXMLElement */
     protected $xml;
 
-    /** @var string $response */
+    /** @var string */
     public function __construct(string $response)
     {
         $this->response = $response;
         $this->xml = simplexml_load_string($this->response);
         if ($this->isInvalidXML()) {
-            throw new InvalidArgumentException('Data is invalid');
+            throw new InvalidArgumentException('Data is invalid', 400);
         }
         $this->xml->registerXPathNamespace('samlp', 'urn:oasis:names:tc:SAML:2.0:protocol');
         $this->xml->registerXPathNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
@@ -84,6 +86,7 @@ class Attributes implements ClaimInterface
      * Query the XML
      *
      * @param string $path
+     *
      * @return array
      */
     protected function query(string $path): array

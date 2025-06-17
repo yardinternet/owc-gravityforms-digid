@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yard\DigiD\Foundation;
 
 class Cryptor
@@ -21,7 +23,7 @@ class Cryptor
         }
         if ($method) {
             if (! in_array(strtolower($method), openssl_get_cipher_methods())) {
-                throw new \Exception(__METHOD__ . ": unrecognised cipher method: {$method}");
+                throw new \Exception(__METHOD__ . ": unrecognised cipher method: {$method}", 500);
             }
             $this->method = $method;
         }
@@ -43,7 +45,7 @@ class Cryptor
     public function decrypt($data)
     {
         $iv_strlen = 2 * $this->ivBytes();
-        if (preg_match("/^(.{" . $iv_strlen . "})(.+)$/", $data, $regs)) {
+        if (preg_match('/^(.{' . $iv_strlen . '})(.+)$/', $data, $regs)) {
             list(, $iv, $crypted_string) = $regs;
             if (ctype_xdigit($iv) && 0 == strlen($iv) % 2) {
                 return openssl_decrypt($crypted_string, $this->method, $this->key, 0, hex2bin($iv));

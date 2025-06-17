@@ -1,21 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yard\DigiD;
 
 class DigiDSession
 {
-    /** @var int */
-    protected $sessionLifeTime;
-
-    public function __construct(int $sessionLifeTime = 0)
+    public function __construct(protected int $sessionLifeTime = 0)
     {
-        $this->sessionLifeTime = (int) $sessionLifeTime;
     }
 
     /**
      * Validate value and convert to minutes
-     *
-     * @return int
      */
     public function getSessionLifeTime(): int
     {
