@@ -11,3 +11,9 @@ DigiD is only able to connect with valid PKi certificates, for local development
 ```env
 DIGID_FAKE_SESSION='012345678'
 ```
+
+## Creating a new release
+
+1. Update the version in `plugin.php` (x2)
+2. Ensure that `CHANGELOG.md` and `RELEASE_NOTES.md` are updated with the latest changes
+3. Draft a new release
