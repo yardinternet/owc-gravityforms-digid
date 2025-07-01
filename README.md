@@ -14,6 +14,6 @@ DIGID_FAKE_SESSION='012345678'
 
 ## Creating a new release
 
-1. Update the version in `plugin.php` (x2)
+1. Update the version in `plugin.php` x2 (plugin version and metadata)
 2. Ensure that `CHANGELOG.md` and `RELEASE_NOTES.md` are updated with the latest changes
 3. Draft a new release
