@@ -35,7 +35,7 @@ class DigiDServiceProvider extends ServiceProvider
 
         $this->checkSession();
 
-        $this->plugin->getLoader()->addAction('plugins_loaded', $this, 'registerRoutes');
+        $this->plugin->getLoader()->addAction('wp_loaded', $this, 'registerRoutes');
         $this->plugin->getLoader()->addAction('wp_enqueue_scripts', $this, 'loadAssets');
         $this->plugin->getLoader()->addAction('wp_body_open', $this, 'addModalHTML');
         $this->plugin->getLoader()->addFilter('gform_pre_render', $gravityForm, 'clearFormOnFirstRender');
