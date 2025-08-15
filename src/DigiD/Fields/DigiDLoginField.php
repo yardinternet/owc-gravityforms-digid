@@ -9,6 +9,7 @@ use Yard\DigiD\DigiD;
 use Yard\DigiD\DigiDController;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
+use function Yard\DigiD\Foundation\Helpers\env;
 use function Yard\DigiD\Foundation\Helpers\view;
 use Yard\DigiD\Foundation\Plugin;
 use Yard\DigiD\Traits\Logger;

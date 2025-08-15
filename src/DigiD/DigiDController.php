@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Yard\DigiD\Claim\Attributes;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\decrypt;
+use function Yard\DigiD\Foundation\Helpers\env;
 use function Yard\DigiD\Foundation\Helpers\encrypt;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 use Yard\DigiD\Traits\Logger;
