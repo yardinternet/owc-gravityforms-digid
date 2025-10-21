@@ -1,5 +1,14 @@
 # Changelog
 
+## v2.0.0
+
+- Refactor: update codebase to PHP 8 standards
+- Refactor: drop support for PHP 7
+- Change: use env from its own helper file
+- Change: use Monolog v3 as opposed to Monolog MS-teams dependency
+- Update: JavaScript dependencies
+- Update: GitHub actions to newer versions
+
 ## v1.7.0
 
 - Feat: Add PHP 8.1 compatibility

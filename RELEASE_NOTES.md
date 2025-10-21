@@ -5,11 +5,29 @@ Functional release notes for stakeholders, focusing on user-facing changes and t
 ---
 
 ## Table of Contents
+- [v2.0.0](#v200)
 - [v1.7.0](#v170)
 - [v1.6.1](#v161)
 - [v1.6.0](#v160)
 
 ---
+
+## v2.0.0
+
+### Summary
+- **Compatibility**: codebase and dependencies to PHP 8.1 and above.
+- **Compatability**: drop support for PHP ^7.
+- **Update**: use env from its own helper file.
+- **Update**: use Monolog v3 as opposed to Monolog MS-teams dependency.
+- **Update**: JavaScript dependencies.
+- **Update**: GitHub actions to newer versions.
+
+### Functional Impact
+- The codebase has now settled on PHP 8.1 and above, dropping support for PHP 7.x versions.
+- Dependencies have been upgraded in line with modern PHP standards.
+- The environment variables are resolved from an internal helper file to streamline configuration.
+- Logging has been updated to use Monolog v3, removing the MS-teams dependency for more flexibility.
+- JavaScript dependencies have been updated to their latest versions to ensure security and performance.
 
 ## v1.7.0
 
