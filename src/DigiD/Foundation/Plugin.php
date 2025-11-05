@@ -89,7 +89,7 @@ class Plugin
                 $maxFiles = apply_filters('owc_gravityforms_digid_rotating_filer_handler_max_files', GF_DIGID_LOGGER_DEFAULT_MAX_FILES);
 
                 $handler = (new \Monolog\Handler\RotatingFileHandler(
-                    filename:  sprintf('%s/gfdigid-log.json', wp_get_upload_dir()['basedir']),
+                    filename:  sprintf('%s/gfdigid-log.json', dirname(ABSPATH)),
                     maxFiles: is_int($maxFiles) && 0 < $maxFiles ? $maxFiles : GF_DIGID_LOGGER_DEFAULT_MAX_FILES,
                     level: \Monolog\Level::Debug
                 ))->setFormatter(new \Monolog\Formatter\JsonFormatter());

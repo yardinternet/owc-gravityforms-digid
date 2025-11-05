@@ -37,7 +37,7 @@ apply_filters('owc_gravityforms_digid_rotating_filer_handler_max_files', GF_DIGI
 You can intercept exceptions caught by the plugin for additional processing or custom logging using this filter:
 
 ```php
-apply_filters('owc_gravityforms_digid_exception_intercept', $exception, $method)
+do_action('owc_gravityforms_digid_exception_intercept', $exception, $method)
 ```
 
 The `$exception` parameter contains the caught exception object.
