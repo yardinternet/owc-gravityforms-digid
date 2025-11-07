@@ -3,6 +3,10 @@
 - requires: WordPress 6.0.0
 - tested: WordPress 6.4.3
 
+## 1.7.1
+
+- Feat: add label setting to DigiD field
+
 ## v1.7.0
 
 - Feat: Add PHP 8.1 compatibility
