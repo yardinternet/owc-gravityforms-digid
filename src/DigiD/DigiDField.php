@@ -78,6 +78,7 @@ class DigiDField extends \GF_Field
     public function get_form_editor_field_settings()
     {
         return [
+			'label_setting',
             'input_placeholders_setting',
             'rules_setting',
             'conditional_logic_field_setting',
