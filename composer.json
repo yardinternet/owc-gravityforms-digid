@@ -1,6 +1,7 @@
 {
 	"name": "plugin/owc-gravityforms-digid",
 	"description": "Add a DigiD login field to GravityForms",
+  "license": "EUPL-1.2",
 	"authors": [
 		{
 			"name": "Yard | Digital Agency",
