@@ -47,3 +47,7 @@ The `$exception` parameter contains the caught exception object.
 1. Update the version in `plugin.php` x2 (plugin version and metadata)
 2. Ensure that `CHANGELOG.md` and `RELEASE_NOTES.md` are updated with the latest changes
 3. Draft a new release
+
+## About us
+
+[![banner](https://raw.githubusercontent.com/yardinternet/.github/refs/heads/main/profile/assets/small-banner-github.svg)](https://www.yard.nl/werken-bij/)
