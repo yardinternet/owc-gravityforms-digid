@@ -155,6 +155,13 @@ class GravityFormsAddon extends GFAddOn
                         'name'                 => "{$prefix}private-certificate",
                         'choices'              => $this->getPrivateCertificates(),
                         'required'             => true,
+                    ],
+                    [
+                        'label'					=> esc_html__('Root certificate location', config('core.text_domain')),
+                        'type'					=> 'select',
+                        'name'					=> "{$prefix}root-certificate",
+                        'choices'				=> $this->getRootCertificates(),
+                        'required'				=> false
                     ]
                 ]
             ],
@@ -234,6 +241,11 @@ class GravityFormsAddon extends GFAddOn
      *
      * @return array
      */
+    private function getRootCertificates(): array
+    {
+        return $this->formatListOfCertificates(glob($this->getCertificateLocation() . '/*.{pem}', GLOB_BRACE));
+    }
+
     private function getPrivateCertificates(): array
     {
         return $this->formatListOfCertificates(glob($this->getCertificateLocation() . '/*.{key}', GLOB_BRACE));

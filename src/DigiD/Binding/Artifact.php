@@ -33,6 +33,7 @@ class Artifact extends BindingArtifact
         $response = $this->getHttpService()->post($this->getTargetUrl(), [
             'cert'    => config('digid.certificate.public'),
             'ssl_key' => config('digid.certificate.private'),
+            'verify' => config('digid.certificate.root'),
             'body'    => $soapRequest
         ]);
 
