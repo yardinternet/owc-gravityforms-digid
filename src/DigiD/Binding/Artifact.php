@@ -30,12 +30,17 @@ class Artifact extends BindingArtifact
         $this->getSettings()->setValue('artifact', $artifact);
 
         $soapRequest = $this->buildEnvelope('ArtifactResolve');
-        $response = $this->getHttpService()->post($this->getTargetUrl(), [
+        $options = [
             'cert'    => config('digid.certificate.public'),
             'ssl_key' => config('digid.certificate.private'),
-            'verify' => config('digid.certificate.root'),
-            'body'    => $soapRequest
-        ]);
+            'body'    => $soapRequest,
+        ];
+
+        if ($root = config('digid.certificate.root')) {
+            $options['verify'] = $root;
+        }
+
+        $response = $this->getHttpService()->post($this->getTargetUrl(), $options);
 
         /** @var \GuzzleHttp\Psr7\Response $response */
         return (string) $response->getBody()->getContents();
