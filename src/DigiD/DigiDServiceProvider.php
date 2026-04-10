@@ -140,6 +140,7 @@ class DigiDServiceProvider extends ServiceProvider
             return new \GuzzleHttp\Client([
                 'cert' => config('digid.certificate.public'),
                 'ssl_key' => config('digid.certificate.private'),
+                'verify' => config('digid.certificate.root'),
             ]);
         });
 
@@ -160,7 +161,10 @@ class DigiDServiceProvider extends ServiceProvider
         });
 
         make('\GoGentoOSS\SAMLBase\Metadata\ResolveService', function () {
-            return new ResolveService();
+            $service = new ResolveService();
+            $service->setClient(resolve('yard::guzzle-http'));
+
+            return $service;
         });
 
         make('yard::digid::idp-settings', function () {
