@@ -36,7 +36,9 @@ class Artifact extends BindingArtifact
             'body'    => $soapRequest,
         ];
 
-        if ($root = config('digid.certificate.root')) {
+        $root = config('digid.certificate.root');
+
+        if ('' !== $root && 'no-certificate' !== $root) {
             $options['verify'] = $root;
         }
 
