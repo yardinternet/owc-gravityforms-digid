@@ -23,6 +23,7 @@ return [
     ],
     'certificate' => [
         'public'  => GravityFormsSettings::make()->get('public-certificate'),
-        'private' => GravityFormsSettings::make()->get('private-certificate')
+        'private' => GravityFormsSettings::make()->get('private-certificate'),
+        'root'    => GravityFormsSettings::make()->get('root-certificate')
     ]
 ];
