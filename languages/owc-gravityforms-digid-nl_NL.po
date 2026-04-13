@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OWC GravityForms DigiD\n"
-"POT-Creation-Date: 2024-02-20 13:22+0100\n"
-"PO-Revision-Date: 2024-02-20 13:24+0100\n"
+"POT-Creation-Date: 2026-04-13 21:28+0200\n"
+"PO-Revision-Date: 2026-04-13 21:29+0200\n"
 "Last-Translator: Edwin Siebel <edwin@yard.nl>\n"
 "Language-Team: Yard Internet <info@yard.nl>\n"
 "Language: nl\n"
@@ -10,9 +10,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
-"X-Poedit-KeywordsList: __;_x;_e;_ex;_n;_nx;esc_attr__;esc_attr_e;esc_attr_x;"
-"esc_html__;esc_html_e;esc_html_x;_n_noop;_nx_noop\n"
+"X-Generator: Poedit 3.9\n"
+"X-Poedit-KeywordsList: "
+"__;_x;_e;_ex;_n;_nx;esc_attr__;esc_attr_e;esc_attr_x;esc_html__;esc_html_e;esc_html_x;_n_noop;_nx_noop\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: tests\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-4: node_modules\n"
 
 #: resources/views/digid/no-certificates.php:2
-#: src/DigiD/GravityFormsAddon.php:218
+#: src/DigiD/GravityFormsAddon.php:225
 msgid "No certificate selected"
 msgstr "Geen certificaat geselecteerd"
 
@@ -44,20 +44,20 @@ msgstr ""
 "uw DigiD goed werkt. Mogelijk is er een storing bij de organisatie waar u "
 "inlogt."
 
-#: src/DigiD/DigiDController.php:58 src/DigiD/DigiDController.php:65
+#: src/DigiD/DigiDController.php:63 src/DigiD/DigiDController.php:71
 msgid "Something went wrong. Please try again."
 msgstr "Er is iets misgegaan. Probeer het nog eens."
 
-#: src/DigiD/DigiDField.php:53 src/DigiD/DigiDField.php:145
-#: src/DigiD/DigiDField.php:159
+#: src/DigiD/DigiDField.php:54 src/DigiD/DigiDField.php:146
+#: src/DigiD/DigiDField.php:160
 msgid "DigiD"
 msgstr "DigiD"
 
-#: src/DigiD/DigiDField.php:117
+#: src/DigiD/DigiDField.php:118
 msgid "This field is required."
 msgstr "Dit veld is verplicht."
 
-#: src/DigiD/Fields/DigiDLoginField.php:150
+#: src/DigiD/Fields/DigiDLoginField.php:155
 msgid "Login to"
 msgstr "Inloggen bij"
 
@@ -122,11 +122,15 @@ msgstr "Publiek certificaat locatie"
 msgid "Private certificate location"
 msgstr "Privaat certificaat locatie"
 
-#: src/DigiD/GravityFormsAddon.php:163
+#: src/DigiD/GravityFormsAddon.php:160
+msgid "Root certificate location"
+msgstr "Bron certificaat locatie"
+
+#: src/DigiD/GravityFormsAddon.php:170
 msgid "Session settings"
 msgstr "Sessie instellingen"
 
-#: src/DigiD/GravityFormsAddon.php:164
+#: src/DigiD/GravityFormsAddon.php:171
 msgid ""
 "The '<b>session lifetime</b>' defines how long the current session is "
 "allowed to exist."
@@ -134,15 +138,15 @@ msgstr ""
 "De '<b>levensduur van een sessie</b>' definieert hoelang er toegestaan is om "
 "de huidige sessie te laten bestaan."
 
-#: src/DigiD/GravityFormsAddon.php:167
+#: src/DigiD/GravityFormsAddon.php:174
 msgid "Session lifetime"
 msgstr "Levensduur sessie"
 
-#: src/DigiD/GravityFormsAddon.php:188
+#: src/DigiD/GravityFormsAddon.php:195
 msgid "Log out WP User"
 msgstr "Log WP gebruiker uit"
 
-#: src/DigiD/GravityFormsAddon.php:191
+#: src/DigiD/GravityFormsAddon.php:198
 msgid "Automatically log out WP User when session ends."
 msgstr "Log automatisch WP gebruiker uit als de sessie eindigt."
 
