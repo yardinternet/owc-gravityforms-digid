@@ -142,7 +142,9 @@ class DigiDServiceProvider extends ServiceProvider
                 'ssl_key' => config('digid.certificate.private'),
             ];
 
-            if ($root = config('digid.certificate.root')) {
+            $root = config('digid.certificate.root');
+
+            if ('' !== $root && 'no-certificate' !== $root) {
                 $options['verify'] = $root;
             }
 

@@ -237,7 +237,7 @@ class GravityFormsAddon extends GFAddOn
     }
 
     /**
-     * Get all the private certificates from the storage map.
+     * Get all the root certificates from the storage map.
      *
      * @return array
      */
@@ -246,6 +246,11 @@ class GravityFormsAddon extends GFAddOn
         return $this->formatListOfCertificates(glob($this->getCertificateLocation() . '/*.{pem}', GLOB_BRACE));
     }
 
+    /**
+     * Get all the private certificates from the storage map.
+     *
+     * @return array
+     */
     private function getPrivateCertificates(): array
     {
         return $this->formatListOfCertificates(glob($this->getCertificateLocation() . '/*.{key}', GLOB_BRACE));
