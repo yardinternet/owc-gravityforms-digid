@@ -5,6 +5,7 @@ namespace Yard\DigiD\Binding;
 use GoGentoOSS\SAMLBase\Binding\Artifact as BindingArtifact;
 
 use function Yard\DigiD\Foundation\Helpers\config;
+use function Yard\DigiD\Foundation\Helpers\rootCertificate;
 use function Yard\DigiD\Foundation\Helpers\view;
 
 /**
@@ -36,9 +37,7 @@ class Artifact extends BindingArtifact
             'body'    => $soapRequest,
         ];
 
-        $root = config('digid.certificate.root');
-
-        if ('' !== $root && 'no-certificate' !== $root) {
+        if ($root = rootCertificate()) {
             $options['verify'] = $root;
         }
 

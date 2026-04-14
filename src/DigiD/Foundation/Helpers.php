@@ -169,3 +169,14 @@ function endsWith($haystack, $needles)
 
     return false;
 }
+
+function rootCertificate(): ?String
+{
+    $root = config('digid.certificate.root');
+
+    if ('' === $root || 'no-certificate' === $root) {
+        return null;
+    }
+
+    return $root;
+}

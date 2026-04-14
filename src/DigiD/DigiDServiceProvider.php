@@ -15,6 +15,7 @@ use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\decrypt;
 use function Yard\DigiD\Foundation\Helpers\make;
 use function Yard\DigiD\Foundation\Helpers\resolve;
+use function Yard\DigiD\Foundation\Helpers\rootCertificate;
 use function Yard\DigiD\Foundation\Helpers\session_lifetime_in_seconds;
 use function Yard\DigiD\Foundation\Helpers\view;
 use Yard\DigiD\Foundation\Plugin;
@@ -142,9 +143,7 @@ class DigiDServiceProvider extends ServiceProvider
                 'ssl_key' => config('digid.certificate.private'),
             ];
 
-            $root = config('digid.certificate.root');
-
-            if ('' !== $root && 'no-certificate' !== $root) {
+            if ($root = rootCertificate()) {
                 $options['verify'] = $root;
             }
 
