@@ -170,7 +170,7 @@ function endsWith($haystack, $needles)
     return false;
 }
 
-function rootCertificate(): ?String
+function rootCertificate(): ?string
 {
     $root = config('digid.certificate.root');
 
