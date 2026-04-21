@@ -84,7 +84,7 @@ class DigiDController
         $session->set('status_code', $attributes->status()->get()->getStatusCode());
 
         if ($attributes->status()->get()->isSuccess()) {
-            $session->set('bsn', encrypt($attributes->bsn()->getID()));
+            $session->set('bsn', encrypt((string)$attributes->bsn()->getID()));
             $session->set('nameID', encrypt($attributes->bsn()->getNameID()));
             $session->set('lastActivity', time());
         } else {
@@ -96,7 +96,7 @@ class DigiDController
         $this->logInfo(message: 'Attributes are filled', context: [
             'session_id' => $attributes->sessionID(),
             'status_code' => $attributes->status()->get()->getStatusCode(),
-            'bsn' => encrypt($attributes->bsn()->getID()),
+            'bsn' => encrypt((string)$attributes->bsn()->getID()),
             'nameID' => encrypt($attributes->bsn()->getNameID()),
             'resume_link' => $session->get('resume_link'),
             'message' => $session->get('message'),
