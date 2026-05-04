@@ -45,6 +45,8 @@ trait Logger
 
     public function logInfo(string $message, array $context = []): void
     {
+        do_action('owc_gravityforms_digid_info_intercept', $message, $context);
+
         if (! defined('WP_DEBUG') || ! WP_DEBUG) {
             return;
         }
