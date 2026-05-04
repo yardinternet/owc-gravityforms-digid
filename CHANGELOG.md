@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.0
+
+- Feat: Add WP action to capture logs
+
 ## v2.0.0
 
 - Refactor: update codebase to PHP 8 standards

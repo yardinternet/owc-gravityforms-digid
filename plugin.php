@@ -8,7 +8,7 @@ declare(strict_types=1);
  * Description: Add a DigiD login field to GravityForms.
  * Author: Yard | Digital Agency
  * Author URI: https://www.yard.nl
- * Version: 2.0.0
+ * Version: 2.1.0
  * License: GPL3.0
  * License URI: https://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain: owc-gravityforms-digid
@@ -25,7 +25,7 @@ if (! defined('WPINC')) {
 define('GF_DIGID_PLUGIN_FILE', __FILE__);
 define('GF_DIGID_PLUGIN_SLUG', 'owc-gravityforms-digid');
 define('GF_DIGID_ROOT_PATH', __DIR__);
-define('GF_DIGID_VERSION', '2.0.0');
+define('GF_DIGID_VERSION', '2.1.0');
 define('GF_DIGID_LOGGER_DEFAULT_MAX_FILES', 7);
 define('GF_DIGID_DEFAULT_SESSION_LIFETIME_SECONDS', '1500');
 
