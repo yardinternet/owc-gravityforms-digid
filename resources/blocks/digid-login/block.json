@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "owc-gravityforms-digid/login",
+	"version": "0.1.0",
+	"title": "DigiD login",
+	"description": "Toont de DigiD inlogknop, of het ingelogd-bericht wanneer de bezoeker al is ingelogd.",
+	"category": "owc-gravityforms-digid",
+	"supports": {
+		"html": false,
+		"multiple": false
+	},
+	"textdomain": "owc-gravityforms-digid",
+	"editorScript": "gravityforms-digid-block-editor",
+	"editorStyle": "gravityforms-digid-block-editor"
+}
