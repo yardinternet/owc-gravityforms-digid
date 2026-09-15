@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "owc-gravityforms-digid/logout",
+	"version": "0.1.0",
+	"title": "DigiD logout",
+	"description": "Toont een DigiD uitlogknop wanneer de bezoeker is ingelogd.",
+	"category": "owc-gravityforms-digid",
+	"supports": {
+		"html": false,
+		"multiple": false
+	},
+	"textdomain": "owc-gravityforms-digid",
+	"editorScript": "gravityforms-digid-logout-block-editor",
+	"editorStyle": "gravityforms-digid-logout-block-editor"
+}
