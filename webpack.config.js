@@ -53,4 +53,24 @@ const blockConfig = {
 	},
 };
 
-module.exports = [ countdownConfig, blockConfig ];
+/*
+ * The "DigiD logout" Gutenberg block. Same wp.* globals approach as the
+ * login block above (see resources/blocks/digid-logout/index.js).
+ */
+const logoutBlockConfig = {
+	entry: './resources/blocks/digid-logout/index.js',
+	mode: process.env.NODE_ENV ? process.env.NODE_ENV : 'development',
+	output: {
+		path: path.resolve( __dirname, 'resources/blocks/dist' ),
+		filename: 'digid-logout.js',
+		publicPath: '/',
+	},
+	module: {
+		rules: [ babelRule ],
+	},
+	resolve: {
+		extensions: [ '*', '.js' ],
+	},
+};
+
+module.exports = [ countdownConfig, blockConfig, logoutBlockConfig ];
