@@ -1,3 +1,18 @@
 .owc-gf-digid-hidden {
 	display: none;
 }
+
+.digid-btn {
+	display: flex;
+	align-items: center;
+}
+
+.digid-btn__text {
+	padding-left: 0.5rem;
+	margin: 0;
+}
+
+.owc-gf-digid-alert {
+	border: 1px solid red;
+	font-size: 0.9rem;
+}
