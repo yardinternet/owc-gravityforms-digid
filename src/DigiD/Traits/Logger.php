@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yard\DigiD\Traits;
 
 use Exception;
-use Throwable;
 use Monolog\Level;
+use Throwable;
 use function Yard\DigiD\Foundation\Helpers\resolve;
 
 trait Logger
