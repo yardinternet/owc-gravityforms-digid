@@ -12,5 +12,5 @@
 	},
 	"textdomain": "owc-gravityforms-digid",
 	"editorScript": "gravityforms-digid-block-editor",
-	"editorStyle": "gravityforms-digid-block-editor"
+	"editorStyle": "gravityforms-digid-block-editor-style"
 }

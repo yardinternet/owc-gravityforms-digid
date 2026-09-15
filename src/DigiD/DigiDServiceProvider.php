@@ -34,10 +34,14 @@ class DigiDServiceProvider extends ServiceProvider
         $this->registerSettingsAddon();
 
         if (is_admin()) {
+            add_action('admin_enqueue_scripts', $this->loadAdminAssets(...));
+
             return;
         }
 
-        $this->checkSession();
+        if (! (defined('REST_REQUEST') && REST_REQUEST)) {
+            $this->checkSession();
+        }
 
         add_action('wp_loaded', $this->registerRoutes(...));
         add_action('wp_enqueue_scripts', $this->loadAssets(...));
@@ -112,6 +116,18 @@ class DigiDServiceProvider extends ServiceProvider
 
         wp_enqueue_script('gravityforms_digid');
 
+        wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.css', 'css'), [], Plugin::VERSION);
+        wp_enqueue_style('gravityforms_digid');
+    }
+
+    /**
+     * DigiDLoginField renders the shared digidField.php template in the
+     * Gravity Forms form editor preview too, but loadAssets() is only hooked
+     * on the frontend (register() returns early for is_admin()). Enqueue the
+     * same stylesheet here so that admin preview keeps its layout.
+     */
+    public function loadAdminAssets(): void
+    {
         wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.css', 'css'), [], Plugin::VERSION);
         wp_enqueue_style('gravityforms_digid');
     }

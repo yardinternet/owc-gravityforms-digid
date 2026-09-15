@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Yard\DigiD\Blocks;
 
 use function Yard\DigiD\Foundation\Helpers\config;
+use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
 use Yard\DigiD\Foundation\Plugin;
 use Yard\DigiD\Foundation\ServiceProvider;
@@ -59,17 +60,35 @@ class DigiDLogoutBlockServiceProvider extends ServiceProvider
         $logo = Plugin::getInstance()->resourceUrl('logo-digid.png', 'img');
 
         if ($this->isBlockEditor()) {
-            return view('digid/logoutButton.php', ['logo' => $logo, 'title' => 'Uitloggen']);
+            return view('digid/logoutButton.php', ['logo' => $logo, 'title' => __('Log out', config('core.text_domain'))]);
         }
 
         if (! apply_filters('owc_digid_is_logged_in', false)) {
-            return view('digid/logoutButton.php', ['logo' => $logo, 'title' => 'U bent niet ingelogd']);
+            return view('digid/logoutButton.php', ['logo' => $logo, 'title' => __('You are not logged in', config('core.text_domain'))]);
         }
+
+        $this->storeResumeLink();
 
         return view('digid/logoutButton.php', [
             'logo' => $logo,
-            'title' => 'Uitloggen',
+            'title' => __('Log out', config('core.text_domain')),
             'link' => config('digid.url.logout'),
         ]);
+    }
+
+    /**
+     * Store the current page so DigiDController::redirectTo() can return the
+     * visitor here after logout, since this block has no form/resume-token
+     * context to derive that from.
+     */
+    private function storeResumeLink(): void
+    {
+        // REQUEST_URI already includes any multisite subdirectory path, so it
+        // is appended to the trusted configured host directly rather than via
+        // home_url(), which would duplicate that path segment.
+        $host = wp_parse_url(home_url(), PHP_URL_HOST);
+        $currentUrl = (is_ssl() ? 'https' : 'http') . '://' . $host . wp_unslash($_SERVER['REQUEST_URI'] ?? '/');
+
+        resolve('session')->getSegment('digid')->set('resume_link', esc_url_raw($currentUrl));
     }
 }
