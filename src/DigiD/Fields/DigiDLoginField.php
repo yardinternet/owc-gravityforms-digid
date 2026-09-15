@@ -150,7 +150,7 @@ class DigiDLoginField extends AbstractField
      *
      * @return string
      */
-    protected function getFieldTitle(): string
+    public static function getFieldTitle(): string
     {
         return apply_filters('owc_gravityforms_digid_field_display_title', __('Login to', config('core.text_domain')));
     }
@@ -160,7 +160,7 @@ class DigiDLoginField extends AbstractField
      *
      * @return string
      */
-    protected function getFieldSubTitle(): string
+    public static function getFieldSubTitle(): string
     {
         return apply_filters('owc_gravityforms_digid_field_display_subtitle', get_bloginfo('name'));
     }
