@@ -2,11 +2,18 @@
 
 declare(strict_types=1);
 
+/**
+ * Service provider for the DigiD block.
+ *
+ * @since NEXT
+ */
+
 namespace Yard\DigiD\Blocks;
 
 use Exception;
 use WP_Block_Editor_Context;
 use Yard\DigiD\DigiDController;
+use Yard\DigiD\Fields\DigiDLoginField;
 use function Yard\DigiD\Foundation\Helpers\config;
 use function Yard\DigiD\Foundation\Helpers\env;
 use function Yard\DigiD\Foundation\Helpers\resolve;
@@ -15,6 +22,11 @@ use Yard\DigiD\Foundation\Plugin;
 use Yard\DigiD\Foundation\ServiceProvider;
 use Yard\DigiD\Traits\Logger;
 
+/**
+ * Service provider for the DigiD block.
+ *
+ * @since NEXT
+ */
 class DigiDBlockServiceProvider extends ServiceProvider
 {
     use Logger;
@@ -46,7 +58,7 @@ class DigiDBlockServiceProvider extends ServiceProvider
         );
 
         register_block_type_from_metadata(GF_DIGID_ROOT_PATH . '/resources/blocks/digid-login', [
-            'render_callback' => [$this, 'render'],
+            'render_callback' => $this->render(...)
         ]);
     }
 
@@ -62,14 +74,16 @@ class DigiDBlockServiceProvider extends ServiceProvider
 
     public function render(): string
     {
-        $fakeSession = env('DIGID_FAKE_SESSION') ?? '';
+        $fakeSession = trim((string) env('DIGID_FAKE_SESSION', ''));
 
-        if (! $this->hasCertificates() && empty($fakeSession)) {
-            return view('digid/no-certificates.php');
+        if (! $this->hasCertificates() && '' === $fakeSession) {
+            return view('digid/no-certificates.php', );
         }
 
         if (apply_filters('owc_digid_is_logged_in', false)) {
-            return view('digid/loggedin.php');
+            return view('digid/loggedinBlock.php', [
+                'logo' => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img')
+            ]);
         }
 
         return $this->renderLoginButton($fakeSession);
@@ -89,8 +103,8 @@ class DigiDBlockServiceProvider extends ServiceProvider
             'error' => resolve('session')->getSegment('digid')->getFlash('error'),
             'logo' => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
             'link' => $link,
-            'title' => apply_filters('owc_gravityforms_digid_field_display_title', __('Login to', config('core.text_domain'))),
-            'subtitle' => apply_filters('owc_gravityforms_digid_field_display_subtitle', get_bloginfo('name')),
+            'title' => DigiDLoginField::getFieldTitle(),
+            'subtitle' => DigiDLoginField::getFieldSubTitle(),
         ]);
     }
 
