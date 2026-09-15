@@ -20,6 +20,7 @@ use function Yard\DigiD\Foundation\Helpers\resolve;
 use function Yard\DigiD\Foundation\Helpers\view;
 use Yard\DigiD\Foundation\Plugin;
 use Yard\DigiD\Foundation\ServiceProvider;
+use Yard\DigiD\Traits\BlockEditor;
 use Yard\DigiD\Traits\Logger;
 
 /**
@@ -29,11 +30,12 @@ use Yard\DigiD\Traits\Logger;
  */
 class DigiDBlockServiceProvider extends ServiceProvider
 {
+    use BlockEditor;
     use Logger;
 
     private const BLOCK_CATEGORY = 'owc-gravityforms-digid';
     private const EDITOR_SCRIPT_HANDLE = 'gravityforms-digid-block-editor';
-    private const EDITOR_STYLE_HANDLE = 'gravityforms-digid-block-editor';
+    private const EDITOR_STYLE_HANDLE = 'gravityforms-digid-block-editor-style';
 
     public function register(): void
     {
@@ -74,10 +76,14 @@ class DigiDBlockServiceProvider extends ServiceProvider
 
     public function render(): string
     {
+        if ($this->isBlockEditor()) {
+            return $this->renderPreview();
+        }
+
         $fakeSession = trim((string) env('DIGID_FAKE_SESSION', ''));
 
         if (! $this->hasCertificates() && '' === $fakeSession) {
-            return view('digid/no-certificates.php', );
+            return view('digid/no-certificates.php');
         }
 
         if (apply_filters('owc_digid_is_logged_in', false)) {
@@ -89,14 +95,35 @@ class DigiDBlockServiceProvider extends ServiceProvider
         return $this->renderLoginButton($fakeSession);
     }
 
+    /**
+     * ServerSideRender previews this block through a REST request. Render a
+     * non-actionable preview here rather than reaching renderLoginButton(),
+     * which would store the REST renderer URL as resume_link and generate a
+     * real signed DigiD AuthnRequest (and touch certificates/metadata) on
+     * every keystroke in the editor.
+	 *
+	 * @since NEXT
+     */
+    private function renderPreview(): string
+    {
+        return view('digid/digidField.php', [
+            'logo' => Plugin::getInstance()->resourceUrl('logo-digid.png', 'img'),
+            'link' => '',
+            'title' => DigiDLoginField::getFieldTitle(),
+            'subtitle' => DigiDLoginField::getFieldSubTitle(),
+        ]);
+    }
+
     private function renderLoginButton(string $fakeSession): string
     {
+        $this->storeResumeLink();
+
         try {
-            $link = empty($fakeSession) ? DigiDController::getAuthNRequestURL() : '/digid/fake_login';
+            $link = '' === $fakeSession ? DigiDController::getAuthNRequestURL() : home_url('/digid/fake_login');
         } catch (Exception $e) {
             $this->logException($e, ['method' => __METHOD__]);
 
-            return view('digid/no-certificates.php');
+            return view('digid/error.php');
         }
 
         return view('digid/digidField.php', [
@@ -108,8 +135,24 @@ class DigiDBlockServiceProvider extends ServiceProvider
         ]);
     }
 
+    /**
+     * Store the current page so DigiDController::redirectTo() can return the
+     * visitor here after login, since this block (unlike the Gravity Forms
+     * field) has no form/resume-token context to derive that from.
+     */
+    private function storeResumeLink(): void
+    {
+        // REQUEST_URI already includes any multisite subdirectory path, so it
+        // is appended to the trusted configured host directly rather than via
+        // home_url(), which would duplicate that path segment.
+        $host = wp_parse_url(home_url(), PHP_URL_HOST);
+        $currentUrl = (is_ssl() ? 'https' : 'http') . '://' . $host . wp_unslash($_SERVER['REQUEST_URI'] ?? '/');
+
+        resolve('session')->getSegment('digid')->set('resume_link', esc_url_raw($currentUrl));
+    }
+
     private function hasCertificates(): bool
     {
-        return file_exists(config('digid.certificate.public')) || file_exists(config('digid.certificate.private'));
+        return file_exists(config('digid.certificate.public')) && file_exists(config('digid.certificate.private'));
     }
 }

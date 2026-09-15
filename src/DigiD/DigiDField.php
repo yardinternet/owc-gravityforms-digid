@@ -123,7 +123,7 @@ class DigiDField extends \GF_Field
 
     protected function hasCertificates(): bool
     {
-        return (file_exists(config('digid.certificate.public')) or (file_exists(config('digid.certificate.private'))));
+        return file_exists(config('digid.certificate.public')) && file_exists(config('digid.certificate.private'));
     }
 
     /**

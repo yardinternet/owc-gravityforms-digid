@@ -19,18 +19,18 @@ use WP_Screen;
  */
 trait BlockEditor
 {
-	protected function isBlockEditor(): bool
+    protected function isBlockEditor(): bool
     {
-		global $current_screen;
+        global $current_screen;
 
-		if ($current_screen instanceof WP_Screen
-			&& method_exists( $current_screen, 'is_block_editor' )
-			&& $current_screen->is_block_editor()
-		) {
-			return true;
-		}
+        if ($current_screen instanceof WP_Screen
+            && method_exists($current_screen, 'is_block_editor')
+            && $current_screen->is_block_editor()
+        ) {
+            return true;
+        }
 
-		return defined( 'REST_REQUEST' ) && REST_REQUEST
-			&& 'edit' === ( $_GET['context'] ?? '' );
+        return defined('REST_REQUEST') && REST_REQUEST
+            && 'edit' === ($_GET['context'] ?? '');
     }
 }
