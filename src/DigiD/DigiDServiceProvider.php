@@ -33,6 +33,8 @@ class DigiDServiceProvider extends ServiceProvider
         $gravityForm->registerField();
         $this->registerSettingsAddon();
 
+        add_action('init', $this->registerAssets(...));
+
         if (is_admin()) {
             add_action('admin_enqueue_scripts', $this->loadAdminAssets(...));
 
@@ -94,41 +96,37 @@ class DigiDServiceProvider extends ServiceProvider
      */
     public function loadAssets(): void
     {
-        wp_register_script('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.js', 'js/dist'), [], Plugin::VERSION);
-
         $session = resolve('session')->getSegment('digid');
 
         if ($session->get('lastActivity')) {
             $digiDSession = new DigiDSession(session_lifetime_in_seconds());
 
-            wp_add_inline_script(
-                'gravityforms_digid',
-                sprintf(
-                    "document.addEventListener('DOMContentLoaded', function() {
-						new CountdownDigiD.CountdownDigiD(%d, %d, '%s').init();
-					});",
-                    $digiDSession->getSessionLifeTime(),
-                    $session->get('lastActivity'),
-                    config('digid.url.logout')
-                )
-            );
+            wp_add_inline_script('gravityforms_digid', 'var owcGfDigidSession = ' . wp_json_encode([
+                'sessionTTL' => $digiDSession->getSessionLifeTime(),
+                'lastActivity' => (int) $session->get('lastActivity'),
+                'logoutLink' => config('digid.url.logout'),
+            ]) . ';', 'before');
         }
 
         wp_enqueue_script('gravityforms_digid');
-
-        wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.css', 'css'), [], Plugin::VERSION);
         wp_enqueue_style('gravityforms_digid');
     }
 
     /**
-     * DigiDLoginField renders the shared digidField.php template in the
-     * Gravity Forms form editor preview too, but loadAssets() is only hooked
-     * on the frontend (register() returns early for is_admin()). Enqueue the
-     * same stylesheet here so that admin preview keeps its layout.
+     * Registered on both frontend and admin: the blocks reference the style
+     * handle from block.json and the Gravity Forms form editor preview renders
+     * the same digidField.php template.
      */
+    public function registerAssets(): void
+    {
+        $asset = require GF_DIGID_ROOT_PATH . '/build/owc-gf-digid.asset.php';
+
+        wp_register_script('gravityforms_digid', plugins_url('build/owc-gf-digid.js', GF_DIGID_PLUGIN_FILE), $asset['dependencies'], $asset['version']);
+        wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.css', 'css'), [], Plugin::VERSION);
+    }
+
     public function loadAdminAssets(): void
     {
-        wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.css', 'css'), [], Plugin::VERSION);
         wp_enqueue_style('gravityforms_digid');
     }
 
