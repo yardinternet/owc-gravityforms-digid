@@ -1,76 +1,10 @@
-const path = require( 'path' );
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 
-const babelRule = {
-	test: /\.(js)$/,
-	exclude: /node_modules/,
-	use: {
-		loader: 'babel-loader',
-		options: {
-			presets: [ '@babel/preset-env' ],
-		},
+// Blocks are discovered from block.json; the frontend countdown script is not a block.
+module.exports = {
+	...defaultConfig,
+	entry: {
+		...defaultConfig.entry(),
+		'owc-gf-digid': './resources/js/index.js',
 	},
 };
-
-const countdownConfig = {
-	entry: './resources/js/index.js',
-	mode: process.env.NODE_ENV ? process.env.NODE_ENV : 'development',
-	output: {
-		library: 'CountdownDigiD',
-		libraryTarget: 'umd',
-		globalObject: '(typeof self !== "undefined" ? self : this)',
-		libraryExport: 'default',
-		path: path.resolve( __dirname, 'resources/js/dist' ),
-		filename: 'owc-gf-digid.js',
-		publicPath: '/',
-	},
-	module: {
-		rules: [ babelRule ],
-	},
-	resolve: {
-		extensions: [ '*', '.js' ],
-	},
-};
-
-/*
- * The "DigiD login" Gutenberg block. Relies on `wp.*` globals (see
- * resources/blocks/digid-login/index.js) instead of `@wordpress/*` imports,
- * so a plain webpack build works and no @wordpress/scripts dependency is
- * needed just for this one block.
- */
-const blockConfig = {
-	entry: './resources/blocks/digid-login/index.js',
-	mode: process.env.NODE_ENV ? process.env.NODE_ENV : 'development',
-	output: {
-		path: path.resolve( __dirname, 'resources/blocks/dist' ),
-		filename: 'digid-login.js',
-		publicPath: '/',
-	},
-	module: {
-		rules: [ babelRule ],
-	},
-	resolve: {
-		extensions: [ '*', '.js' ],
-	},
-};
-
-/*
- * The "DigiD logout" Gutenberg block. Same wp.* globals approach as the
- * login block above (see resources/blocks/digid-logout/index.js).
- */
-const logoutBlockConfig = {
-	entry: './resources/blocks/digid-logout/index.js',
-	mode: process.env.NODE_ENV ? process.env.NODE_ENV : 'development',
-	output: {
-		path: path.resolve( __dirname, 'resources/blocks/dist' ),
-		filename: 'digid-logout.js',
-		publicPath: '/',
-	},
-	module: {
-		rules: [ babelRule ],
-	},
-	resolve: {
-		extensions: [ '*', '.js' ],
-	},
-};
-
-module.exports = [ countdownConfig, blockConfig, logoutBlockConfig ];
