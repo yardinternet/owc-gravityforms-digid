@@ -1,32 +1,10 @@
-const path = require( 'path' );
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 
+// Blocks are discovered from block.json; the frontend countdown script is not a block.
 module.exports = {
-	entry: './resources/js/index.js',
-	mode: process.env.NODE_ENV ? process.env.NODE_ENV : 'development',
-	output: {
-		library: 'CountdownDigiD',
-		libraryTarget: 'umd',
-		globalObject: '(typeof self !== "undefined" ? self : this)',
-		libraryExport: 'default',
-		path: path.resolve( __dirname, 'resources/js/dist' ),
-		filename: 'owc-gf-digid.js',
-		publicPath: '/',
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader',
-					options: {
-						presets: [ '@babel/preset-env' ],
-					},
-				},
-			},
-		],
-	},
-	resolve: {
-		extensions: [ '*', '.js' ],
+	...defaultConfig,
+	entry: {
+		...defaultConfig.entry(),
+		'owc-gf-digid': './resources/js/index.js',
 	},
 };

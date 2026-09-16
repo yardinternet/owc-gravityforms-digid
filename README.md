@@ -12,6 +12,14 @@ DigiD is only able to connect with valid PKi certificates, for local development
 DIGID_FAKE_SESSION='012345678'
 ```
 
+## Development
+
+```sh
+npm install
+npm run build   # production build
+npm run start   # watch mode
+```
+
 ## Logging
 
 Enable logging to monitor errors during communication with DigiD.

@@ -1,5 +1,12 @@
 import CountdownDigiD from './lib/countdown';
 
-export default {
-	CountdownDigiD,
-};
+document.addEventListener( 'DOMContentLoaded', () => {
+	const { sessionTTL, lastActivity, logoutLink } =
+		window.owcGfDigidSession ?? {};
+
+	if ( ! sessionTTL ) {
+		return;
+	}
+
+	new CountdownDigiD( sessionTTL, lastActivity, logoutLink ).init();
+} );

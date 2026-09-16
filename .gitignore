@@ -33,7 +33,6 @@
 # ignore all files starting with .
 .*
 
-!.babelrc
 .php-cs-fixer.cache
 
 # track this file .gitignore (i.e. do NOT ignore it)

@@ -1,11 +1,14 @@
-<?php if (isset($vars['error'])) : ?>
-    <div class="alert" style="border: 1px solid red; font-size: 0.9rem;">{{ error }}</div>
+<?php $tag = empty($vars['link']) ? 'div' : 'a'; ?>
+<?php if (! empty($vars['error'])) : ?>
+    <div class="owc-gf-digid-alert">{{ error }}</div>
 <?php endif; ?>
 
-<a href="{{ link }}" class="digid-btn" style="display: flex; align-items: center;">
+<<?php echo $tag; ?><?php if ('a' === $tag) : ?> href="{{ link }}"<?php endif; ?> class="digid-btn">
     <img class="digid-btn__img" src="{{ logo }}" alt="DigiD logo">
-    <div class="digid-btn__text" style="padding-left: 0.5rem">
+    <div class="digid-btn__text">
         <div class="digid-btn__title">{{ title }}</div>
+        <?php if (! empty($vars['subtitle'])) : ?>
         <div class="digid-btn__subtitle">{{ subtitle }}</div>
+        <?php endif; ?>
     </div>
-</a>
+</<?php echo $tag; ?>>
