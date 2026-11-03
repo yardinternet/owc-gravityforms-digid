@@ -135,7 +135,13 @@ class BlockServiceProvider extends ServiceProvider
      */
     private function isEditorPreview(): bool
     {
-        return defined('REST_REQUEST') && REST_REQUEST;
+        if (! defined('REST_REQUEST') || ! REST_REQUEST) {
+            return false;
+        }
+
+        $route = (string) ($GLOBALS['wp']->query_vars['rest_route'] ?? '');
+
+        return str_starts_with($route, '/wp/v2/block-renderer/');
     }
 
     /**
@@ -149,7 +155,8 @@ class BlockServiceProvider extends ServiceProvider
         // is appended to the trusted configured host directly rather than via
         // home_url(), which would duplicate that path segment.
         $host = wp_parse_url(home_url(), PHP_URL_HOST);
-        $currentUrl = (is_ssl() ? 'https' : 'http') . '://' . $host . wp_unslash($_SERVER['REQUEST_URI'] ?? '/');
+        $port = wp_parse_url(home_url(), PHP_URL_PORT);
+        $currentUrl = (is_ssl() ? 'https' : 'http') . '://' . $host . ($port ? ':' . $port : '') . wp_unslash($_SERVER['REQUEST_URI'] ?? '/');
 
         resolve('session')->getSegment('digid')->set('resume_link', esc_url_raw($currentUrl));
     }
