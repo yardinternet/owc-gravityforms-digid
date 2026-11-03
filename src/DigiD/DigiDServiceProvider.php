@@ -41,8 +41,9 @@ class DigiDServiceProvider extends ServiceProvider
             return;
         }
 
-        // 'wp' never fires for REST requests, so block editor previews don't touch the session.
-        add_action('wp', $this->checkSession(...));
+        // Runs before registerRoutes() so expired sessions are handled before
+        // any DigiD route (e.g. keep_alive) can refresh them.
+        add_action('wp_loaded', $this->checkSession(...), 9);
         add_action('wp_loaded', $this->registerRoutes(...));
         add_action('wp_enqueue_scripts', $this->loadAssets(...));
         add_action('wp_body_open', $this->addModalHTML(...));
@@ -114,6 +115,8 @@ class DigiDServiceProvider extends ServiceProvider
      * Registered on both frontend and admin: the blocks reference the style
      * handle from block.json and the Gravity Forms form editor preview renders
      * the same digidField.php template.
+	 *
+	 * @since NEXT
      */
     public function registerAssets(): void
     {
@@ -123,6 +126,9 @@ class DigiDServiceProvider extends ServiceProvider
         wp_register_style('gravityforms_digid', Plugin::getInstance()->resourceUrl('owc-gf-digid.css', 'css'), [], Plugin::VERSION);
     }
 
+	/**
+	 * @since NEXT
+	 */
     public function loadAdminAssets(): void
     {
         wp_enqueue_style('gravityforms_digid');
@@ -242,6 +248,11 @@ class DigiDServiceProvider extends ServiceProvider
 
     public function checkSession(): void
     {
+        // Block editor previews must not refresh or expire the session.
+        if ($this->isBlockRendererRequest()) {
+            return;
+        }
+
         $session = resolve('session')->getSegment('digid');
 
         if (! $session->get('lastActivity')) {
@@ -258,5 +269,45 @@ class DigiDServiceProvider extends ServiceProvider
         }
 
         $session->set('lastActivity', time());
+    }
+
+    /**
+     * Whether this is a ServerSideRender preview request for a block.
+     *
+     * REST_REQUEST and the parsed rest_route are only available after
+     * parse_request, which runs after wp_loaded, so the route is derived
+     * from the raw request instead.
+	 *
+	 * @since NEXT
+     */
+    private function isBlockRendererRequest(): bool
+    {
+        return str_starts_with($this->currentRestRoute(), '/wp/v2/block-renderer/');
+    }
+
+	/**
+	 * @since NEXT
+	 */
+    private function currentRestRoute(): string
+    {
+        if (isset($_GET['rest_route'])) {
+            return '/' . ltrim(sanitize_text_field(wp_unslash($_GET['rest_route'])), '/');
+        }
+
+        $restPath = trailingslashit((string) wp_parse_url(rest_url(), PHP_URL_PATH));
+
+        // Without pretty permalinks rest_url() is "/?rest_route=/", whose path
+        // "/" would match every request; that case is covered by rest_route above.
+        if ('/' === $restPath) {
+            return '';
+        }
+
+        $requestPath = (string) wp_parse_url(wp_unslash($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
+
+        if (! str_starts_with(trailingslashit($requestPath), $restPath)) {
+            return '';
+        }
+
+        return '/' . ltrim(substr($requestPath, strlen($restPath)), '/');
     }
 }
