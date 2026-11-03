@@ -1,6 +1,12 @@
 # Changelog
 
-## [v.2.2.0] - 2025-05-27
+## [v2.3.0] - 2026-11-03
+
+-   Added: Gutenberg authentication block
+-   Added: Gutenberg logout block
+-   Change: build blocks and assets with @wordpress/scripts
+
+## [v2.2.0] - 2025-05-27
 
 -   Fix: ensure bsn is cast to string before encryption
 -   Feat: add additional certificate field for the trustchain
