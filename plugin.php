@@ -12,7 +12,7 @@ declare(strict_types=1);
  * License: GPL3.0
  * License URI: https://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain: owc-gravityforms-digid
- * Domain Path: /languages.
+ * Domain Path: /languages
  */
 
 /**
