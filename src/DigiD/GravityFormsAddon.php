@@ -34,14 +34,14 @@ class GravityFormsAddon extends GFAddOn
      *
      * @var string
      */
-    protected $_path = GF_DIGID_ROOT_PATH . '/plugin.php';
+    protected $_path = 'owc-gravityforms-digid/plugin.php';
 
     /**
      * The physical path to the main plugin file.
      *
      * @var string
      */
-    protected $_full_path = __FILE__;
+    protected $_full_path = GF_DIGID_PLUGIN_FILE;
 
     /**
      * The complete title of the Add-On.
