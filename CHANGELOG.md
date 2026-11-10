@@ -1,5 +1,10 @@
 # Changelog
 
+## [v2.3.1] - 2026-11-10
+
+-   Fix: translations not loading on WordPress 6.7+ because the Gravity Forms add-on registered a wrong languages directory
+-   Fix: typo in the Domain Path plugin header
+
 ## [v2.3.0] - 2026-11-03
 
 -   Added: Gutenberg authentication block
