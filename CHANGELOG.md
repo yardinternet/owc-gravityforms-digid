@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.4.0] - 2026-11-20
+
+-   Feat: broaden symfony dependency to allow installation under Acorn 5 which
+
 ## [v2.3.1] - 2026-11-10
 
 -   Fix: translations not loading on WordPress 6.7+ because the Gravity Forms add-on registered a wrong languages directory

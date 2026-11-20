@@ -1,6 +1,6 @@
 {
   "name": "owc-gravityforms-digid",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Add a DigiD login field to GravityForms",
   "private": true,
   "repository": {
